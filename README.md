@@ -11,8 +11,8 @@ React component library inspired by Material Design 3 and Jetpack Compose.
 ## Usage
 
 ```tsx
-import { Button } from "@ponci/material-design-3";
-import "@ponci/material-design-3/styles.css";
+import { Button } from "@ponce/material-design-3";
+import "@ponce/material-design-3/styles.css";
 
 export function App() {
   return <Button>Continue</Button>;

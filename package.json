@@ -1,5 +1,5 @@
 {
-  "name": "@ponci/material-design-3",
+  "name": "@ponce/material-design-3",
   "version": "0.1.0",
   "description": "React components inspired by Material Design 3 and Jetpack Compose.",
   "type": "module",

@@ -11,10 +11,10 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      "@ponci/material-design-3": resolve(exampleDir, "../src/index.ts")
-    }
+      "@ponce/material-design-3": resolve(exampleDir, "../src/index.ts"),
+    },
   },
   server: {
-    port: 5173
-  }
+    port: 5173,
+  },
 });
