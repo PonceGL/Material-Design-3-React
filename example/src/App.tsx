@@ -1,4 +1,4 @@
-import { Button } from "@ponce/material-design-3";
+import { Button } from "@poncegl/material-design-3";
 import "./example.css";
 import "./styles.css";
 
