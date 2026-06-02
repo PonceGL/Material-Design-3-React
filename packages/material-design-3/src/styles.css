@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@source "./**/*.{ts,tsx}";
+
+@theme {
+  --color-md-primary: #6750a4;
+  --color-md-on-primary: #ffffff;
+  --color-md-primary-container: #eaddff;
+  --color-md-on-primary-container: #21005d;
+  --color-md-secondary-container: #e8def8;
+  --color-md-on-secondary-container: #1d192b;
+  --color-md-surface: #fffbfe;
+  --color-md-on-surface: #1c1b1f;
+  --color-md-outline: #79747e;
+  --shadow-md-elevation-1: 0 1px 2px rgb(0 0 0 / 0.3), 0 1px 3px 1px rgb(0 0 0 / 0.15);
+}
+
+@layer base {
+  :root {
+    color: var(--color-md-on-surface);
+    background: var(--color-md-surface);
+  }
+}
