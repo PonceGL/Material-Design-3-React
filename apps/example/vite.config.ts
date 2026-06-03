@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      "@poncegl/material-design-3": resolve(exampleDir, "../src/index.ts"),
+      "@poncegl/material-design-3": resolve(exampleDir, "../../packages/material-design-3/src/index.ts"),
     },
   },
   server: {

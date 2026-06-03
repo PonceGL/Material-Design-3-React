@@ -1,0 +1,3 @@
+@import "../../../packages/material-design-3/src/styles.css";
+
+@source "./**/*.{ts,tsx}";
