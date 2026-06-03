@@ -58,7 +58,7 @@ No hardcoded colors, border-radii, shadows, or font sizes. Every visual value co
 
 ```css
 /* Wrong */
-background-color: #6750A4;
+background-color: #6750a4;
 
 /* Right */
 background-color: var(--md-sys-color-primary);
@@ -92,22 +92,22 @@ The library is TypeScript-first. `strict: true` is enabled. No `any` types. All 
 
 The library is built with Vite in library mode. It outputs:
 
-| File | Format | Purpose |
-|---|---|---|
-| `dist/index.js` | ESM | For modern bundlers (Vite, Next.js, Astro) |
-| `dist/index.cjs` | CJS | For CommonJS environments |
-| `dist/index.d.ts` | TypeScript declarations | For type checking |
-| `dist/styles.css` | CSS | Tokens + Tailwind @theme |
+| File              | Format                  | Purpose                                    |
+| ----------------- | ----------------------- | ------------------------------------------ |
+| `dist/index.js`   | ESM                     | For modern bundlers (Vite, Next.js, Astro) |
+| `dist/index.cjs`  | CJS                     | For CommonJS environments                  |
+| `dist/index.d.ts` | TypeScript declarations | For type checking                          |
+| `dist/styles.css` | CSS                     | Tokens + Tailwind @theme                   |
 
 Both `react` and `react-dom` are peer dependencies and are excluded from the bundle.
 
 ## Testing strategy
 
-| Layer | Tool | What it covers |
-|---|---|---|
-| Unit | Vitest + RTL | Component rendering, props, interactions |
-| Accessibility | axe-core | Automated a11y audit per variant |
-| Visual | Storybook | Manual review of all variants and states |
+| Layer         | Tool         | What it covers                           |
+| ------------- | ------------ | ---------------------------------------- |
+| Unit          | Vitest + RTL | Component rendering, props, interactions |
+| Accessibility | axe-core     | Automated a11y audit per variant         |
+| Visual        | Storybook    | Manual review of all variants and states |
 
 Tests live alongside components (colocation). Run with `pnpm test`.
 
@@ -122,19 +122,19 @@ Every component must have stories covering all variants, all meaningful states, 
 
 ## CI/CD pipelines
 
-| Workflow | Trigger | Steps |
-|---|---|---|
-| `ci.yml` | PR and push to `main` | lint → typecheck → test → build |
-| `release.yml` | Push to `main` | Changesets version → publish to npm |
-| `storybook.yml` | Push to `main` | Build Storybook → deploy to GitHub Pages |
+| Workflow        | Trigger               | Steps                                    |
+| --------------- | --------------------- | ---------------------------------------- |
+| `ci.yml`        | PR and push to `main` | lint → typecheck → test → build          |
+| `release.yml`   | Push to `main`        | Changesets version → publish to npm      |
+| `storybook.yml` | Push to `main`        | Build Storybook → deploy to GitHub Pages |
 
 ## Workspace includes
 
-| Glob | Purpose |
-|---|---|
-| `packages/*` | Publishable packages |
-| `apps/*` | Internal applications (not published) |
-| `tooling/*` | Shared dev configs (not published) |
+| Glob         | Purpose                               |
+| ------------ | ------------------------------------- |
+| `packages/*` | Publishable packages                  |
+| `apps/*`     | Internal applications (not published) |
+| `tooling/*`  | Shared dev configs (not published)    |
 
 ## Package naming
 
@@ -142,12 +142,12 @@ All packages use the `@poncegl` npm scope — the same as the GitHub handle (@Po
 
 ## Key decisions log
 
-| Decision | Rationale |
-|---|---|
-| pnpm over npm/yarn | Better monorepo support, strict dependency isolation, faster |
-| Tailwind v4 | Native CSS variables support, no config file, works with our token system |
-| CSS custom properties for tokens | Framework-agnostic, supports all 3 theming approaches simultaneously |
-| No React Context for theming | Prevents unnecessary re-renders; components read from CSS variables, not context |
-| Changesets over semantic-release | Better monorepo support, human-readable changeset files, PR-based workflow |
-| Storybook 8 | Latest stable, best framework integration, strong addon ecosystem |
-| axe-core in tests | Catches accessibility regressions automatically before they reach production |
+| Decision                         | Rationale                                                                        |
+| -------------------------------- | -------------------------------------------------------------------------------- |
+| pnpm over npm/yarn               | Better monorepo support, strict dependency isolation, faster                     |
+| Tailwind v4                      | Native CSS variables support, no config file, works with our token system        |
+| CSS custom properties for tokens | Framework-agnostic, supports all 3 theming approaches simultaneously             |
+| No React Context for theming     | Prevents unnecessary re-renders; components read from CSS variables, not context |
+| Changesets over semantic-release | Better monorepo support, human-readable changeset files, PR-based workflow       |
+| Storybook 8                      | Latest stable, best framework integration, strong addon ecosystem                |
+| axe-core in tests                | Catches accessibility regressions automatically before they reach production     |
