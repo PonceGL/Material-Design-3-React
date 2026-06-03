@@ -56,18 +56,19 @@ We use [Conventional Commits](https://www.conventionalcommits.org/). Commitlint 
 
 Format: `type(scope): description`
 
-| Type | When to use |
-|---|---|
-| `feat` | A new component or feature |
-| `fix` | A bug fix |
-| `docs` | Documentation changes only |
-| `chore` | Build process, tooling, dependencies |
+| Type       | When to use                                         |
+| ---------- | --------------------------------------------------- |
+| `feat`     | A new component or feature                          |
+| `fix`      | A bug fix                                           |
+| `docs`     | Documentation changes only                          |
+| `chore`    | Build process, tooling, dependencies                |
 | `refactor` | Code change that doesn't add a feature or fix a bug |
-| `test` | Adding or updating tests |
-| `style` | Formatting, whitespace (no logic change) |
-| `perf` | Performance improvement |
+| `test`     | Adding or updating tests                            |
+| `style`    | Formatting, whitespace (no logic change)            |
+| `perf`     | Performance improvement                             |
 
 **Examples:**
+
 ```
 feat: add Card component with elevated and filled variants
 fix: correct focus ring color in outlined Button
@@ -118,7 +119,7 @@ See [docs/releasing.md](./releasing.md) for the full explanation.
 - ESLint handles code quality (also runs on pre-commit)
 - TypeScript strict mode is enabled
 - No `any` types — use `unknown` or proper types
-- No comments that explain *what* the code does — only *why* if it's non-obvious
+- No comments that explain _what_ the code does — only _why_ if it's non-obvious
 
 ## Questions?
 

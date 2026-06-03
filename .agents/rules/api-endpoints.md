@@ -22,6 +22,7 @@ src/app/api/[domain]/[resource]/
 ```
 
 **Examples from the codebase:**
+
 ```
 src/app/api/fs/dialog/
 ├── route.ts
@@ -35,11 +36,11 @@ src/app/api/fs/dialog/
 
 ## File naming — camelCase with dot-notation for type suffix
 
-| File | Pattern |
-|---|---|
-| Service | `[resource].server.ts` |
-| Service tests | `[resource].server.test.ts` |
-| DTO | `[resource].dto.ts` |
+| File          | Pattern                          |
+| ------------- | -------------------------------- |
+| Service       | `[resource].server.ts`           |
+| Service tests | `[resource].server.test.ts`      |
+| DTO           | `[resource].dto.ts`              |
 | Route handler | `route.ts` (required by Next.js) |
 
 Folder names: camelCase (`dialog/`, `openDialog/`, `dtos/`).
@@ -49,6 +50,7 @@ Folder names: camelCase (`dialog/`, `openDialog/`, `dtos/`).
 ## Shared error infrastructure (`src/lib/`)
 
 ### `src/lib/httpErrors/index.ts`
+
 Defines the base `HttpError` class and all domain-specific exception subclasses.
 All exceptions set their own prototype correctly for `instanceof` checks.
 
@@ -68,6 +70,7 @@ export class UserCanceledDialogException extends HttpError { ... } // 409
 ```
 
 ### `src/lib/errorResponse/index.ts`
+
 `handleHttpError(error: unknown): NextResponse` — the single function that turns any error into a standardized NextResponse. Used in every route handler's catch block.
 
 Handles: `HttpError` → status from instance, `ZodError` → 400 with issues formatted, `unknown` → 500.
@@ -96,11 +99,13 @@ NextResponse.json(
 One file per endpoint group. Export the schema, the inferred type, and (where applicable) derived schemas (e.g. `updateDto = createDto.partial()`).
 
 ```ts
-import { z } from "zod";
+import { z } from 'zod';
 
-export const openDialogBodyDto = z.object({
-  prompt: z.string({ error: "..." }).min(10, { error: "..." }),
-}).strict();
+export const openDialogBodyDto = z
+  .object({
+    prompt: z.string({ error: '...' }).min(10, { error: '...' }),
+  })
+  .strict();
 
 export type OpenDialogBodyDto = z.infer<typeof openDialogBodyDto>;
 
@@ -112,6 +117,7 @@ export type OpenDialogResponseDto = z.infer<typeof openDialogResponseDto>;
 ```
 
 Rules:
+
 - Use `.strict()` on body schemas to reject unknown fields
 - Always export both the schema (for `.parse()`) and the inferred type (for TypeScript)
 - Response DTOs do NOT use `.strict()` — they only assert the shape of what we return
@@ -122,23 +128,25 @@ Rules:
 
 ```ts
 class ResourceServer {
-  public async doSomething(input: ResourceBodyDto): Promise<ResourceResponseDto> {
+  public async doSomething(
+    input: ResourceBodyDto,
+  ): Promise<ResourceResponseDto> {
     try {
-      const parsed = resourceBodyDto.parse(input);   // throws ZodError if invalid
+      const parsed = resourceBodyDto.parse(input); // throws ZodError if invalid
       // ... business logic ...
-      return resourceResponseDto.parse(result);      // validates output shape
+      return resourceResponseDto.parse(result); // validates output shape
     } catch (error) {
-      throw this.handleServiceError(error, { internal: "Mensaje específico." });
+      throw this.handleServiceError(error, { internal: 'Mensaje específico.' });
     }
   }
 
   private handleServiceError(
     error: unknown,
-    customMessages?: { internal?: string }
+    customMessages?: { internal?: string },
   ): Error {
     if (error instanceof HttpError || error instanceof ZodError) return error;
     return new InternalServerErrorException(
-      (error as Error).message ?? customMessages?.internal ?? "Error interno."
+      (error as Error).message ?? customMessages?.internal ?? 'Error interno.',
     );
   }
   // ... private helpers ...
@@ -148,6 +156,7 @@ export const resourceServer = new ResourceServer(); // singleton
 ```
 
 Rules:
+
 - One public method per HTTP verb the route supports
 - `handleServiceError()` is always private and always present
 - Export as a **singleton instance**, not the class itself
@@ -159,20 +168,24 @@ Rules:
 ## Route handler (`route.ts`)
 
 ```ts
-import { NextRequest, NextResponse } from "next/server";
-import { handleHttpError } from "@/lib/errorResponse";
-import { resourceServer } from "@/app/api/[domain]/[resource]/[resource].server";
-import type { ResourceBodyDto } from "@/app/api/[domain]/[resource]/dtos/[resource].dto";
+import { resourceServer } from '@/app/api/[domain]/[resource]/[resource].server';
+import type { ResourceBodyDto } from '@/app/api/[domain]/[resource]/dtos/[resource].dto';
+import { handleHttpError } from '@/lib/errorResponse';
+import { NextRequest, NextResponse } from 'next/server';
 
-const DEFAULT_BODY: ResourceBodyDto = { /* safe defaults */ };
+const DEFAULT_BODY: ResourceBodyDto = {
+  /* safe defaults */
+};
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const body: ResourceBodyDto = await request.json().catch(() => DEFAULT_BODY);
+    const body: ResourceBodyDto = await request
+      .json()
+      .catch(() => DEFAULT_BODY);
     const data = await resourceServer.doSomething(body);
     return NextResponse.json(
-      { success: true, message: "Operación completada", data },
-      { status: 200 }
+      { success: true, message: 'Operación completada', data },
+      { status: 200 },
     );
   } catch (error) {
     return handleHttpError(error);
@@ -181,6 +194,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 ```
 
 Rules:
+
 - **Always** `NextRequest` / `NextResponse` — never `Request` / `Response`
 - **Always** import from `@/` aliases — no relative paths for cross-directory imports
 - One try/catch per exported HTTP function
@@ -203,8 +217,9 @@ Rules:
 ## Import aliases
 
 All imports use `@/` — never `../../../`:
+
 ```ts
-import { handleHttpError } from "@/lib/errorResponse";
-import { HttpError } from "@/lib/httpErrors";
-import { dialogServer } from "@/app/api/fs/dialog/dialog.server";
+import { dialogServer } from '@/app/api/fs/dialog/dialog.server';
+import { handleHttpError } from '@/lib/errorResponse';
+import { HttpError } from '@/lib/httpErrors';
 ```

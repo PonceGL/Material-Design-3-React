@@ -18,6 +18,7 @@ Create a changeset when your change affects the published package (`@poncegl/mat
 - Breaking API changes → `major`
 
 **Do NOT create a changeset for:**
+
 - Documentation changes in `docs/`
 - Internal tooling changes (`tooling/`, GitHub Actions)
 - Changes only in `apps/example/` or `apps/storybook/`
@@ -31,6 +32,7 @@ pnpm changeset
 ```
 
 The interactive CLI will ask you:
+
 1. Which package is affected (`@poncegl/material-design-3`)
 2. What type of change (major / minor / patch)
 3. A short description of the change (this appears in the CHANGELOG)
@@ -39,11 +41,11 @@ A file is created in `.changeset/` — commit this file with your PR.
 
 ## Semantic versioning
 
-| Change type | Example | Version bump |
-|---|---|---|
-| `major` | Removed a prop, renamed a component, changed behavior | `1.0.0` → `2.0.0` |
-| `minor` | New component, new variant, new prop (backward compatible) | `1.0.0` → `1.1.0` |
-| `patch` | Bug fix, visual correction, accessibility fix | `1.0.0` → `1.0.1` |
+| Change type | Example                                                    | Version bump      |
+| ----------- | ---------------------------------------------------------- | ----------------- |
+| `major`     | Removed a prop, renamed a component, changed behavior      | `1.0.0` → `2.0.0` |
+| `minor`     | New component, new variant, new prop (backward compatible) | `1.0.0` → `1.1.0` |
+| `patch`     | Bug fix, visual correction, accessibility fix              | `1.0.0` → `1.0.1` |
 
 When in doubt, use `patch`. When adding a new component, use `minor`.
 
