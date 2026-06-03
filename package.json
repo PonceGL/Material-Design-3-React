@@ -8,6 +8,8 @@
     "dev": "pnpm --filter example dev",
     "typecheck": "pnpm -r typecheck",
     "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "preview": "pnpm --filter example preview"
   },
   "devDependencies": {
