@@ -33,18 +33,18 @@ Existing React implementations of M3 are incomplete, poorly maintained, or tight
 
 ## Tech stack
 
-| Concern | Tool |
-|---|---|
-| Language | TypeScript |
-| Framework | React 18+ |
-| Styling | Tailwind CSS v4 + CSS custom properties |
-| Build | Vite (library mode) |
-| Testing | Vitest + React Testing Library + axe-core |
-| Documentation | Storybook 8 |
-| Package manager | pnpm (monorepo) |
-| Versioning | Changesets |
-| CI/CD | GitHub Actions |
-| Registry | npm (`@poncegl` scope) |
+| Concern         | Tool                                      |
+| --------------- | ----------------------------------------- |
+| Language        | TypeScript                                |
+| Framework       | React 18+                                 |
+| Styling         | Tailwind CSS v4 + CSS custom properties   |
+| Build           | Vite (library mode)                       |
+| Testing         | Vitest + React Testing Library + axe-core |
+| Documentation   | Storybook 8                               |
+| Package manager | pnpm (monorepo)                           |
+| Versioning      | Changesets                                |
+| CI/CD           | GitHub Actions                            |
+| Registry        | npm (`@poncegl` scope)                    |
 
 ## Package
 

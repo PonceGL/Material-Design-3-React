@@ -20,33 +20,33 @@ All system tokens are CSS custom properties. Components use those variables inte
 /* Default M3 baseline theme */
 :root {
   /* Color — Light scheme */
-  --md-sys-color-primary: #6750A4;
-  --md-sys-color-on-primary: #FFFFFF;
-  --md-sys-color-primary-container: #EADDFF;
-  --md-sys-color-on-primary-container: #21005D;
-  --md-sys-color-secondary: #625B71;
-  --md-sys-color-on-secondary: #FFFFFF;
-  --md-sys-color-secondary-container: #E8DEF8;
-  --md-sys-color-on-secondary-container: #1D192B;
-  --md-sys-color-tertiary: #7D5260;
-  --md-sys-color-on-tertiary: #FFFFFF;
-  --md-sys-color-tertiary-container: #FFD8E4;
-  --md-sys-color-on-tertiary-container: #31111D;
-  --md-sys-color-error: #B3261E;
-  --md-sys-color-on-error: #FFFFFF;
-  --md-sys-color-error-container: #F9DEDC;
-  --md-sys-color-on-error-container: #410E0B;
-  --md-sys-color-background: #FFFBFE;
-  --md-sys-color-on-background: #1C1B1F;
-  --md-sys-color-surface: #FFFBFE;
-  --md-sys-color-on-surface: #1C1B1F;
-  --md-sys-color-surface-variant: #E7E0EC;
-  --md-sys-color-on-surface-variant: #49454F;
-  --md-sys-color-outline: #79747E;
-  --md-sys-color-outline-variant: #CAC4D0;
+  --md-sys-color-primary: #6750a4;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #eaddff;
+  --md-sys-color-on-primary-container: #21005d;
+  --md-sys-color-secondary: #625b71;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #e8def8;
+  --md-sys-color-on-secondary-container: #1d192b;
+  --md-sys-color-tertiary: #7d5260;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #ffd8e4;
+  --md-sys-color-on-tertiary-container: #31111d;
+  --md-sys-color-error: #b3261e;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #f9dedc;
+  --md-sys-color-on-error-container: #410e0b;
+  --md-sys-color-background: #fffbfe;
+  --md-sys-color-on-background: #1c1b1f;
+  --md-sys-color-surface: #fffbfe;
+  --md-sys-color-on-surface: #1c1b1f;
+  --md-sys-color-surface-variant: #e7e0ec;
+  --md-sys-color-on-surface-variant: #49454f;
+  --md-sys-color-outline: #79747e;
+  --md-sys-color-outline-variant: #cac4d0;
   --md-sys-color-inverse-surface: #313033;
-  --md-sys-color-inverse-on-surface: #F4EFF4;
-  --md-sys-color-inverse-primary: #D0BCFF;
+  --md-sys-color-inverse-on-surface: #f4eff4;
+  --md-sys-color-inverse-primary: #d0bcff;
   --md-sys-color-shadow: #000000;
   --md-sys-color-scrim: #000000;
 
@@ -61,11 +61,16 @@ All system tokens are CSS custom properties. Components use those variables inte
 
   /* Elevation — expressed as box-shadow values */
   --md-sys-elevation-level0: none;
-  --md-sys-elevation-level1: 0px 1px 2px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
-  --md-sys-elevation-level2: 0px 1px 2px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
-  --md-sys-elevation-level3: 0px 4px 8px 3px rgba(0,0,0,0.15), 0px 1px 3px rgba(0,0,0,0.3);
-  --md-sys-elevation-level4: 0px 6px 10px 4px rgba(0,0,0,0.15), 0px 2px 3px rgba(0,0,0,0.3);
-  --md-sys-elevation-level5: 0px 8px 12px 6px rgba(0,0,0,0.15), 0px 4px 4px rgba(0,0,0,0.3);
+  --md-sys-elevation-level1:
+    0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level2:
+    0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level3:
+    0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-level4:
+    0px 6px 10px 4px rgba(0, 0, 0, 0.15), 0px 2px 3px rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-level5:
+    0px 8px 12px 6px rgba(0, 0, 0, 0.15), 0px 4px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Tailwind v4 — map system tokens to utility classes */
@@ -126,11 +131,11 @@ All three options are fully supported. Choose the one that fits your project.
 No dependencies, no JavaScript. Works in any framework.
 
 ```css
-@import "@poncegl/material-design-3/styles.css";
+@import '@poncegl/material-design-3/styles.css';
 
 :root {
-  --md-sys-color-primary: #0066CC;
-  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary: #0066cc;
+  --md-sys-color-on-primary: #ffffff;
   /* override only what you need — unset tokens fall back to the baseline */
 }
 ```
@@ -142,16 +147,12 @@ Best for: projects that manage their design tokens in CSS, or non-React contexts
 Generates a complete M3 palette from a single source color, using the same HCT algorithm as [Material Theme Builder](https://m3.material.io/theme-builder).
 
 ```tsx
-import { MD3Provider, createMD3Theme } from '@poncegl/material-design-3'
+import { MD3Provider, createMD3Theme } from '@poncegl/material-design-3';
 
-const theme = createMD3Theme({ primary: '#0066CC' })
+const theme = createMD3Theme({ primary: '#0066CC' });
 
 function App() {
-  return (
-    <MD3Provider theme={theme}>
-      {/* your app */}
-    </MD3Provider>
-  )
+  return <MD3Provider theme={theme}>{/* your app */}</MD3Provider>;
 }
 ```
 
@@ -164,9 +165,9 @@ Best for: projects that want automatic palette generation from a brand color.
 ### Option C — No configuration (baseline M3 theme)
 
 ```tsx
-import '@poncegl/material-design-3/styles.css'
+import '@poncegl/material-design-3/styles.css';
 
-<Button variant="filled">Hello</Button>
+<Button variant="filled">Hello</Button>;
 ```
 
 Ships with the default M3 purple baseline theme out of the box. Zero configuration.
@@ -180,8 +181,8 @@ System tokens have two schemes: light and dark. Dark mode support is provided vi
 ```css
 @media (prefers-color-scheme: dark) {
   :root {
-    --md-sys-color-primary: #D0BCFF;
-    --md-sys-color-on-primary: #381E72;
+    --md-sys-color-primary: #d0bcff;
+    --md-sys-color-on-primary: #381e72;
     /* ... dark scheme overrides */
   }
 }

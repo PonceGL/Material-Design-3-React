@@ -10,6 +10,7 @@ React component library reimplementing Material Design 3. Published as `@poncegl
 **Why:** Bring M3 components to React (M3 was originally designed for Kotlin/Jetpack Compose).
 
 **Key decisions:**
+
 - npm scope: `@poncegl` (matches GitHub handle PonceGL)
 - Package manager: pnpm with monorepo workspaces
 - Monorepo structure: `packages/` (publishable), `apps/` (example, storybook), `tooling/` (shared configs)
