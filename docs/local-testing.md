@@ -14,15 +14,21 @@ This document describes how to test the library locally in an external project b
 
 ---
 
-## Step 1 — Build the library
+## Step 1 — Build and verify the library
 
-From the **monorepo root**:
+From the **monorepo root**, run the single verification command:
 
 ```bash
-pnpm build
+pnpm build:local
 ```
 
-This produces the following files inside `packages/material-design-3/dist/`:
+This command runs in sequence and stops immediately if any step fails:
+
+1. **Typecheck** — validates all TypeScript files including tests
+2. **Tests** — runs the full test suite
+3. **Build** — compiles and bundles the library into `dist/`
+
+The output after a successful run:
 
 ```
 dist/
@@ -32,6 +38,8 @@ dist/
   styles.css      # Component styles (must be imported explicitly)
   components/     # Individual component type declarations
 ```
+
+> Use `pnpm build` if you only need to compile without running tests (e.g., in CI or when iterating on styles).
 
 ---
 
@@ -102,15 +110,11 @@ A successful run (no output, exit code 0) confirms that `dist/index.d.ts` is res
 
 ## Step 5 — Rebuild after changes
 
-Because `pnpm link` creates a symlink to `dist/`, you only need to rebuild the library. **No re-linking required.**
-
-From the **monorepo root**:
+Run the same command as step 1. This re-validates everything and updates `dist/`. No re-linking required — the symlink already points to `dist/`.
 
 ```bash
-pnpm build
+pnpm build:local
 ```
-
-The updated files in `dist/` are immediately available in your external project.
 
 ---
 
@@ -138,6 +142,33 @@ When you no longer need the local link:
    ```
 
 > **Why not `pnpm unlink`?** `pnpm unlink <package>` does not remove the `link:` entry from `package.json` or the override from `pnpm-workspace.yaml`. Always clean these up manually and re-run `pnpm install`.
+
+---
+
+## Package contents
+
+To see exactly which files would be included in a published release, run from the library package directory:
+
+```bash
+cd packages/material-design-3
+pnpm pack:preview
+```
+
+Expected output:
+
+```
+Tarball Contents
+dist/components/Button.d.ts
+dist/index.cjs
+dist/index.d.ts
+dist/index.js
+dist/styles.css
+package.json
+```
+
+Only `dist/` files and `package.json` are published. Source files, tests, config files, and the example app are not included.
+
+The `prepublishOnly` lifecycle hook runs `pnpm build:local` automatically before every `pnpm publish`, so the package is always verified and built before it reaches npm.
 
 ---
 
@@ -177,9 +208,11 @@ Next.js 15+ uses Turbopack by default for production builds. Turbopack does not 
 
 | Task                            | Command                                                                                       |
 | ------------------------------- | --------------------------------------------------------------------------------------------- |
-| Build the library               | `pnpm build` (from monorepo root)                                                             |
+| Build + verify (recommended)    | `pnpm build:local` (from monorepo root)                                                       |
+| Build only (fast)               | `pnpm build` (from monorepo root)                                                             |
 | Link to external project        | `pnpm link <abs-path>` (from external project root)                                           |
 | Verify types                    | `pnpm typecheck` (in external project)                                                        |
-| Rebuild after changes           | `pnpm build` — no re-link needed (Vite/Electron)                                              |
-| Rebuild after changes (Next.js) | `pnpm build` → `pnpm update @poncegl/material-design-3`                                       |
+| Rebuild + verify after changes  | `pnpm build:local` — no re-link needed                                                        |
+| Preview published files         | `pnpm pack:preview` (from `packages/material-design-3`)                                       |
 | Disconnect                      | Remove `link:` from `package.json` + override from `pnpm-workspace.yaml`, then `pnpm install` |
+| Rebuild after changes (Next.js) | `pnpm build:local` → `pnpm update @poncegl/material-design-3`                                 |
