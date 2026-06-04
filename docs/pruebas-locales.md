@@ -12,6 +12,8 @@ Este documento describe cómo probar la librería localmente en un proyecto exte
 - Un proyecto React externo (React ≥ 18.2)
 - La librería compilada al menos una vez (ver paso 1)
 
+**Solo en Windows:** `pnpm link` crea symlinks, y en Windows crearlos requiere que el **Modo desarrollador** esté activado (`Configuración → Sistema → Para desarrolladores → Modo desarrollador`) o ejecutar la terminal como Administrador. Sin uno de estos, el link parece funcionar pero el paquete no se resuelve. Si no puedes activar el Modo desarrollador, usa el [protocolo `file:`](#windowsvite--electron) en su lugar — copia los archivos al store de pnpm sin symlinks y funciona sin permisos elevados.
+
 ---
 
 ## Paso 1 — Compilar y verificar la librería
@@ -48,13 +50,21 @@ dist/
 Desde la **raíz de tu proyecto externo**, ejecuta:
 
 ```bash
-pnpm link /ruta/absoluta/a/Material-Design-3-React/packages/material-design-3
+pnpm link <ruta-absoluta-a-packages/material-design-3>
 ```
 
-**Ejemplo** (ajusta la ruta a tu máquina):
+La ruta es siempre **absoluta** y varía según el sistema operativo y el usuario. Ejemplos:
+
+**macOS / Linux**
 
 ```bash
 pnpm link /Users/tunombre/proyectos/Material-Design-3-React/packages/material-design-3
+```
+
+**Windows (PowerShell o Símbolo del sistema)**
+
+```powershell
+pnpm link C:\Users\tunombre\Documents\DEV\Material-Design-3-React\packages\material-design-3
 ```
 
 pnpm modificará tres archivos en tu proyecto:
@@ -174,6 +184,42 @@ El hook `prepublishOnly` ejecuta `pnpm build:local` automáticamente antes de ca
 
 ## Notas por framework
 
+### Windows / Vite + Electron
+
+`pnpm link` usa symlinks. En Windows, crearlos requiere el **Modo desarrollador** o ejecutar la terminal como Administrador (ver [Requisitos previos](#requisitos-previos)). Si ves errores como `Module not found` o `Failed to resolve import` después de ejecutar `pnpm link`, el symlink no se creó correctamente.
+
+**Solución recomendada:** usa el protocolo `file:` directamente. Copia los archivos al virtual store de pnpm mediante hardlinks — sin necesidad de permisos de symlink.
+
+1. Agrega la dependencia manualmente en `package.json` usando barras hacia adelante:
+
+   ```diff
+   + "@poncegl/material-design-3": "file:../ruta/relativa/a/packages/material-design-3",
+   ```
+
+   O con ruta absoluta:
+
+   ```diff
+   + "@poncegl/material-design-3": "file:C:/Users/tunombre/Documents/DEV/Material-Design-3-React/packages/material-design-3",
+   ```
+
+2. Ejecuta `pnpm install`:
+
+   ```bash
+   pnpm install
+   ```
+
+3. Después de cada recompilación de la librería, actualiza el store de pnpm:
+
+   ```bash
+   pnpm update @poncegl/material-design-3
+   ```
+
+   > `pnpm install` solo no es suficiente después de una recompilación — los hardlinks en el virtual store apuntan a los inodos anteriores. `pnpm update` vuelve a copiar los archivos.
+
+4. Para desconectar, elimina la entrada `file:` de `package.json` y el override de `pnpm-workspace.yaml`, luego ejecuta `pnpm install`.
+
+---
+
 ### Next.js / Turbopack
 
 Next.js 15+ usa Turbopack por defecto para los builds de producción. Turbopack no resuelve symlinks que apunten fuera de la raíz del proyecto, por lo que `pnpm link` (que usa el protocolo `link:`) fallará al compilar con `Module not found`.
@@ -206,13 +252,15 @@ Next.js 15+ usa Turbopack por defecto para los builds de producción. Turbopack 
 
 ## Referencia rápida
 
-| Tarea                                     | Comando                                                                                     |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Compilar + verificar (recomendado)        | `pnpm build:local` (desde la raíz del monorepo)                                             |
-| Solo compilar (rápido)                    | `pnpm build` (desde la raíz del monorepo)                                                   |
-| Enlazar en proyecto externo               | `pnpm link <ruta-absoluta>` (desde la raíz del proyecto externo)                            |
-| Verificar tipos                           | `pnpm typecheck` (en el proyecto externo)                                                   |
-| Recompilar + verificar después de cambios | `pnpm build:local` — no requiere volver a enlazar                                           |
-| Ver archivos que se publicarían           | `pnpm pack:preview` (desde `packages/material-design-3`)                                    |
-| Desconectar                               | Elimina `link:` de `package.json` + override de `pnpm-workspace.yaml`, luego `pnpm install` |
-| Recompilar después de cambios (Next.js)   | `pnpm build:local` → `pnpm update @poncegl/material-design-3`                               |
+| Tarea                                             | Comando                                                                                     |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Compilar + verificar (recomendado)                | `pnpm build:local` (desde la raíz del monorepo)                                             |
+| Solo compilar (rápido)                            | `pnpm build` (desde la raíz del monorepo)                                                   |
+| Enlazar en proyecto externo (macOS/Linux)         | `pnpm link /ruta/absoluta` (desde la raíz del proyecto externo)                             |
+| Enlazar en proyecto externo (Windows)             | `pnpm link C:\ruta\absoluta` — requiere Modo desarrollador o admin                          |
+| Alternativa en Windows (sin symlinks)             | Usar protocolo `file:` en `package.json`, luego `pnpm install`                              |
+| Verificar tipos                                   | `pnpm typecheck` (en el proyecto externo)                                                   |
+| Recompilar + verificar después de cambios         | `pnpm build:local` — no requiere volver a enlazar                                           |
+| Ver archivos que se publicarían                   | `pnpm pack:preview` (desde `packages/material-design-3`)                                    |
+| Desconectar                                       | Elimina `link:` de `package.json` + override de `pnpm-workspace.yaml`, luego `pnpm install` |
+| Recompilar después de cambios (Next.js / Windows) | `pnpm build:local` → `pnpm update @poncegl/material-design-3`                               |
