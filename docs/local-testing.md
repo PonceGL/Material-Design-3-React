@@ -1,8 +1,8 @@
-# Local Testing with pnpm link
+# Local Testing with pnpm
 
 This document describes how to test the library locally in an external project before publishing to npm.
 
-> **Verified with:** pnpm 11.1.3, React 19, Vite 8 (Electron), Next.js 16 (see [framework notes](#framework-notes)).
+> **Verified with:** pnpm 11.1.3, React 19, Vite 8 (Electron), Next.js 16.
 
 ---
 
@@ -11,8 +11,6 @@ This document describes how to test the library locally in an external project b
 - pnpm 11 or higher installed globally
 - An external React project (React ≥ 18.2)
 - The library built at least once (see step 1)
-
-**Windows only:** `pnpm link` creates symlinks, which require either **Developer Mode** enabled (`Settings → System → For developers → Developer Mode`) or running the terminal as Administrator. Without one of these, the link appears to succeed but the package will not resolve. If you cannot enable Developer Mode, use the [`file:` protocol](#windowsvite--electron) instead — it copies files into the pnpm store without symlinks and works without elevated permissions.
 
 ---
 
@@ -47,42 +45,67 @@ dist/
 
 ## Step 2 — Link the package
 
+Two approaches are available. Use this table to choose:
+
+| Situation                                   | Use         |
+| ------------------------------------------- | ----------- |
+| Windows (any framework)                     | `file:` (A) |
+| macOS / Linux + Next.js / Turbopack         | `file:` (A) |
+| macOS / Linux + Vite (Electron, plain Vite) | Either      |
+
+### Option A — `file:` protocol (recommended, works on all platforms)
+
+1. Add the dependency manually to `package.json`. **Use forward slashes on all platforms, including Windows** (avoids escaping issues):
+
+   **macOS / Linux:**
+
+   ```json
+   "@poncegl/material-design-3": "file:../relative/path/to/packages/material-design-3"
+   ```
+
+   **Windows (use forward slashes, not backslashes):**
+
+   ```json
+   "@poncegl/material-design-3": "file:C:/Users/yourname/Documents/DEV/Material-Design-3-React/packages/material-design-3"
+   ```
+
+2. Run `pnpm install`:
+
+   ```bash
+   pnpm install
+   ```
+
+   You will see a confirmation line in the output:
+
+   ```
+   + @poncegl/material-design-3 0.1.0
+   ```
+
+> **Why `file:` works everywhere:** pnpm copies the package files into its virtual store (`.pnpm/` inside the project) using hardlinks, then symlinks from `node_modules/@poncegl/material-design-3` to that local store. The symlink never crosses the project root, so Vite resolves it on any OS.
+
+> **Why `link:` fails on Windows and Next.js:** `link:` creates a symlink that points directly to the external path. Vite on Windows and Next.js / Turbopack do not follow symlinks that cross the project root boundary.
+
+> **Do not commit these changes to your main branch.** The paths in `package.json` are machine-specific and only valid during local testing. See [Step 6](#step-6--disconnect-the-link) for cleanup.
+
+---
+
+### Option B — `pnpm link` (macOS / Linux + Vite only)
+
+> **Does not work on Windows** — Vite cannot follow symlinks that point outside the project root on Windows, even with Developer Mode enabled. Use Option A instead.
+>
+> **Does not work with Next.js / Turbopack** — same symlink restriction. Use Option A instead.
+
 From the **root of your external project**, run:
 
 ```bash
-pnpm link <absolute-path-to-packages/material-design-3>
+pnpm link /absolute/path/to/Material-Design-3-React/packages/material-design-3
 ```
 
-The path is always **absolute** and differs by operating system and user. Examples:
+pnpm will modify three files: `package.json` (`link:` protocol), `pnpm-workspace.yaml` (override), and `pnpm-lock.yaml`.
 
-**macOS / Linux**
+After rebuilds, no refresh step is needed — the symlink already points directly to `dist/`.
 
-```bash
-pnpm link /Users/yourname/projects/Material-Design-3-React/packages/material-design-3
-```
-
-**Windows (PowerShell or Command Prompt)**
-
-```powershell
-pnpm link C:\Users\yourname\Documents\DEV\Material-Design-3-React\packages\material-design-3
-```
-
-pnpm will modify three files in your project:
-
-1. `package.json` — adds the dependency using the `link:` protocol.
-2. `pnpm-workspace.yaml` — adds an override pointing to the local path (pnpm 11 behavior).
-3. `pnpm-lock.yaml` — updated lockfile.
-
-You will see a confirmation line in the output:
-
-```
-dependencies:
-+ @poncegl/material-design-3 0.1.0 <- ../Material-Design-3-React/packages/material-design-3
-```
-
-> **Do not commit these changes to your main branch.** The paths in `package.json` and `pnpm-workspace.yaml` are machine-specific. They are only valid during local testing. See [Step 6](#step-6--disconnect-the-link) for cleanup.
-
-> **Note about peer dependency warnings:** pnpm will display a warning about `react` and `react-dom` peer dependencies not resolving through the link. This is expected — the consuming project's own React installation is used at runtime and there is no actual issue as long as React is already installed.
+To disconnect, see [Step 6](#step-6--disconnect-the-link).
 
 ---
 
@@ -120,38 +143,69 @@ A successful run (no output, exit code 0) confirms that `dist/index.d.ts` is res
 
 ## Step 5 — Rebuild after changes
 
-Run the same command as step 1. This re-validates everything and updates `dist/`. No re-linking required — the symlink already points to `dist/`.
+From the **monorepo root**, run:
 
 ```bash
 pnpm build:local
 ```
 
+**If you used Option A (`file:`)**, run this additional command in your external project after each rebuild:
+
+```bash
+pnpm update @poncegl/material-design-3
+```
+
+> `file:` copies files into the pnpm virtual store using hardlinks. After a rebuild (new inodes), `pnpm update` re-copies the files. A plain `pnpm install` is not enough.
+
+**If you used Option B (`pnpm link`)**, no extra step is needed — the symlink already points to `dist/`.
+
 ---
 
 ## Step 6 — Disconnect the link
 
-When you no longer need the local link:
+### Option A (`file:`)
 
-1. Open `package.json` and **remove** the `link:` entry:
+1. Open `package.json` and remove the `file:` entry:
+
+   ```diff
+   - "@poncegl/material-design-3": "file:../path/to/packages/material-design-3",
+   ```
+
+2. Remove the override block from `pnpm-workspace.yaml` if present:
+
+   ```diff
+   - overrides:
+   -   '@poncegl/material-design-3': file:../path/to/packages/material-design-3
+   ```
+
+3. Run `pnpm install`:
+
+   ```bash
+   pnpm install
+   ```
+
+### Option B (`pnpm link`)
+
+> **Why not `pnpm unlink`?** `pnpm unlink <package>` does not remove the `link:` entry from `package.json` or the override from `pnpm-workspace.yaml`. Always clean these up manually.
+
+1. Open `package.json` and remove the `link:` entry:
 
    ```diff
    - "@poncegl/material-design-3": "link:../path/to/packages/material-design-3",
    ```
 
-2. Open `pnpm-workspace.yaml` and **remove** the override block:
+2. Open `pnpm-workspace.yaml` and remove the override block:
 
    ```diff
    - overrides:
    -   '@poncegl/material-design-3': link:../path/to/packages/material-design-3
    ```
 
-3. Run `pnpm install` to restore the project to its original state:
+3. Run `pnpm install`:
 
    ```bash
    pnpm install
    ```
-
-> **Why not `pnpm unlink`?** `pnpm unlink <package>` does not remove the `link:` entry from `package.json` or the override from `pnpm-workspace.yaml`. Always clean these up manually and re-run `pnpm install`.
 
 ---
 
@@ -182,85 +236,17 @@ The `prepublishOnly` lifecycle hook runs `pnpm build:local` automatically before
 
 ---
 
-## Framework notes
-
-### Windows / Vite + Electron
-
-`pnpm link` uses symlinks. On Windows, creating symlinks requires either **Developer Mode** or running the terminal as Administrator (see [Prerequisites](#prerequisites)). If you see errors like `Module not found` or `Failed to resolve import` after running `pnpm link`, the symlink was not created.
-
-**Recommended workaround:** use the `file:` protocol instead. It copies files into the pnpm virtual store using hardlinks — no symlink permissions needed.
-
-1. Add the dependency manually to `package.json` using a forward-slash path:
-
-   ```diff
-   + "@poncegl/material-design-3": "file:../relative/path/to/packages/material-design-3",
-   ```
-
-   Or with an absolute path:
-
-   ```diff
-   + "@poncegl/material-design-3": "file:C:/Users/yourname/Documents/DEV/Material-Design-3-React/packages/material-design-3",
-   ```
-
-2. Run `pnpm install`:
-
-   ```bash
-   pnpm install
-   ```
-
-3. After each rebuild of the library, refresh the pnpm store:
-
-   ```bash
-   pnpm update @poncegl/material-design-3
-   ```
-
-   > `pnpm install` alone is not enough after a rebuild — the hardlinks in the virtual store point to the old inodes. `pnpm update` re-copies the files.
-
-4. To disconnect, remove the `file:` entry from `package.json` and any override from `pnpm-workspace.yaml`, then run `pnpm install`.
-
----
-
-### Next.js / Turbopack
-
-Next.js 15+ uses Turbopack by default for production builds. Turbopack does not resolve symlinks that point outside the project root, so `pnpm link` (which uses the `link:` protocol) will fail at build time with `Module not found`.
-
-**Workaround:** use the `file:` protocol directly instead of `pnpm link`.
-
-1. Add the dependency manually to `package.json`:
-
-   ```diff
-   + "@poncegl/material-design-3": "file:../path/to/packages/material-design-3",
-   ```
-
-2. Run `pnpm install`:
-
-   ```bash
-   pnpm install
-   ```
-
-3. After each rebuild of the library, refresh the pnpm store:
-
-   ```bash
-   pnpm update @poncegl/material-design-3
-   ```
-
-   > Unlike `link:`, the `file:` protocol copies files into the pnpm virtual store using hardlinks. When the library is rebuilt (new inodes), you must run `pnpm update` to refresh the hardlinks. A plain `pnpm install` is not enough.
-
-4. To disconnect, remove the `file:` entry and any override from `pnpm-workspace.yaml`, then run `pnpm install`.
-
----
-
 ## Quick reference
 
-| Task                                      | Command                                                                                       |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Build + verify (recommended)              | `pnpm build:local` (from monorepo root)                                                       |
-| Build only (fast)                         | `pnpm build` (from monorepo root)                                                             |
-| Link to external project (macOS/Linux)    | `pnpm link /absolute/path` (from external project root)                                       |
-| Link to external project (Windows)        | `pnpm link C:\absolute\path` — requires Developer Mode or admin                               |
-| Windows alternative (no symlinks)         | Use `file:` protocol in `package.json`, then `pnpm install`                                   |
-| Verify types                              | `pnpm typecheck` (in external project)                                                        |
-| Rebuild + verify after changes            | `pnpm build:local` — no re-link needed                                                        |
-| Preview published files                   | `pnpm pack:preview` (from `packages/material-design-3`)                                       |
-| Disconnect                                | Remove `link:` from `package.json` + override from `pnpm-workspace.yaml`, then `pnpm install` |
-| Rebuild after changes (Next.js / Windows) | `pnpm build:local` → `pnpm update @poncegl/material-design-3`                                 |
+| Task                                             | Command                                                                                       |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Build + verify (recommended)                     | `pnpm build:local` (from monorepo root)                                                       |
+| Build only (fast)                                | `pnpm build` (from monorepo root)                                                             |
+| Link — Option A, all platforms (file:)           | Add `file:<path>` to `package.json`, then `pnpm install`                                      |
+| Link — Option B, macOS/Linux + Vite only (link:) | `pnpm link <abs-path>` (from external project root)                                           |
+| Verify types                                     | `pnpm typecheck` (in external project)                                                        |
+| Rebuild after changes — Option A                 | `pnpm build:local` → `pnpm update @poncegl/material-design-3`                                 |
+| Rebuild after changes — Option B                 | `pnpm build:local` — no extra step needed                                                     |
+| Preview published files                          | `pnpm pack:preview` (from `packages/material-design-3`)                                       |
+| Disconnect — Option A                            | Remove `file:` from `package.json` + override from `pnpm-workspace.yaml`, then `pnpm install` |
+| Disconnect — Option B                            | Remove `link:` from `package.json` + override from `pnpm-workspace.yaml`, then `pnpm install` |
