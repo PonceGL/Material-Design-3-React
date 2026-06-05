@@ -5,6 +5,7 @@
   "packageManager": "pnpm@11.1.3",
   "scripts": {
     "build": "pnpm --filter @poncegl/material-design-3 build",
+    "build:local": "pnpm --filter @poncegl/material-design-3 build:local",
     "dev": "pnpm --filter example dev",
     "typecheck": "pnpm -r typecheck",
     "lint": "eslint .",

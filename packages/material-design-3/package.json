@@ -22,6 +22,9 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && vite build",
+    "build:local": "pnpm typecheck && pnpm test && pnpm build",
+    "pack:preview": "pnpm pack --dry-run",
+    "prepublishOnly": "pnpm build:local",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
