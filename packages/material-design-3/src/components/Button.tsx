@@ -33,7 +33,7 @@ export function Button({
     .join(' ');
 
   return (
-    <button className={classes} type={type} {...props}>
+    <button className={`${classes} shadow`} type={type} {...props}>
       {icon}
       {children}
     </button>
