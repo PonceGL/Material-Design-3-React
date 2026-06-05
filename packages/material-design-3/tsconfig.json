@@ -13,7 +13,8 @@
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
-      "@poncegl/material-design-3": ["./src/index.ts"]
+      "@poncegl/material-design-3": ["./src/index.ts"],
+      "@/*": ["src/*"]
     },
     "resolveJsonModule": true,
     "isolatedModules": true,
