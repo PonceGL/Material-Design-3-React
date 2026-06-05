@@ -3,5 +3,6 @@
     "esbenp.prettier-vscode",
     "bradlc.vscode-tailwindcss",
     "dbaeumer.vscode-eslint"
-  ]
+  ],
+  "unwantedRecommendations": ["eg2.tslint"]
 }
