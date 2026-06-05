@@ -15,6 +15,7 @@ export default defineConfig({
         exampleDir,
         '../../packages/material-design-3/src/index.ts',
       ),
+      '@': resolve(exampleDir, '../../packages/material-design-3/src'),
     },
   },
   server: {

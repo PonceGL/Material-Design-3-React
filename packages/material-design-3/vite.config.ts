@@ -8,6 +8,11 @@ import dts from 'vite-plugin-dts';
 const rootDir = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': resolve(rootDir, 'src'),
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),
