@@ -4,6 +4,10 @@ import './example.css';
 import './styles.css';
 
 export function App() {
+  const exampleAction = () => {
+    alert('Example action');
+  };
+
   return (
     <main className="min-h-screen bg-md-surface px-6 py-10 text-md-on-surface">
       <section className="mx-auto flex max-w-4xl flex-col gap-8">
@@ -17,11 +21,19 @@ export function App() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button>Filled</Button>
-          <Button variant="tonal">Tonal</Button>
-          <Button variant="outlined">Outlined</Button>
-          <Button variant="text">Text</Button>
-          <Button disabled>Disabled</Button>
+          <Button onClick={exampleAction}>Filled</Button>
+          <Button variant="tonal" onClick={exampleAction}>
+            Tonal
+          </Button>
+          <Button variant="outlined" onClick={exampleAction}>
+            Outlined
+          </Button>
+          <Button variant="text" onClick={exampleAction}>
+            Text
+          </Button>
+          <Button disabled onClick={exampleAction}>
+            Disabled
+          </Button>
         </div>
       </section>
     </main>
