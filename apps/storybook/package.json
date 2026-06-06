@@ -1,0 +1,24 @@
+{
+  "name": "storybook",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build"
+  },
+  "dependencies": {
+    "@poncegl/material-design-3": "workspace:*"
+  },
+  "devDependencies": {
+    "@storybook/blocks": "^8.0.0",
+    "@storybook/react": "^8.0.0",
+    "@storybook/react-vite": "^8.0.0",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "storybook": "^8.0.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}
