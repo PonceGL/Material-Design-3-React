@@ -12,6 +12,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "pnpm --filter example preview",
+    "storybook": "pnpm --filter storybook run dev",
+    "build-storybook": "pnpm --filter storybook run build",
     "test": "pnpm --filter @poncegl/material-design-3 test",
     "test:coverage": "pnpm --filter @poncegl/material-design-3 test:coverage",
     "changeset": "changeset",
