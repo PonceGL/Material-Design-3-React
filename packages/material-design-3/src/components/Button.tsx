@@ -8,7 +8,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const baseClasses =
-  'inline-flex h-10 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-[0.38]';
+  'inline-flex h-10 items-center justify-center gap-2 rounded-md-full px-6 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-[0.38]';
 
 const variantClasses: Record<ButtonVariant, string> = {
   filled:
@@ -33,7 +33,7 @@ export function Button({
     .join(' ');
 
   return (
-    <button className={`${classes} shadow`} type={type} {...props}>
+    <button className={classes} type={type} {...props}>
       {icon}
       {children}
     </button>
