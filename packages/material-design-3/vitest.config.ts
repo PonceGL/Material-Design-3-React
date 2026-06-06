@@ -16,6 +16,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     globals: true,
+    server: {
+      deps: {
+        inline: ['@material/material-color-utilities'],
+      },
+    },
     coverage: {
       provider: 'v8',
       include: ['src/**'],
