@@ -10,6 +10,9 @@
     "@poncegl/material-design-3": "workspace:*"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^8.6.18",
+    "@storybook/addon-docs": "^8.6.18",
+    "@storybook/addon-interactions": "^8.6.18",
     "@storybook/blocks": "^8.0.0",
     "@storybook/react": "^8.0.0",
     "@storybook/react-vite": "^8.0.0",

@@ -3,7 +3,11 @@ import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
   stories: ['../../packages/material-design-3/src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: [],
+  addons: [
+    '@storybook/addon-docs',
+    '@storybook/addon-a11y',
+    '@storybook/addon-interactions',
+  ],
   framework: {
     name: '@storybook/react-vite',
     options: {},
