@@ -10,6 +10,7 @@
     "@poncegl/material-design-3": "workspace:*"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.1.8",
     "@storybook/addon-a11y": "^8.6.18",
     "@storybook/addon-docs": "^8.6.18",
     "@storybook/addon-interactions": "^8.6.18",
