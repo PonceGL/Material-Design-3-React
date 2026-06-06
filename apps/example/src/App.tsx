@@ -35,6 +35,26 @@ export function App() {
             Disabled
           </Button>
         </div>
+
+        <div className="space-y-3">
+          <p className="text-sm font-medium text-md-on-surface-variant">
+            Elevation tokens
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <div className="rounded-md-lg bg-md-surface-variant shadow-md-elevation-2 px-6 py-4">
+              <p className="text-sm text-md-on-surface-variant">elevation-2</p>
+              <p className="text-xs text-md-on-surface-variant/60">
+                rounded-md-lg
+              </p>
+            </div>
+            <div className="rounded-md-xl bg-md-surface-variant shadow-md-elevation-3 px-6 py-4">
+              <p className="text-sm text-md-on-surface-variant">elevation-3</p>
+              <p className="text-xs text-md-on-surface-variant/60">
+                rounded-md-xl
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );
