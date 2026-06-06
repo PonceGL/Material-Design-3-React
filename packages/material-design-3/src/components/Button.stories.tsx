@@ -11,6 +11,7 @@ const meta: Meta<typeof Button> = {
       control: 'select',
       options: ['filled', 'tonal', 'outlined', 'text'],
     },
+    children: { control: 'text' },
     disabled: { control: 'boolean' },
   },
 };
@@ -18,6 +19,14 @@ const meta: Meta<typeof Button> = {
 export default meta;
 
 type Story = StoryObj<typeof Button>;
+
+export const Primary: Story = {
+  args: {
+    variant: 'filled',
+    children: 'Button',
+    disabled: false,
+  },
+};
 
 export const Filled: Story = {
   args: { variant: 'filled', children: 'Button' },
