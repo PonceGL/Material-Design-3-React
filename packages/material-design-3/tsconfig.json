@@ -28,5 +28,6 @@
     "vitest.setup.ts",
     "**/*.test.tsx",
     "**/*.test.ts"
-  ]
+  ],
+  "exclude": ["**/*.stories.tsx", "**/*.stories.ts"]
 }

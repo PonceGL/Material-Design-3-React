@@ -18,12 +18,15 @@ export default defineConfig({
     tailwindcss(),
     dts({
       entryRoot: 'src',
+      tsconfigPath: './tsconfig.build.json',
       include: ['src'],
       exclude: [
         '**/*.test.tsx',
         '**/*.test.ts',
         '**/*.spec.tsx',
         '**/*.spec.ts',
+        '**/*.stories.tsx',
+        '**/*.stories.ts',
       ],
       insertTypesEntry: true,
     }),
