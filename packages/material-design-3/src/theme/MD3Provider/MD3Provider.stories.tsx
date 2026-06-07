@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from '../../components/Button';
@@ -116,7 +118,7 @@ export const DarkModeSideBySide: Story = {
     docs: {
       description: {
         story:
-          'Muestra ambos esquemas simultáneamente. El panel oscuro usa `data-theme="dark"` sobre un div contenedor para activar los tokens dark de `styles.css`, ya que `MD3Provider` escribe en `document.documentElement` y no puede anidarse para dos esquemas distintos en la misma página.',
+          'Muestra ambos esquemas simultáneamente. El panel oscuro aplica los tokens dark directamente como CSS custom properties inline en el div contenedor — el mismo mecanismo que usa `MD3Provider` internamente — ya que no es posible anidar dos instancias del provider para distintos esquemas en la misma página.',
       },
     },
   },
@@ -133,13 +135,13 @@ export const DarkModeSideBySide: Story = {
           <ThemeDemo label='colorScheme="light"' />
         </div>
         <div
-          data-theme="dark"
           style={{
             flex: 1,
+            ...(defaultTheme.dark as unknown as CSSProperties),
             background: 'var(--md-sys-color-surface)',
           }}
         >
-          <ThemeDemo label='data-theme="dark"' />
+          <ThemeDemo label='colorScheme="dark"' />
         </div>
       </div>
     </MD3Provider>
