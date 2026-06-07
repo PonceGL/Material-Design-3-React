@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
 
@@ -112,13 +112,40 @@ export const CustomBrandColor: Story = {
   },
 };
 
+function DarkPanel({ label }: { label: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const tokens = defaultTheme.dark;
+    Object.entries(tokens).forEach(([key, value]) => {
+      el.style.setProperty(key, value ?? '');
+    });
+    return () => {
+      Object.keys(tokens).forEach((key) => {
+        el.style.removeProperty(key);
+      });
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{ flex: 1, background: 'var(--md-sys-color-surface)' }}
+    >
+      <ThemeDemo label={label} />
+    </div>
+  );
+}
+
 export const DarkModeSideBySide: Story = {
   name: 'Light / Dark side-by-side',
   parameters: {
     docs: {
       description: {
         story:
-          'Muestra ambos esquemas simultáneamente. El panel oscuro aplica los tokens dark directamente como CSS custom properties inline en el div contenedor — el mismo mecanismo que usa `MD3Provider` internamente — ya que no es posible anidar dos instancias del provider para distintos esquemas en la misma página.',
+          'Muestra ambos esquemas simultáneamente. El panel oscuro usa `useLayoutEffect` + `ref` para aplicar los tokens dark vía `element.style.setProperty()` — exactamente el mismo mecanismo que usa `MD3Provider` internamente — ya que no es posible anidar dos instancias del provider para distintos esquemas en la misma página.',
       },
     },
   },
@@ -134,15 +161,7 @@ export const DarkModeSideBySide: Story = {
         >
           <ThemeDemo label='colorScheme="light"' />
         </div>
-        <div
-          style={{
-            flex: 1,
-            ...(defaultTheme.dark as unknown as CSSProperties),
-            background: 'var(--md-sys-color-surface)',
-          }}
-        >
-          <ThemeDemo label='colorScheme="dark"' />
-        </div>
+        <DarkPanel label='colorScheme="dark"' />
       </div>
     </MD3Provider>
   ),
