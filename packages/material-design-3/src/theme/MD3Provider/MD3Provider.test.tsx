@@ -215,6 +215,33 @@ describe('MD3Provider', () => {
     ).toBe('#0066CC');
   });
 
+  it('updates tokens when colorScheme prop changes from light to dark', () => {
+    const { rerender } = render(
+      <MD3Provider theme={theme} colorScheme="light">
+        <div />
+      </MD3Provider>,
+    );
+
+    expect(
+      document.documentElement.style.getPropertyValue('--md-sys-color-primary'),
+    ).toBe('#6750A4');
+
+    rerender(
+      <MD3Provider theme={theme} colorScheme="dark">
+        <div />
+      </MD3Provider>,
+    );
+
+    expect(
+      document.documentElement.style.getPropertyValue('--md-sys-color-primary'),
+    ).toBe('#D0BCFF');
+    expect(
+      document.documentElement.style.getPropertyValue(
+        '--md-sys-color-on-primary',
+      ),
+    ).toBe('#381E72');
+  });
+
   it('calls assertCSSTokensLoaded and detectOptionAConflict on mount', () => {
     setupMatchMedia(false);
 
