@@ -1,8 +1,17 @@
 import type { MD3ThemeResult } from '@/theme/create-md3-theme';
+import {
+  assertCSSTokensLoaded,
+  detectOptionAConflict,
+} from '@/theme/validation';
 import { act, render } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MD3Provider } from './MD3Provider';
+
+vi.mock('@/theme/validation', () => ({
+  assertCSSTokensLoaded: vi.fn(),
+  detectOptionAConflict: vi.fn(),
+}));
 
 const theme: MD3ThemeResult = {
   light: {
@@ -44,6 +53,7 @@ function setupMatchMedia(matchesDark: boolean) {
 
 beforeEach(() => {
   document.documentElement.removeAttribute('style');
+  vi.clearAllMocks();
 });
 
 describe('MD3Provider', () => {
@@ -203,5 +213,18 @@ describe('MD3Provider', () => {
     expect(
       document.documentElement.style.getPropertyValue('--md-sys-color-primary'),
     ).toBe('#0066CC');
+  });
+
+  it('calls assertCSSTokensLoaded and detectOptionAConflict on mount', () => {
+    setupMatchMedia(false);
+
+    render(
+      <MD3Provider theme={theme}>
+        <div />
+      </MD3Provider>,
+    );
+
+    expect(assertCSSTokensLoaded).toHaveBeenCalledOnce();
+    expect(detectOptionAConflict).toHaveBeenCalledOnce();
   });
 });
