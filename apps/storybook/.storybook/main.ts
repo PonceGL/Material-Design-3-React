@@ -33,6 +33,7 @@ const config: StorybookConfig = {
           // More specific alias must come before the generic one to avoid prefix collision
           '@poncegl/material-design-3/styles.css': resolve(libSrc, 'styles.css'),
           '@poncegl/material-design-3': resolve(libSrc, 'index.ts'),
+          '@': libSrc,
         },
       },
     };

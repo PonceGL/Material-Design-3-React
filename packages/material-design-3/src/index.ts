@@ -10,3 +10,9 @@ export type {
   CreateMD3ThemeInput,
   MD3ThemeResult,
 } from '@/theme/create-md3-theme';
+
+export { MD3Provider } from '@/theme/MD3Provider';
+export type {
+  MD3ProviderColorScheme,
+  MD3ProviderProps,
+} from '@/theme/MD3Provider';
