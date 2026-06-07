@@ -1,7 +1,7 @@
-import { Button } from '@/components/Button';
-import { createMD3Theme } from '@/theme/create-md3-theme';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { Button } from '../../components/Button';
+import { createMD3Theme } from '../create-md3-theme';
 import { MD3Provider } from './MD3Provider';
 import type { MD3ProviderColorScheme } from './MD3Provider.types';
 
