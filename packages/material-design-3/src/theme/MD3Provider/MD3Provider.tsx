@@ -1,5 +1,9 @@
 import { useLayoutEffect } from 'react';
 
+import {
+  assertCSSTokensLoaded,
+  detectOptionAConflict,
+} from '@/theme/validation';
 import type { MD3Theme } from '@/tokens';
 
 import type {
@@ -38,6 +42,8 @@ export function MD3Provider({
   children,
 }: MD3ProviderProps) {
   useLayoutEffect(() => {
+    assertCSSTokensLoaded();
+    detectOptionAConflict();
     const isDark = resolveIsDark(colorScheme);
     applyTokens(isDark ? theme.dark : theme.light);
 
