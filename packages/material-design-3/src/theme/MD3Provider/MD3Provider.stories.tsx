@@ -110,6 +110,59 @@ export const CustomBrandColor: Story = {
   },
 };
 
+export const DarkModeSideBySide: Story = {
+  name: 'Light / Dark side-by-side',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Muestra ambos esquemas simultáneamente. El panel oscuro usa `data-theme="dark"` sobre un div contenedor para activar los tokens dark de `styles.css`, ya que `MD3Provider` escribe en `document.documentElement` y no puede anidarse para dos esquemas distintos en la misma página.',
+      },
+    },
+  },
+  render: () => (
+    <MD3Provider theme={defaultTheme} colorScheme="light">
+      <div style={{ display: 'flex', gap: '0' }}>
+        <div
+          style={{
+            flex: 1,
+            background: 'var(--md-sys-color-surface)',
+            borderRight: '1px solid var(--md-sys-color-outline-variant)',
+          }}
+        >
+          <ThemeDemo label='colorScheme="light"' />
+        </div>
+        <div
+          data-theme="dark"
+          style={{
+            flex: 1,
+            background: 'var(--md-sys-color-surface)',
+          }}
+        >
+          <ThemeDemo label='data-theme="dark"' />
+        </div>
+      </div>
+    </MD3Provider>
+  ),
+};
+
+export const SystemColorScheme: Story = {
+  name: 'System color scheme (sigue el SO)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Con `colorScheme="system"` el provider escucha el evento `change` de `matchMedia("(prefers-color-scheme: dark)")` y actualiza los tokens al vuelo sin re-renderizar hijos. Para simular el cambio: Chrome DevTools → Rendering → Emulate CSS media feature `prefers-color-scheme`.',
+      },
+    },
+  },
+  render: ({ colorScheme }: { colorScheme?: MD3ProviderColorScheme }) => (
+    <MD3Provider theme={defaultTheme} colorScheme={colorScheme ?? 'system'}>
+      <ThemeDemo label='colorScheme="system" — sigue preferencia del SO en tiempo real' />
+    </MD3Provider>
+  ),
+};
+
 export const MultipleThemes: Story = {
   name: 'Multiple Themes (anidados)',
   render: () => {
