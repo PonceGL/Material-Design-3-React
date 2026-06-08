@@ -1,44 +1,222 @@
-import { Button } from '@/components/Button';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import axe from 'axe-core';
 
-describe('Button', () => {
-  it('renders without crashing', () => {
-    render(<Button>Click me</Button>);
+import { Button } from './Button';
+import type { ButtonVariant } from './Button.types';
+
+// ─── Rendering ────────────────────────────────────────────────────────────────
+
+describe('Button — Rendering', () => {
+  it('renders a button element with the given label', () => {
+    render(<Button>Save</Button>);
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+  });
+
+  it.each<ButtonVariant>([
+    'filled',
+    'elevated',
+    'filled-tonal',
+    'outlined',
+    'text',
+  ])('renders the %s variant without crashing', (variant) => {
+    render(<Button variant={variant}>{variant}</Button>);
+    expect(screen.getByRole('button', { name: variant })).toBeInTheDocument();
+  });
+
+  it('applies the rounded-md-full shape token', () => {
+    render(<Button>Shape</Button>);
+    expect(screen.getByRole('button')).toHaveClass('rounded-md-full');
+  });
+
+  it('applies shadow-md-elevation-1 for the filled variant', () => {
+    render(<Button variant="filled">Filled</Button>);
+    expect(screen.getByRole('button')).toHaveClass('shadow-md-elevation-1');
+  });
+
+  it('applies shadow-md-elevation-1 for the elevated variant', () => {
+    render(<Button variant="elevated">Elevated</Button>);
+    expect(screen.getByRole('button')).toHaveClass('shadow-md-elevation-1');
+  });
+
+  it('does not apply a hardcoded shadow class', () => {
+    render(<Button>No shadow</Button>);
+    expect(screen.getByRole('button')).not.toHaveClass('shadow');
+  });
+
+  it('contains an aria-hidden state-layer span for M3 interaction overlay', () => {
+    const { container } = render(<Button>State layer</Button>);
+    const stateLayer = container.querySelector('span[aria-hidden]');
+    expect(stateLayer).toBeInTheDocument();
+  });
+});
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+
+describe('Button — Props', () => {
+  it('forwards testId as data-testid on the root button element', () => {
+    render(<Button testId="my-button">Submit</Button>);
+    expect(screen.getByTestId('my-button')).toBeInTheDocument();
+    expect(screen.getByTestId('my-button').tagName).toBe('BUTTON');
+  });
+
+  it('merges consumer className without breaking variant classes', () => {
+    render(<Button className="custom-class">Custom</Button>);
+    const btn = screen.getByRole('button');
+    expect(btn).toHaveClass('custom-class');
+    expect(btn).toHaveClass('rounded-md-full');
+  });
+
+  it('forwards onClick handler', async () => {
+    const onClick = vi.fn();
+    render(<Button onClick={onClick}>Click</Button>);
+    await userEvent.click(screen.getByRole('button'));
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+
+  it('forwards aria-label for icon-only scenarios', () => {
+    render(<Button aria-label="Close dialog">×</Button>);
     expect(
-      screen.getByRole('button', { name: 'Click me' }),
+      screen.getByRole('button', { name: 'Close dialog' }),
     ).toBeInTheDocument();
   });
 
-  it('applies rounded-md-full token class', () => {
-    render(<Button>Click me</Button>);
-    expect(screen.getByRole('button', { name: 'Click me' })).toHaveClass(
-      'rounded-md-full',
+  it('defaults type to "button" to prevent accidental form submission', () => {
+    render(<Button>Submit</Button>);
+    expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
+  });
+
+  it('respects an explicit type="submit"', () => {
+    render(<Button type="submit">Submit</Button>);
+    expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
+  });
+
+  it('passes arbitrary HTML attributes to the root element', () => {
+    render(<Button data-analytics="cta-hero">CTA</Button>);
+    expect(screen.getByRole('button')).toHaveAttribute(
+      'data-analytics',
+      'cta-hero',
+    );
+  });
+});
+
+// ─── Icons ────────────────────────────────────────────────────────────────────
+
+describe('Button — Icons', () => {
+  it('renders a leading icon inside the button', () => {
+    render(
+      <Button icon={<span data-testid="leading-icon" />}>With Icon</Button>,
+    );
+    const icon = screen.getByTestId('leading-icon');
+    expect(icon).toBeInTheDocument();
+    expect(screen.getByRole('button')).toContainElement(icon);
+  });
+
+  it('renders a trailing icon after the label', () => {
+    render(
+      <Button iconTrailing={<span data-testid="trailing-icon" />}>
+        With Icon
+      </Button>,
+    );
+    expect(screen.getByTestId('trailing-icon')).toBeInTheDocument();
+  });
+
+  it('renders both leading and trailing icons simultaneously', () => {
+    render(
+      <Button
+        icon={<span data-testid="leading" />}
+        iconTrailing={<span data-testid="trailing" />}
+      >
+        Both
+      </Button>,
+    );
+    expect(screen.getByTestId('leading')).toBeInTheDocument();
+    expect(screen.getByTestId('trailing')).toBeInTheDocument();
+  });
+
+  it('renders without icons when neither prop is provided', () => {
+    const { container } = render(<Button>No Icons</Button>);
+    const iconWrappers = container.querySelectorAll('span.shrink-0');
+    expect(iconWrappers).toHaveLength(0);
+  });
+});
+
+// ─── States ───────────────────────────────────────────────────────────────────
+
+describe('Button — States', () => {
+  it('is disabled when the disabled prop is set', () => {
+    render(<Button disabled>Disabled</Button>);
+    expect(screen.getByRole('button')).toBeDisabled();
+  });
+
+  it('does not fire onClick when disabled', async () => {
+    const onClick = vi.fn();
+    render(
+      <Button disabled onClick={onClick}>
+        Disabled
+      </Button>,
+    );
+    await userEvent.click(screen.getByRole('button'));
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('carries the disabled:pointer-events-none Tailwind class', () => {
+    render(<Button disabled>Disabled</Button>);
+    expect(screen.getByRole('button')).toHaveClass(
+      'disabled:pointer-events-none',
     );
   });
 
-  it('applies md-elevation token class for filled variant', () => {
-    render(<Button variant="filled">Filled</Button>);
-    expect(screen.getByRole('button', { name: 'Filled' })).toHaveClass(
-      'shadow-md-elevation-1',
-    );
+  it('carries the disabled:opacity-[0.38] Tailwind class', () => {
+    render(<Button disabled>Disabled</Button>);
+    expect(screen.getByRole('button')).toHaveClass('disabled:opacity-[0.38]');
   });
 
-  it('does not apply hardcoded shadow class', () => {
-    render(<Button>Click me</Button>);
-    expect(screen.getByRole('button', { name: 'Click me' })).not.toHaveClass(
-      'shadow',
-    );
+  it('fires onClick when Enter key is pressed', async () => {
+    const onClick = vi.fn();
+    render(<Button onClick={onClick}>Keyboard</Button>);
+    screen.getByRole('button').focus();
+    await userEvent.keyboard('{Enter}');
+    expect(onClick).toHaveBeenCalledOnce();
   });
 
-  it('renders icon when provided', () => {
-    render(<Button icon={<span data-testid="icon">★</span>}>With icon</Button>);
-    expect(screen.getByTestId('icon')).toBeInTheDocument();
+  it('fires onClick when Space key is pressed', async () => {
+    const onClick = vi.fn();
+    render(<Button onClick={onClick}>Keyboard</Button>);
+    screen.getByRole('button').focus();
+    await userEvent.keyboard(' ');
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+});
+
+// ─── Accessibility ────────────────────────────────────────────────────────────
+
+describe('Button — Accessibility', () => {
+  const variants: ButtonVariant[] = [
+    'filled',
+    'elevated',
+    'filled-tonal',
+    'outlined',
+    'text',
+  ];
+
+  it.each(variants)('has no axe violations — %s variant', async (variant) => {
+    const { container } = render(<Button variant={variant}>{variant}</Button>);
+    const results = await axe.run(container);
+    expect(results.violations).toHaveLength(0);
   });
 
-  it('applies custom className', () => {
-    render(<Button className="custom-class">Custom</Button>);
-    expect(screen.getByRole('button', { name: 'Custom' })).toHaveClass(
-      'custom-class',
+  it('has no axe violations — disabled state', async () => {
+    const { container } = render(<Button disabled>Disabled</Button>);
+    const results = await axe.run(container);
+    expect(results.violations).toHaveLength(0);
+  });
+
+  it('has no axe violations — with icon and aria-label', async () => {
+    const { container } = render(
+      <Button aria-label="Add item" icon={<span aria-hidden="true">+</span>} />,
     );
+    const results = await axe.run(container);
+    expect(results.violations).toHaveLength(0);
   });
 });
