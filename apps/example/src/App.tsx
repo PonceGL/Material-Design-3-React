@@ -9,8 +9,8 @@ export function App() {
   };
 
   return (
-    <main className="min-h-screen bg-md-surface px-6 py-10 text-md-on-surface">
-      <section className="mx-auto flex max-w-4xl flex-col gap-8">
+    <main className="w-full min-h-screen bg-md-surface px-6 py-10 text-md-on-surface">
+      <section className="mx-auto flex w-full max-w-4xl flex-col gap-8">
         <div className="space-y-3">
           <p className="text-sm font-medium text-md-primary">
             Material Design 3 React
@@ -20,7 +20,7 @@ export function App() {
           </h1>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="w-full flex justify-center items-center gap-3">
           <Button onClick={exampleAction}>Filled</Button>
           <Button variant="elevated" onClick={exampleAction}>
             Elevated
