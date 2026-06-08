@@ -22,8 +22,11 @@ export function App() {
 
         <div className="flex flex-wrap items-center gap-3">
           <Button onClick={exampleAction}>Filled</Button>
-          <Button variant="tonal" onClick={exampleAction}>
-            Tonal
+          <Button variant="elevated" onClick={exampleAction}>
+            Elevated
+          </Button>
+          <Button variant="filled-tonal" onClick={exampleAction}>
+            Filled Tonal
           </Button>
           <Button variant="outlined" onClick={exampleAction}>
             Outlined
