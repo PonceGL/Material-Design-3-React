@@ -1,0 +1,31 @@
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
+
+import type { BaseComponentProps } from '@/components/shared/BaseComponent.types';
+
+/**
+ * The five visual variants of the M3 Button component.
+ *
+ * Choose based on the action's emphasis level:
+ *
+ * - `filled`       — Highest emphasis. Use for the primary, most important action on a screen.
+ * - `filled-tonal` — Medium-high emphasis. Use for secondary actions that still need prominence.
+ * - `elevated`     — Medium emphasis. Similar to filled-tonal but with a shadow instead of a tonal fill.
+ * - `outlined`     — Medium emphasis. Use for important actions that are not the primary one.
+ * - `text`         — Lowest emphasis. Use for optional or supplementary actions.
+ */
+export type ButtonVariant =
+  | 'filled'
+  | 'filled-tonal'
+  | 'elevated'
+  | 'outlined'
+  | 'text';
+
+export interface ButtonProps
+  extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Visual style of the button. Defaults to `'filled'`. */
+  variant?: ButtonVariant;
+  /** Leading icon rendered before the label. Accepts any ReactNode (e.g. an SVG icon component). */
+  icon?: ReactNode;
+  /** Trailing icon rendered after the label. Accepts any ReactNode. */
+  iconTrailing?: ReactNode;
+}
