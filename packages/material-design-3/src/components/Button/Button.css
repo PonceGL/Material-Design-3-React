@@ -1,0 +1,61 @@
+/*
+  Estilos base del componente Button.
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+*/
+
+.md3-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  gap: 0.5rem;
+  min-height: 48px;
+  border: none;
+  border-radius: 9999px;
+  transition-property: box-shadow, border-radius, padding-inline;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+.md3-button:active {
+  border-radius: 0.75rem;
+}
+
+.md3-button--filled,
+.md3-button--elevated,
+.md3-button--filled-tonal {
+  padding-inline: 1.5rem;
+}
+
+.md3-button--filled:active,
+.md3-button--elevated:active,
+.md3-button--filled-tonal:active {
+  padding-inline: 2rem;
+}
+
+.md3-button--outlined {
+  padding-inline: 1.5rem;
+  border: 1px solid var(--md-sys-color-primary);
+}
+
+.md3-button--outlined:active {
+  padding-inline: 2rem;
+}
+
+.md3-button--text {
+  min-height: auto;
+  padding-inline: 0.25rem;
+}
+
+.md3-button--text:active {
+  padding-inline: 0.5rem;
+  opacity: 0.7;
+}

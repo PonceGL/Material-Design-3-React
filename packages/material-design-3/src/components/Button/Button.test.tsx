@@ -24,9 +24,9 @@ describe('Button — Rendering', () => {
     expect(screen.getByRole('button', { name: variant })).toBeInTheDocument();
   });
 
-  it('applies the active press animation class', () => {
+  it('applies the md3-button base class', () => {
     render(<Button>Shape</Button>);
-    expect(screen.getByRole('button')).toHaveClass('active:rounded-xl');
+    expect(screen.getByRole('button')).toHaveClass('md3-button');
   });
 
   it('does not apply shadow-md-elevation-1 for the filled variant', () => {
@@ -44,9 +44,9 @@ describe('Button — Rendering', () => {
     expect(screen.getByRole('button')).not.toHaveClass('shadow');
   });
 
-  it('applies active padding expansion class for filled variant', () => {
+  it('applies the md3-button variant class for each variant', () => {
     render(<Button variant="filled">Filled</Button>);
-    expect(screen.getByRole('button')).toHaveClass('active:px-8');
+    expect(screen.getByRole('button')).toHaveClass('md3-button--filled');
   });
 });
 
@@ -63,7 +63,7 @@ describe('Button — Props', () => {
     render(<Button className="custom-class">Custom</Button>);
     const btn = screen.getByRole('button');
     expect(btn).toHaveClass('custom-class');
-    expect(btn).toHaveClass('rounded-3xl');
+    expect(btn).toHaveClass('md3-button');
   });
 
   it('forwards onClick handler', async () => {
