@@ -1,3 +1,5 @@
+import { cn } from '@/lib/cn';
+
 import type { ButtonProps, ButtonVariant } from './Button.types';
 
 const base = [
@@ -55,9 +57,7 @@ export function Button({
   return (
     <button
       data-testid={testId}
-      className={[base, variantClasses[variant], className]
-        .filter(Boolean)
-        .join(' ')}
+      className={cn(base, variantClasses[variant], className)}
       type={type}
       {...rest}
     >
