@@ -160,26 +160,78 @@ export type IconButtonVariant =
 export type FABVariant = 'primary' | 'secondary' | 'tertiary' | 'surface';
 ```
 
+## Class Management: `cn()` and Variant Classes
+
+### Always use `cn()` to build className strings
+
+`cn()` (`src/lib/cn.ts`) wraps `clsx` + `tailwind-merge`. It must be used every time you combine Tailwind classes — **never** use string concatenation, template literals, or `.join()`. When a consumer passes a custom `className`, `cn()` ensures their utilities correctly override the component defaults:
+
+```tsx
+import { cn } from '@/lib/cn';
+
+// ✅ Consumer's px-3 overrides the component's px-6 — predictable, always
+cn('px-6 bg-md-primary', className) // → "bg-md-primary px-3" if className="px-3"
+  [
+    // ❌ Both classes land on the element, CSS source order decides — unpredictable
+    ('px-6 bg-md-primary', className)
+  ].filter(Boolean)
+  .join(' ');
+```
+
+### Variant classes: `Record<Variant, string>`
+
+Variants are defined as `Record<VariantType, string>`. All class names must be **complete literal strings** — never construct a class name dynamically from parts:
+
+```ts
+// ✅ Complete literals — Tailwind scanner finds every class
+const variantClasses: Record<ButtonVariant, string> = {
+  filled: 'px-6 bg-md-primary text-md-on-primary shadow-md-elevation-1',
+  'filled-tonal':
+    'px-6 bg-md-secondary-container text-md-on-secondary-container',
+  text: 'px-3 bg-transparent text-md-primary',
+};
+
+// ❌ Dynamic construction — Tailwind CANNOT find 'bg-md-primary' at build time
+const color = variant === 'filled' ? 'primary' : 'secondary';
+const cls = `bg-md-${color}`; // will be purged from the production build
+```
+
+`Record<Variant, string>` also gives TypeScript exhaustiveness: if you add a new value to the union type and forget to handle it in the map, the compiler will error. See [architecture.md](./architecture.md#class-management-cn-tailwind-purging-and-variant-pattern) for the full rationale.
+
 ## File Responsibilities
 
 ### `ComponentName.tsx`
 
 - Contains only the component implementation
 - Imports types from `ComponentName.types.ts`
+- Uses `cn()` from `@/lib/cn` to build all className strings
+- Defines variant classes as `Record<VariantType, string>` with complete literal strings only
 - No business logic, no data fetching, no side effects beyond DOM interaction
 - All M3 visual variants implemented in the same file (unless size justifies splitting)
 - Forwards `testId` to the root element as `data-testid`
 - Passes all remaining props to the root element via `...rest` spread
 
 ```tsx
+import { cn } from '@/lib/cn';
+
+const variantClasses: Record<ButtonVariant, string> = {
+  filled: 'px-6 bg-md-primary text-md-on-primary shadow-md-elevation-1',
+  text: 'px-3 bg-transparent text-md-primary',
+};
+
 export function Button({
   testId,
   variant = 'filled',
+  className,
   children,
   ...rest
 }: ButtonProps) {
   return (
-    <button data-testid={testId} data-variant={variant} {...rest}>
+    <button
+      data-testid={testId}
+      className={cn(variantClasses[variant], className)}
+      {...rest}
+    >
       {children}
     </button>
   );

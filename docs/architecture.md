@@ -142,12 +142,74 @@ All packages use the `@poncegl` npm scope — the same as the GitHub handle (@Po
 
 ## Key decisions log
 
-| Decision                         | Rationale                                                                        |
-| -------------------------------- | -------------------------------------------------------------------------------- |
-| pnpm over npm/yarn               | Better monorepo support, strict dependency isolation, faster                     |
-| Tailwind v4                      | Native CSS variables support, no config file, works with our token system        |
-| CSS custom properties for tokens | Framework-agnostic, supports all 3 theming approaches simultaneously             |
-| No React Context for theming     | Prevents unnecessary re-renders; components read from CSS variables, not context |
-| Changesets over semantic-release | Better monorepo support, human-readable changeset files, PR-based workflow       |
-| Storybook 8                      | Latest stable, best framework integration, strong addon ecosystem                |
-| axe-core in tests                | Catches accessibility regressions automatically before they reach production     |
+| Decision                               | Rationale                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------ |
+| pnpm over npm/yarn                     | Better monorepo support, strict dependency isolation, faster                         |
+| Tailwind v4                            | Native CSS variables support, no config file, works with our token system            |
+| CSS custom properties for tokens       | Framework-agnostic, supports all 3 theming approaches simultaneously                 |
+| No React Context for theming           | Prevents unnecessary re-renders; components read from CSS variables, not context     |
+| Changesets over semantic-release       | Better monorepo support, human-readable changeset files, PR-based workflow           |
+| Storybook 8                            | Latest stable, best framework integration, strong addon ecosystem                    |
+| axe-core in tests                      | Catches accessibility regressions automatically before they reach production         |
+| `cn()` (tailwind-merge + clsx)         | Resolves conflicting Tailwind utilities when consumers pass custom `className`       |
+| `Record<Variant, string>` for variants | Type-safe, exhaustive, all classes are literal strings — Tailwind scanner finds them |
+| No `cva` (class-variance-authority)    | Single variation axis doesn't justify the dependency; `Record` + `cn` is simpler     |
+
+## Class Management: `cn()`, Tailwind Purging, and Variant Pattern
+
+### Why `cn()` exists
+
+Every component accepts a `className` prop that the consumer can use to override or extend styles. Without class merging, conflicting Tailwind utilities produce unpredictable results:
+
+```tsx
+// Consumer code
+<Button className="px-3" />;
+
+// Without cn() — both classes land on the element, CSS source order decides
+// "... px-6 ... px-3"  ← unpredictable, depends on bundle order
+
+// With cn() — tailwind-merge resolves the conflict, consumer wins
+cn('px-6', 'px-3'); // → "px-3"
+```
+
+`cn()` lives at `src/lib/cn.ts` and is the **only** way to build className strings in this library. Never use string concatenation, template literals, or `.join()` to combine Tailwind classes.
+
+### Tailwind purging — what is safe and what is not
+
+Tailwind v4 scans source files for class name strings. The scanner looks for **complete, literal class names**. This is safe:
+
+```ts
+// ✅ Complete literal strings — Tailwind finds every class
+const variantClasses: Record<ButtonVariant, string> = {
+  filled: 'px-6 bg-md-primary text-md-on-primary shadow-md-elevation-1',
+  text: 'px-3 bg-transparent text-md-primary',
+};
+```
+
+This is **not** safe and must never be done:
+
+```ts
+// ❌ Dynamic construction — Tailwind cannot find 'bg-md-primary'
+const color = 'primary';
+const cls = `bg-md-${color}`;
+
+// ❌ Partial class stored in a variable
+const prefix = 'bg-md-';
+const cls = prefix + 'primary';
+```
+
+The `@source "./**/*.{ts,tsx}"` directive in `styles.css` ensures all component source files are scanned. As long as every class name is written as a complete literal string somewhere in those files, it will be included in the build.
+
+### Why `Record<Variant, string>` instead of `cva`
+
+`cva` (class-variance-authority) is a popular tool for variant management. We evaluated it and chose not to use it because:
+
+1. **Single axis of variation** — M3 Button has one variant dimension. `cva` adds the most value when you have compound variants (e.g., `variant × size × state`). For a single axis, a `Record` is clearer and has no runtime overhead beyond a property lookup.
+2. **No extra dependency** — `cva` would be a third styling dependency alongside `clsx` and `tailwind-merge`. The `Record` approach needs none of these directly.
+3. **TypeScript exhaustiveness** — `Record<ButtonVariant, string>` gives the same guarantee as `cva`: if you add a new value to the union type and forget to handle it in the variant map, TypeScript will error at compile time.
+
+If a future component has multiple variation axes (e.g., `variant × size`), `cva` can be reconsidered for that specific component. The `cn()` utility is already present and compatible with `cva`.
+
+### The Storybook Tailwind problem
+
+Storybook (`apps/storybook/`) requires its own Tailwind configuration that imports the library's `styles.css` and points `@source` at the library source files. Without this, component styles will appear broken in Storybook. This is a known open issue tracked separately — it is **not** a problem with how classes are written in components.
