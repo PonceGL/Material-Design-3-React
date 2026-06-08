@@ -2,6 +2,32 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from './Button';
 
+const PlusIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M19 13H13v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+  </svg>
+);
+
+const ArrowIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8-8-8z" />
+  </svg>
+);
+
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
   component: Button,
@@ -9,10 +35,37 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['filled', 'tonal', 'outlined', 'text'],
+      options: ['filled', 'elevated', 'filled-tonal', 'outlined', 'text'],
+      description: 'Variante visual según la especificación M3.',
     },
-    children: { control: 'text' },
-    disabled: { control: 'boolean' },
+    children: {
+      control: 'text',
+      description: 'Etiqueta del botón.',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Deshabilita el botón y elimina los eventos de puntero.',
+    },
+    type: {
+      control: 'select',
+      options: ['button', 'submit', 'reset'],
+      description:
+        'Atributo type del elemento button. Por defecto "button" para evitar envíos accidentales de formulario.',
+    },
+    icon: {
+      control: false,
+      description: 'Nodo de icono líder, renderizado antes de la etiqueta.',
+    },
+    iconTrailing: {
+      control: false,
+      description:
+        'Nodo de icono al final, renderizado después de la etiqueta.',
+    },
+    testId: {
+      control: 'text',
+      description: 'Propagado como data-testid en el elemento raíz.',
+    },
+    onClick: { action: 'clicked' },
   },
 };
 
@@ -25,41 +78,56 @@ export const Primary: Story = {
     variant: 'filled',
     children: 'Button',
     disabled: false,
+    type: 'button',
   },
 };
 
 export const Filled: Story = {
-  args: { variant: 'filled', children: 'Button' },
+  args: { variant: 'filled', children: 'Filled' },
 };
 
-export const Tonal: Story = {
-  args: { variant: 'tonal', children: 'Button' },
+export const Elevated: Story = {
+  args: { variant: 'elevated', children: 'Elevated' },
+};
+
+export const FilledTonal: Story = {
+  args: { variant: 'filled-tonal', children: 'Filled Tonal' },
 };
 
 export const Outlined: Story = {
-  args: { variant: 'outlined', children: 'Button' },
+  args: { variant: 'outlined', children: 'Outlined' },
 };
 
 export const Text: Story = {
-  args: { variant: 'text', children: 'Button' },
+  args: { variant: 'text', children: 'Text' },
 };
 
 export const Disabled: Story = {
-  args: { variant: 'filled', children: 'Button', disabled: true },
+  args: { variant: 'filled', children: 'Disabled', disabled: true },
+};
+
+export const WithLeadingIcon: Story = {
+  args: {
+    variant: 'filled',
+    children: 'Add item',
+    icon: <PlusIcon />,
+  },
+};
+
+export const WithTrailingIcon: Story = {
+  args: {
+    variant: 'filled',
+    children: 'Continue',
+    iconTrailing: <ArrowIcon />,
+  },
 };
 
 export const AllVariants: Story = {
   render: () => (
-    <div
-      style={{
-        display: 'flex',
-        gap: '16px',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-      }}
-    >
+    <div className="flex flex-wrap items-center gap-3">
       <Button variant="filled">Filled</Button>
-      <Button variant="tonal">Tonal</Button>
+      <Button variant="elevated">Elevated</Button>
+      <Button variant="filled-tonal">Filled Tonal</Button>
       <Button variant="outlined">Outlined</Button>
       <Button variant="text">Text</Button>
     </div>
