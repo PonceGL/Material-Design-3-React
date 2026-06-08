@@ -5,7 +5,7 @@ import './styles.css';
 
 export function App() {
   const exampleAction = () => {
-    alert('Example action');
+    console.log('Example action');
   };
 
   return (
