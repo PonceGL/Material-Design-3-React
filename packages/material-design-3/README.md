@@ -28,6 +28,6 @@ export function App() {
 
 ## Componentes
 
-| Componente | Descripción                            | Documentación                                                                                                 |
-| ---------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `Button`   | Botón M3 en sus 5 variantes de énfasis | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/Button.md) |
+| Componente | Descripción                            | Documentación            |
+| ---------- | -------------------------------------- | ------------------------ |
+| `Button`   | Botón M3 en sus 5 variantes de énfasis | [Ver documentación →](#) |
