@@ -24,14 +24,14 @@ describe('Button — Rendering', () => {
     expect(screen.getByRole('button', { name: variant })).toBeInTheDocument();
   });
 
-  it('applies the rounded-md-full shape token', () => {
+  it('applies the active press animation class', () => {
     render(<Button>Shape</Button>);
-    expect(screen.getByRole('button')).toHaveClass('rounded-md-full');
+    expect(screen.getByRole('button')).toHaveClass('active:rounded-xl');
   });
 
-  it('applies shadow-md-elevation-1 for the filled variant', () => {
+  it('does not apply shadow-md-elevation-1 for the filled variant', () => {
     render(<Button variant="filled">Filled</Button>);
-    expect(screen.getByRole('button')).toHaveClass('shadow-md-elevation-1');
+    expect(screen.getByRole('button')).not.toHaveClass('shadow-md-elevation-1');
   });
 
   it('applies shadow-md-elevation-1 for the elevated variant', () => {
@@ -44,10 +44,9 @@ describe('Button — Rendering', () => {
     expect(screen.getByRole('button')).not.toHaveClass('shadow');
   });
 
-  it('contains an aria-hidden state-layer span for M3 interaction overlay', () => {
-    const { container } = render(<Button>State layer</Button>);
-    const stateLayer = container.querySelector('span[aria-hidden]');
-    expect(stateLayer).toBeInTheDocument();
+  it('applies active padding expansion class for filled variant', () => {
+    render(<Button variant="filled">Filled</Button>);
+    expect(screen.getByRole('button')).toHaveClass('active:px-8');
   });
 });
 
@@ -64,7 +63,7 @@ describe('Button — Props', () => {
     render(<Button className="custom-class">Custom</Button>);
     const btn = screen.getByRole('button');
     expect(btn).toHaveClass('custom-class');
-    expect(btn).toHaveClass('rounded-md-full');
+    expect(btn).toHaveClass('rounded-3xl');
   });
 
   it('forwards onClick handler', async () => {
