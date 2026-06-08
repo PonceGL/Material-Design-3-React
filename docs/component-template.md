@@ -43,6 +43,7 @@ This is the most important decision when structuring a component family.
 ```
 src/components/ComponentName/
 ├── ComponentName.tsx        # Implementation + all visual variants
+├── ComponentName.css        # Isolation styles — structural, outside @layer
 ├── ComponentName.types.ts   # TypeScript interfaces and types
 ├── ComponentName.test.tsx   # Unit tests
 ├── ComponentName.stories.tsx# Storybook stories
@@ -56,6 +57,7 @@ The Button family is the canonical example:
 ```
 src/components/Button/
 ├── Button.tsx                   ← Base primitive: renders <button>, handles variant + state layers
+├── Button.css                   ← Isolation styles — structural, outside @layer
 ├── Button.types.ts              ← ButtonVariant + ButtonProps
 ├── Button.test.tsx
 ├── Button.stories.tsx
@@ -200,12 +202,23 @@ const cls = `bg-md-${color}`; // will be purged from the production build
 
 ## File Responsibilities
 
+### `ComponentName.css`
+
+- Contains **only structural styles** that must survive any consumer CSS reset
+- Written **outside any `@layer`** so it beats both layered consumer styles and typical `* { ... }` resets
+- Uses the `md3-{component}` and `md3-{component}--{variant}` naming convention
+- Covers: `display`, `position`, `overflow`, `padding`, `min-height`, `border-radius`, `border`, `cursor`, font properties, transition definitions, and `:active` / structural pseudo-class states
+- Does **not** contain color, shadow, or focus-ring styles — those stay in Tailwind
+- Imported directly in `ComponentName.tsx`: `import './ComponentName.css';`
+
+See [architecture.md — CSS Isolation](./architecture.md#css-isolation--component-stylesheet-pattern) for the full rationale and the rule for what goes in each file.
+
 ### `ComponentName.tsx`
 
-- Contains only the component implementation
+- Imports `./ComponentName.css` at the top
 - Imports types from `ComponentName.types.ts`
 - Uses `cn()` from `@/lib/cn` to build all className strings
-- Defines variant classes as `Record<VariantType, string>` with complete literal strings only
+- Defines variant classes as `Record<VariantType, string>` with complete literal strings only — both the CSS class names (`md3-button--filled`) and Tailwind utilities
 - No business logic, no data fetching, no side effects beyond DOM interaction
 - All M3 visual variants implemented in the same file (unless size justifies splitting)
 - Forwards `testId` to the root element as `data-testid`
@@ -214,26 +227,37 @@ const cls = `bg-md-${color}`; // will be purged from the production build
 ```tsx
 import { cn } from '@/lib/cn';
 
-const variantClasses: Record<ButtonVariant, string> = {
-  filled: 'px-6 bg-md-primary text-md-on-primary shadow-md-elevation-1',
-  text: 'px-3 bg-transparent text-md-primary',
+import './ComponentName.css';
+
+const base = [
+  'md3-component', // structural base — from ComponentName.css
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+  'disabled:pointer-events-none disabled:opacity-[0.38]',
+].join(' ');
+
+const variantClasses: Record<ComponentVariant, string> = {
+  filled: [
+    'md3-component--filled', // structural variant — from ComponentName.css
+    'bg-md-primary text-md-on-primary', // visual — Tailwind only
+    'focus-visible:outline-md-primary',
+  ].join(' '),
 };
 
-export function Button({
+export function ComponentName({
   testId,
   variant = 'filled',
   className,
   children,
   ...rest
-}: ButtonProps) {
+}: ComponentNameProps) {
   return (
-    <button
+    <element
       data-testid={testId}
-      className={cn(variantClasses[variant], className)}
+      className={cn(base, variantClasses[variant], className)}
       {...rest}
     >
       {children}
-    </button>
+    </element>
   );
 }
 ```
@@ -313,6 +337,14 @@ A component is **done** when all of the following are true:
 - [ ] Supports light and dark schemes via CSS variables
 - [ ] Touch target minimum 48×48px for all interactive elements
 - [ ] `disabled` state uses `pointer-events-none` + `opacity-[0.38]`
+
+### CSS Isolation
+
+- [ ] `ComponentName.css` exists with all structural styles (padding, min-height, border-radius, transitions, border) placed **outside any `@layer`**
+- [ ] CSS classes use the `md3-{component}` and `md3-{component}--{variant}` naming convention
+- [ ] `ComponentName.tsx` imports `./ComponentName.css` at the top
+- [ ] No structural Tailwind class (`px-*`, `min-h-*`, `rounded-*`, etc.) duplicates what the CSS file already sets
+- [ ] Any CSS property that animates/transitions uses a concrete Tailwind value (e.g. `rounded-3xl`), not a `rounded-md-*` utility backed by an unregistered CSS custom property
 
 ### Accessibility
 

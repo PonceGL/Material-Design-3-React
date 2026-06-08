@@ -44,6 +44,7 @@ Every component owns all of its files. Implementation, types, tests, and stories
 ```
 Button/
 ├── Button.tsx          ← implementation
+├── Button.css          ← isolation styles (structural, outside @layer)
 ├── Button.types.ts     ← types
 ├── Button.test.tsx     ← tests
 ├── Button.stories.tsx  ← Storybook stories
@@ -142,18 +143,20 @@ All packages use the `@poncegl` npm scope — the same as the GitHub handle (@Po
 
 ## Key decisions log
 
-| Decision                               | Rationale                                                                            |
-| -------------------------------------- | ------------------------------------------------------------------------------------ |
-| pnpm over npm/yarn                     | Better monorepo support, strict dependency isolation, faster                         |
-| Tailwind v4                            | Native CSS variables support, no config file, works with our token system            |
-| CSS custom properties for tokens       | Framework-agnostic, supports all 3 theming approaches simultaneously                 |
-| No React Context for theming           | Prevents unnecessary re-renders; components read from CSS variables, not context     |
-| Changesets over semantic-release       | Better monorepo support, human-readable changeset files, PR-based workflow           |
-| Storybook 8                            | Latest stable, best framework integration, strong addon ecosystem                    |
-| axe-core in tests                      | Catches accessibility regressions automatically before they reach production         |
-| `cn()` (tailwind-merge + clsx)         | Resolves conflicting Tailwind utilities when consumers pass custom `className`       |
-| `Record<Variant, string>` for variants | Type-safe, exhaustive, all classes are literal strings — Tailwind scanner finds them |
-| No `cva` (class-variance-authority)    | Single variation axis doesn't justify the dependency; `Record` + `cn` is simpler     |
+| Decision                                         | Rationale                                                                                                                                                                                                                                                                                            |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| pnpm over npm/yarn                               | Better monorepo support, strict dependency isolation, faster                                                                                                                                                                                                                                         |
+| Tailwind v4                                      | Native CSS variables support, no config file, works with our token system                                                                                                                                                                                                                            |
+| CSS custom properties for tokens                 | Framework-agnostic, supports all 3 theming approaches simultaneously                                                                                                                                                                                                                                 |
+| No React Context for theming                     | Prevents unnecessary re-renders; components read from CSS variables, not context                                                                                                                                                                                                                     |
+| Changesets over semantic-release                 | Better monorepo support, human-readable changeset files, PR-based workflow                                                                                                                                                                                                                           |
+| Storybook 8                                      | Latest stable, best framework integration, strong addon ecosystem                                                                                                                                                                                                                                    |
+| axe-core in tests                                | Catches accessibility regressions automatically before they reach production                                                                                                                                                                                                                         |
+| `cn()` (tailwind-merge + clsx)                   | Resolves conflicting Tailwind utilities when consumers pass custom `className`                                                                                                                                                                                                                       |
+| `Record<Variant, string>` for variants           | Type-safe, exhaustive, all classes are literal strings — Tailwind scanner finds them                                                                                                                                                                                                                 |
+| No `cva` (class-variance-authority)              | Single variation axis doesn't justify the dependency; `Record` + `cn` is simpler                                                                                                                                                                                                                     |
+| `ComponentName.css` for structural styles        | Tailwind v4 utilities live in `@layer utilities`; un-layered consumer resets (`* { padding: 0 }`) always win regardless of specificity. Un-layered class selectors (`.md3-button`, specificity `0,1,0`) beat `*` (`0,0,0`) and can't be overridden by layered styles. See the CSS Isolation section. |
+| Concrete Tailwind values for animated properties | CSS custom properties without `@property` are untyped strings — the browser cannot interpolate between them. For transitioning `border-radius`, `padding`, etc., use built-in Tailwind classes with literal px values, not the library's `rounded-md-*` utilities.                                   |
 
 ## Class Management: `cn()`, Tailwind Purging, and Variant Pattern
 
@@ -213,3 +216,120 @@ If a future component has multiple variation axes (e.g., `variant × size`), `cv
 ### The Storybook Tailwind problem
 
 Storybook (`apps/storybook/`) requires its own Tailwind configuration that imports the library's `styles.css` and points `@source` at the library source files. Without this, component styles will appear broken in Storybook. This is a known open issue tracked separately — it is **not** a problem with how classes are written in components.
+
+## CSS Isolation — Component Stylesheet Pattern
+
+### The Tailwind v4 cascade layer problem
+
+Tailwind v4 compiles all utilities into `@layer utilities`. In the CSS cascade, un-layered author styles **always win** over layered styles — regardless of specificity. This means a consumer project with a global reset like:
+
+```css
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+```
+
+...will silently break any structural Tailwind class the library applies (`px-6`, `min-h-[48px]`, etc.), because the un-layered `* { padding: 0 }` beats the layered `.px-6 { padding-left: 1.5rem }` — every time.
+
+### The fix: un-layered component CSS
+
+Every component ships a `ComponentName.css` file that declares structural styles **outside any `@layer`**. This file is imported directly in the component's TSX:
+
+```css
+/* ComponentName.css — intentionally outside @layer */
+/* Specificity: class (0,1,0) > universal selector (0,0,0) */
+.md3-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  padding-inline: 1.5rem;
+  min-height: 48px;
+  border-radius: 9999px;
+  /* ... */
+}
+
+.md3-button--outlined {
+  border: 1px solid var(--md-sys-color-primary);
+}
+```
+
+Because this CSS is un-layered, it can't be beaten by layered consumer styles. Because it uses class selectors (specificity `0,1,0`), it beats the universal selector `*` (specificity `0,0,0`) even when both are un-layered.
+
+### What belongs in each file
+
+| `ComponentName.css` — structural, un-layered        | Tailwind classes in `ComponentName.tsx` — visual only |
+| --------------------------------------------------- | ----------------------------------------------------- |
+| `display`, `position`, `overflow`                   | `bg-md-*` color utilities                             |
+| `padding`, `margin`, `gap`                          | `text-md-*` color utilities                           |
+| `min-height`, `min-width`                           | `shadow-md-elevation-*` utilities                     |
+| `border-radius`                                     | `focus-visible:outline-*`                             |
+| `border` (width + style; color via `var()`)         | `hover:shadow-*`, `disabled:opacity-*`                |
+| `cursor`, `font-size`, `font-weight`, `line-height` |                                                       |
+| `transition-property`, `transition-duration`        |                                                       |
+| `:active`, `:hover` structural state changes        |                                                       |
+
+The rule: if a property is commonly reset by `* { ... }` or browser UA styles and it controls the shape/layout of the component, it goes in the CSS file. If it's purely visual (color, shadow), it stays in Tailwind.
+
+### CSS naming convention
+
+All component CSS classes use the `md3-` prefix with BEM-like variant modifiers:
+
+```css
+.md3-button {
+  /* base */
+}
+.md3-button--filled {
+  /* variant */
+}
+.md3-button--outlined {
+  /* variant with border */
+}
+.md3-button:active {
+  /* active state — all variants */
+}
+.md3-button--filled:active {
+  /* variant-specific active state */
+}
+```
+
+The component imports its own CSS file and includes both the base and variant classes:
+
+```tsx
+import { cn } from '@/lib/cn';
+
+import './Button.css';
+
+const base = 'md3-button focus-visible:outline focus-visible:outline-2 ...';
+const variantClasses = {
+  filled: 'md3-button--filled bg-md-primary text-md-on-primary ...',
+};
+```
+
+## CSS Custom Properties and Transitions
+
+### Why CSS variables without `@property` cannot animate
+
+CSS custom properties defined in `@theme` (e.g. `--radius-md-full: var(--md-sys-shape-corner-full)`) are **unregistered** by default. Browsers treat unregistered custom properties as opaque strings. CSS transitions require both the start and end values to be of the same concrete, interpolatable type — they cannot transition between two strings.
+
+In practice: applying `transition: border-radius 150ms` when the value changes between `var(--radius-md-full)` and `var(--radius-md-sm)` produces no animation. The change is instantaneous, regardless of transition duration.
+
+### The rule
+
+**For any CSS property that needs to animate**: use Tailwind built-in classes with concrete compiled values (e.g. `rounded-3xl`, `rounded-xl`), not the library's `rounded-md-*` utilities.
+
+**If a CSS custom property must animate in the future**: register it with `@property`:
+
+```css
+@property --md-sys-shape-corner-full {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 9999px;
+}
+```
+
+A registered property becomes typed, and browsers can interpolate it in transitions. This is the correct long-term solution, but it requires an explicit `@property` block for every token that participates in an animation.
+
+**Current status**: the library's `--md-sys-shape-*` and `--radius-md-*` tokens are not registered with `@property`. Do not use `rounded-md-*` utilities as the target of a CSS transition until they are registered.
