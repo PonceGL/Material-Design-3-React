@@ -1,0 +1,33 @@
+# @poncegl/material-design-3
+
+Librería de componentes React basada en Material Design 3 de Google, inspirada en los patrones de Jetpack Compose.
+
+## Instalación
+
+```bash
+npm install @poncegl/material-design-3
+```
+
+## Configuración inicial
+
+Importa el stylesheet una sola vez en la raíz de tu aplicación:
+
+```tsx
+import '@poncegl/material-design-3/styles.css';
+```
+
+Envuelve tu app con `MD3Provider` y pasa un color fuente para generar el tema:
+
+```tsx
+import { MD3Provider } from '@poncegl/material-design-3';
+
+export function App() {
+  return <MD3Provider sourceColor="#6750A4">{/* tu aplicación */}</MD3Provider>;
+}
+```
+
+## Componentes
+
+| Componente | Descripción                            | Documentación            |
+| ---------- | -------------------------------------- | ------------------------ |
+| `Button`   | Botón M3 en sus 5 variantes de énfasis | [Ver documentación →](#) |
