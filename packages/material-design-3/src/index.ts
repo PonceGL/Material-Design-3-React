@@ -1,5 +1,7 @@
 import '@/styles.css';
 
+export type { BaseComponentProps } from '@/components/shared/BaseComponent.types';
+
 export { Button } from '@/components/Button';
 export type { ButtonProps } from '@/components/Button';
 
