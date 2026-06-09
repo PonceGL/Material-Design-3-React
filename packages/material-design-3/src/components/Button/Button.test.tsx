@@ -29,24 +29,24 @@ describe('Button — Rendering', () => {
     expect(screen.getByRole('button')).toHaveClass('md3-button');
   });
 
-  it('does not apply shadow-md-elevation-1 for the filled variant', () => {
+  it('applies the md3-button variant class for each variant', () => {
     render(<Button variant="filled">Filled</Button>);
-    expect(screen.getByRole('button')).not.toHaveClass('shadow-md-elevation-1');
+    expect(screen.getByRole('button')).toHaveClass('md3-button--filled');
   });
 
-  it('applies shadow-md-elevation-1 for the elevated variant', () => {
+  it('applies the correct variant class for elevated', () => {
     render(<Button variant="elevated">Elevated</Button>);
-    expect(screen.getByRole('button')).toHaveClass('shadow-md-elevation-1');
+    expect(screen.getByRole('button')).toHaveClass('md3-button--elevated');
+  });
+
+  it('applies the correct variant class for outlined', () => {
+    render(<Button variant="outlined">Outlined</Button>);
+    expect(screen.getByRole('button')).toHaveClass('md3-button--outlined');
   });
 
   it('does not apply a hardcoded shadow class', () => {
     render(<Button>No shadow</Button>);
     expect(screen.getByRole('button')).not.toHaveClass('shadow');
-  });
-
-  it('applies the md3-button variant class for each variant', () => {
-    render(<Button variant="filled">Filled</Button>);
-    expect(screen.getByRole('button')).toHaveClass('md3-button--filled');
   });
 });
 
@@ -135,8 +135,18 @@ describe('Button — Icons', () => {
 
   it('renders without icons when neither prop is provided', () => {
     const { container } = render(<Button>No Icons</Button>);
-    const iconWrappers = container.querySelectorAll('span.shrink-0');
+    const iconWrappers = container.querySelectorAll('span.md3-button__icon');
     expect(iconWrappers).toHaveLength(0);
+  });
+
+  it('wraps icons with the md3-button__icon class', () => {
+    const { container } = render(
+      <Button icon={<span />} iconTrailing={<span />}>
+        Both
+      </Button>,
+    );
+    const iconWrappers = container.querySelectorAll('span.md3-button__icon');
+    expect(iconWrappers).toHaveLength(2);
   });
 });
 
@@ -157,18 +167,6 @@ describe('Button — States', () => {
     );
     await userEvent.click(screen.getByRole('button'));
     expect(onClick).not.toHaveBeenCalled();
-  });
-
-  it('carries the disabled:pointer-events-none Tailwind class', () => {
-    render(<Button disabled>Disabled</Button>);
-    expect(screen.getByRole('button')).toHaveClass(
-      'disabled:pointer-events-none',
-    );
-  });
-
-  it('carries the disabled:opacity-[0.38] Tailwind class', () => {
-    render(<Button disabled>Disabled</Button>);
-    expect(screen.getByRole('button')).toHaveClass('disabled:opacity-[0.38]');
   });
 
   it('fires onClick when Enter key is pressed', async () => {

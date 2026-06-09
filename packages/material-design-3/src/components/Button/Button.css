@@ -1,9 +1,17 @@
 /*
-  Estilos base del componente Button.
-  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
-  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
-  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+  Estilos del componente Button — fuera de @layer intencionalmente.
+
+  Razón: los estilos sin @layer ganan sobre @layer utilities (Tailwind v4) y
+  sobre el @layer base del reset del consumidor. La especificidad de clase
+  (0,1,0) supera al selector universal * (0,0,0) de cualquier CSS reset.
+
+  Todos los estilos visuales (colores, sombras, focus ring) están aquí con
+  variables CSS directas en lugar de clases utilitarias de Tailwind. Esto
+  garantiza que dist/styles.css sea auto-contenido: el build del consumidor
+  no puede eliminar estas reglas al re-procesar @layer utilities.
 */
+
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
 
 .md3-button {
   box-sizing: border-box;
@@ -23,26 +31,90 @@
   transition-property: box-shadow, border-radius, padding-inline;
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
+  text-decoration: none;
+}
+
+.md3-button:focus-visible {
+  outline-style: solid;
+  outline-width: 2px;
+  outline-offset: 2px;
+}
+
+.md3-button:disabled {
+  pointer-events: none;
+  opacity: 0.38;
 }
 
 .md3-button:active {
   border-radius: 0.75rem;
 }
 
-.md3-button--filled,
-.md3-button--elevated,
-.md3-button--filled-tonal {
-  padding-inline: 1.5rem;
+.md3-button__icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
 }
 
-.md3-button--filled:active,
-.md3-button--elevated:active,
+/* ─── Filled ────────────────────────────────────────────────────────────────── */
+
+.md3-button--filled {
+  padding-inline: 1.5rem;
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.md3-button--filled:focus-visible {
+  outline-color: var(--md-sys-color-primary);
+}
+
+.md3-button--filled:active {
+  padding-inline: 2rem;
+}
+
+/* ─── Elevated ──────────────────────────────────────────────────────────────── */
+
+.md3-button--elevated {
+  padding-inline: 1.5rem;
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-primary);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.md3-button--elevated:hover {
+  box-shadow: var(--md-sys-elevation-level2);
+}
+
+.md3-button--elevated:active {
+  padding-inline: 2rem;
+  box-shadow: var(--md-sys-elevation-level3);
+}
+
+.md3-button--elevated:focus-visible {
+  outline-color: var(--md-sys-color-primary);
+}
+
+/* ─── Filled Tonal ──────────────────────────────────────────────────────────── */
+
+.md3-button--filled-tonal {
+  padding-inline: 1.5rem;
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-primary);
+}
+
 .md3-button--filled-tonal:active {
   padding-inline: 2rem;
 }
 
+.md3-button--filled-tonal:focus-visible {
+  outline-color: var(--md-sys-color-primary);
+}
+
+/* ─── Outlined ──────────────────────────────────────────────────────────────── */
+
 .md3-button--outlined {
   padding-inline: 1.5rem;
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
   border: 1px solid var(--md-sys-color-primary);
 }
 
@@ -50,12 +122,24 @@
   padding-inline: 2rem;
 }
 
+.md3-button--outlined:focus-visible {
+  outline-color: var(--md-sys-color-primary);
+}
+
+/* ─── Text ──────────────────────────────────────────────────────────────────── */
+
 .md3-button--text {
   min-height: auto;
   padding-inline: 0.25rem;
+  background-color: transparent;
+  color: var(--md-sys-color-primary);
 }
 
 .md3-button--text:active {
   padding-inline: 0.5rem;
   opacity: 0.7;
+}
+
+.md3-button--text:focus-visible {
+  outline-color: var(--md-sys-color-primary);
 }
