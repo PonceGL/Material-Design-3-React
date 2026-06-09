@@ -2,6 +2,8 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 import type { BaseComponentProps } from '@/components/shared/BaseComponent.types';
 
+import { CommonVariants } from '../shared/variants.types';
+
 /**
  * The five visual variants of the M3 Button component.
  *
@@ -13,12 +15,7 @@ import type { BaseComponentProps } from '@/components/shared/BaseComponent.types
  * - `outlined`     — Medium emphasis. Use for important actions that are not the primary one.
  * - `text`         — Lowest emphasis. Use for optional or supplementary actions.
  */
-export type ButtonVariant =
-  | 'filled'
-  | 'filled-tonal'
-  | 'elevated'
-  | 'outlined'
-  | 'text';
+export type ButtonVariant = CommonVariants | 'text';
 
 export interface ButtonProps
   extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
