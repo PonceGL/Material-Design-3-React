@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "aaa-pattern": {
+      "source": "yanko-belov/code-craft",
+      "sourceType": "github",
+      "skillPath": "skills/aaa-pattern/SKILL.md",
+      "computedHash": "557579e132bc62d322bdfd6593142e1001d449d4a81332100854b6de17868be8"
+    },
+    "frontend-design": {
+      "source": "anthropics/claude-code",
+      "sourceType": "github",
+      "skillPath": "plugins/frontend-design/skills/frontend-design/SKILL.md",
+      "computedHash": "e8118284a6365753790d44bb2758a6032b3af27fa84696428d9233f2be0f4e78"
+    },
+    "frontend-engineer": {
+      "source": "siviter-xyz/dot-agent",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-engineer/SKILL.md",
+      "computedHash": "a6e58279c68ab75587d59830ba57b0e0bf816ba131f246ea22b3e1516a13a9b6"
+    },
+    "tailwind": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/tailwind/SKILL.md",
+      "computedHash": "97bf0007f24e6275dcabc084c4d42f434ba48a84cec5a5b060036220239d6ddc"
+    },
+    "typescript": {
+      "source": "siviter-xyz/dot-agent",
+      "sourceType": "github",
+      "skillPath": "skills/typescript/SKILL.md",
+      "computedHash": "cea224c10c0be67c25d4b379276f1d8cda4aaaa719f9e8a4c3ba59e8926deebd"
+    },
+    "vite": {
+      "source": "antfu/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vite/SKILL.md",
+      "computedHash": "867ff66238f3152e9c494339ad08dc432dd0df5bcf5cc7a00b61a72b580eb908"
+    },
+    "vitest": {
+      "source": "antfu/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vitest/SKILL.md",
+      "computedHash": "669c7275f7e1379b06b2bcfa593603aead4c983b951c7e8edbc09640aa38d0a1"
+    }
+  }
+}

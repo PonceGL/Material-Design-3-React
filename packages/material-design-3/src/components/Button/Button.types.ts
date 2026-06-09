@@ -22,6 +22,7 @@ export type ButtonVariant =
 
 export interface ButtonProps
   extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
+  testId?: string;
   /** Visual style of the button. Defaults to `'filled'`. */
   variant?: ButtonVariant;
   /** Leading icon rendered before the label. Accepts any ReactNode (e.g. an SVG icon component). */
