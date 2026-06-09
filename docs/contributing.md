@@ -77,6 +77,47 @@ chore: upgrade Tailwind to v4.2
 test: add accessibility tests for Button
 ```
 
+## Naming conventions
+
+### Branches
+
+Format: `<type>/<ticket-id>-<short-description>`
+
+- Types mirror commit types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`, `perf`
+- Ticket ID matches the Jira task (e.g. `RCL-45`)
+- Description is lowercase, hyphen-separated, in English
+
+```
+feat/RCL-45-card-component
+fix/RCL-12-button-focus-ring
+docs/RCL-67-update-theming-guide
+```
+
+### Pull request titles
+
+Format: `<type>(<ticket-id>): <description>`
+
+```
+feat(RCL-45): add Card component with elevated and filled variants
+fix(RCL-12): correct focus ring color in outlined Button
+docs(RCL-67): update theming examples in overview
+```
+
+### File and folder names
+
+| Context                              | Convention | Example                                    |
+| ------------------------------------ | ---------- | ------------------------------------------ |
+| React components (`src/components/`) | PascalCase | `src/components/UserCard/`                 |
+| Non-component source files           | camelCase  | `src/theme/paletteGenerator.ts`            |
+| Config and tooling files             | kebab-case | `eslint.config.js`, `commitlint.config.js` |
+
+```
+src/components/UserCard/      ✓  (React component)
+src/components/user_card/     ✗
+src/theme/paletteGenerator.ts ✓  (not a component)
+src/theme/palette-generator   ✗
+```
+
 ## Adding a new component
 
 Follow the process in [component-template.md](./component-template.md). Every component requires:
