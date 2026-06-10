@@ -35,7 +35,11 @@ pnpm monorepo. Only `packages/material-design-3` is published to npm as `@ponceg
 
 ```
 packages/material-design-3/src/
-├── components/           # UI components (one folder per component)
+├── components/
+│   └── Buttons/          # Component family — Button, ButtonGroup, ToggleButton, ...
+│       ├── Button/
+│       ├── ButtonGroup/
+│       └── index.ts      # re-exports every component + types in the family
 ├── theme/
 │   ├── MD3Provider/      # React wrapper that applies tokens to :root
 │   ├── create-md3-theme/ # Generates light/dark token maps from a hex color
@@ -50,6 +54,12 @@ apps/
 
 tooling/                  # Shared ESLint and TypeScript configs (not published)
 ```
+
+### Component Families
+
+Related M3 components are grouped under a shared **family folder** in `src/components/` (e.g. `Buttons/` holds `Button`, `ButtonGroup`, `ToggleButton` — all distinct M3 components from the same M3 category, not variants of one another). Each component keeps its own colocated folder; the family folder adds a single `index.ts` that re-exports every component's public API (imported through each component's own `index.ts`, never their internal files).
+
+A component that doesn't belong to an existing family gets its own top-level folder under `src/components/` directly.
 
 ## Theming System
 
@@ -182,8 +192,8 @@ Format: `type(scope): description` — enforced by commitlint (Conventional Comm
 ## Adding a New Component — Checklist
 
 1. Read the M3 spec at m3.material.io/components — extract variants, anatomy, states, ARIA role, color tokens.
-2. Create `packages/material-design-3/src/components/ComponentName/` with all five files.
-3. Export from `packages/material-design-3/src/index.ts`.
+2. Create `packages/material-design-3/src/components/ComponentName/` with all five files — or, if the component belongs to an existing family (see [Component Families](#component-families)), `src/components/<Family>/ComponentName/`.
+3. Export from the family's `index.ts` (if applicable) and from `packages/material-design-3/src/index.ts`.
 4. Run `pnpm typecheck && pnpm test:coverage && pnpm storybook`.
 5. Open a PR linked to the Jira task. Every item in `docs/component-template.md` Definition of Done must be met.
 

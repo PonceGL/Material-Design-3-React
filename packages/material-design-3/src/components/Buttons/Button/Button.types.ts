@@ -6,7 +6,7 @@ import {
   type ButtonShape,
   type ButtonSize,
   CommonVariants,
-} from '../shared/variants.types';
+} from '../../shared/variants.types';
 
 export type { ButtonShape, ButtonSize };
 

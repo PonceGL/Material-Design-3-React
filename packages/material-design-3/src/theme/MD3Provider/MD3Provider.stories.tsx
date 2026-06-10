@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button } from '../../components/Button';
+import { Button } from '../../components/Buttons';
 import { createMD3Theme } from '../create-md3-theme';
 import { MD3Provider } from './MD3Provider';
 import type { MD3ProviderColorScheme } from './MD3Provider.types';
