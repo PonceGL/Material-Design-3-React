@@ -1,7 +1,7 @@
 import '@/styles.css';
 
-export { Button } from '@/components/Button';
-export type { ButtonProps } from '@/components/Button';
+export { Button } from '@/components/Buttons';
+export type { ButtonProps } from '@/components/Buttons';
 
 export type { MD3ColorScheme, MD3SystemColorToken, MD3Theme } from '@/tokens';
 
