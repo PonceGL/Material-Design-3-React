@@ -14,17 +14,55 @@ El componente Button sigue la especificación [Buttons de Material Design 3](htt
 
 ## Props
 
-| Prop           | Tipo                                                               | Por defecto | Descripción                                                                                                    |
-| -------------- | ------------------------------------------------------------------ | ----------- | -------------------------------------------------------------------------------------------------------------- |
-| `variant`      | `'filled' \| 'elevated' \| 'filled-tonal' \| 'outlined' \| 'text'` | `'filled'`  | Variante visual del botón.                                                                                     |
-| `icon`         | `ReactNode`                                                        | —           | Icono líder renderizado antes de la etiqueta.                                                                  |
-| `iconTrailing` | `ReactNode`                                                        | —           | Icono al final renderizado después de la etiqueta.                                                             |
-| `testId`       | `string`                                                           | —           | Propagado como `data-testid` en el elemento raíz para selectores de prueba.                                    |
-| `disabled`     | `boolean`                                                          | `false`     | Deshabilita el botón y elimina los eventos de puntero.                                                         |
-| `type`         | `'button' \| 'submit' \| 'reset'`                                  | `'button'`  | Atributo `type` del elemento `<button>`. Por defecto `'button'` para evitar envíos accidentales de formulario. |
-| `className`    | `string`                                                           | —           | Clases adicionales que se fusionan con las del componente mediante `cn()`.                                     |
-| `onClick`      | `MouseEventHandler`                                                | —           | Manejador del evento click. No se dispara cuando el botón está deshabilitado.                                  |
-| ...rest        | `ButtonHTMLAttributes`                                             | —           | Cualquier atributo HTML válido para `<button>` se propaga al elemento raíz.                                    |
+| Prop           | Tipo                                                               | Por defecto | Descripción                                                                                                     |
+| -------------- | ------------------------------------------------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------- |
+| `variant`      | `'filled' \| 'elevated' \| 'filled-tonal' \| 'outlined' \| 'text'` | `'filled'`  | Variante visual del botón.                                                                                      |
+| `size`         | `'xs' \| 's' \| 'm' \| 'l' \| 'xl'`                                | `'m'`       | Tamaño M3 Expressive. Controla el `min-height` (área táctil) y el padding horizontal, en reposo y al presionar. |
+| `shape`        | `'round' \| 'square'`                                              | `'round'`   | Forma M3 Expressive en reposo. Controla el `border-radius`, en reposo y al presionar.                           |
+| `icon`         | `ReactNode`                                                        | —           | Icono líder renderizado antes de la etiqueta.                                                                   |
+| `iconTrailing` | `ReactNode`                                                        | —           | Icono al final renderizado después de la etiqueta.                                                              |
+| `testId`       | `string`                                                           | —           | Propagado como `data-testid` en el elemento raíz para selectores de prueba.                                     |
+| `disabled`     | `boolean`                                                          | `false`     | Deshabilita el botón y elimina los eventos de puntero.                                                          |
+| `type`         | `'button' \| 'submit' \| 'reset'`                                  | `'button'`  | Atributo `type` del elemento `<button>`. Por defecto `'button'` para evitar envíos accidentales de formulario.  |
+| `className`    | `string`                                                           | —           | Clases adicionales que se fusionan con las del componente mediante `cn()`.                                      |
+| `onClick`      | `MouseEventHandler`                                                | —           | Manejador del evento click. No se dispara cuando el botón está deshabilitado.                                   |
+| ...rest        | `ButtonHTMLAttributes`                                             | —           | Cualquier atributo HTML válido para `<button>` se propaga al elemento raíz.                                     |
+
+## Tamaños y formas (M3 Expressive)
+
+Además de `variant`, `Button` admite dos ejes de personalización de M3 Expressive: `size` y `shape`.
+
+### `size`
+
+Controla el área táctil (`min-height`) y el padding horizontal del botón, tanto en reposo como al presionar.
+
+| Tamaño | `min-height` | Uso recomendado                                                          |
+| ------ | ------------ | ------------------------------------------------------------------------ |
+| `xs`   | 40px         | Espacios muy compactos (toolbars densas).                                |
+| `s`    | 44px         | Listas o formularios compactos.                                          |
+| `m`    | 48px         | Por defecto. Cumple el área táctil mínima de 48×48dp recomendada por M3. |
+| `l`    | 52px         | Acciones destacadas.                                                     |
+| `xl`   | 56px         | Pantallas de gran formato o mayor accesibilidad.                         |
+
+```tsx
+<Button size="xs">XS</Button>
+<Button size="s">S</Button>
+<Button size="m">M</Button>
+<Button size="l">L</Button>
+<Button size="xl">XL</Button>
+```
+
+### `shape`
+
+Controla el `border-radius` del botón, tanto en reposo como al presionar (M3 Expressive "shape morph").
+
+- `round` (por defecto) — esquinas totalmente redondeadas.
+- `square` — esquinas levemente redondeadas (`corner-medium`).
+
+```tsx
+<Button shape="round">Round</Button>
+<Button shape="square">Square</Button>
+```
 
 ## Ejemplos
 
@@ -113,4 +151,4 @@ El componente hereda el comportamiento nativo del elemento `<button>`:
 
 ### Touch target
 
-El componente aplica `min-h-[48px]` en todas las variantes para cumplir con el mínimo de área táctil de 48×48 dp recomendado por M3 y las pautas de accesibilidad móvil.
+El `min-height` del botón depende de `size` (ver [Tamaños y formas](#tamaños-y-formas-m3-expressive)). El valor por defecto, `'m'` (48px), cumple con el mínimo de área táctil de 48×48 dp recomendado por M3 y las pautas de accesibilidad móvil. Los tamaños `xs` (40px) y `s` (44px) quedan por debajo de esa recomendación: úsalos solo en contextos de espacio reducido y considera reforzar el área táctil con `padding`/`margin` en el contenedor.

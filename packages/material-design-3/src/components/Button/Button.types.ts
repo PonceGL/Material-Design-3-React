@@ -28,9 +28,16 @@ export interface ButtonProps
   testId?: string;
   /** Visual style of the button. Defaults to `'filled'`. */
   variant?: ButtonVariant;
-  /** M3 Expressive size, drives the corner-radius scale. Defaults to `'s'`. */
+  /**
+   * M3 Expressive size. Drives the button's `min-height` (touch target)
+   * and horizontal padding, both at rest and while pressed.
+   * Defaults to `'m'`.
+   */
   size?: ButtonSize;
-  /** M3 Expressive shape at rest. Defaults to `'round'`. */
+  /**
+   * M3 Expressive shape at rest. Drives the button's corner-radius,
+   * both at rest and while pressed. Defaults to `'round'`.
+   */
   shape?: ButtonShape;
   /** Leading icon rendered before the label. Accepts any ReactNode (e.g. an SVG icon component). */
   icon?: ReactNode;

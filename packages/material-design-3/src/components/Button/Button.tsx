@@ -55,6 +55,33 @@ const shapeClasses: Record<ButtonShape, string> = {
   square: 'md3-button--shape-square',
 };
 
+/**
+ * Material Design 3 button.
+ *
+ * Renders a native `<button>` element with one of the five M3 visual
+ * variants (`filled`, `elevated`, `filled-tonal`, `outlined`, `text`).
+ *
+ * Two additional M3 Expressive axes control its shape:
+ * - `size` (`xs`–`xl`) drives the horizontal padding and `min-height`
+ *   (touch target), both at rest and while pressed.
+ * - `shape` (`round` | `square`) drives the corner-radius, both at rest
+ *   and while pressed.
+ *
+ * All standard `ButtonHTMLAttributes` (`onClick`, `disabled`, `type`,
+ * `aria-*`, etc.) pass through to the root element via `...rest`.
+ *
+ * @example
+ * ```tsx
+ * <Button variant="filled" size="m" onClick={handleSave}>
+ *   Guardar
+ * </Button>
+ * ```
+ *
+ * @example Icon-only button — provide an accessible name via `aria-label`
+ * ```tsx
+ * <Button variant="text" icon={<CloseIcon />} aria-label="Cerrar" />
+ * ```
+ */
 export function Button({
   testId,
   variant = 'filled',
