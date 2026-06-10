@@ -18,3 +18,27 @@ export type CommonVariants =
   | FilledTonalVariant
   | ElevatedVariant
   | OutlinedVariant;
+
+/**
+ * M3 Expressive button sizes, from smallest to largest.
+ *
+ * Drives the corner-radius (resting and pressed) of `Button` and is shared
+ * with `ButtonGroup`/`ToggleButton` so the whole family stays in sync.
+ *
+ * - `xs` — Extra small
+ * - `s`  — Small
+ * - `m`  — Medium
+ * - `l`  — Large
+ * - `xl` — Extra large
+ */
+export type ButtonSize = 'xs' | 's' | 'm' | 'l' | 'xl';
+
+/**
+ * M3 Expressive button shapes.
+ *
+ * - `round`  — Fully-rounded corners at rest (default, matches the pre-Expressive shape).
+ * - `square` — Rounded-rectangle corners at rest, sized per `ButtonSize`.
+ *
+ * Both shapes morph to the same "pressed" corner radius for a given size.
+ */
+export type ButtonShape = 'round' | 'square';

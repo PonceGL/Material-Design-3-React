@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import axe from 'axe-core';
 
 import { Button } from './Button';
-import type { ButtonVariant } from './Button.types';
+import type { ButtonShape, ButtonSize, ButtonVariant } from './Button.types';
 
 // ─── Rendering ────────────────────────────────────────────────────────────────
 
@@ -48,6 +48,44 @@ describe('Button — Rendering', () => {
     render(<Button variant="filled">Filled</Button>);
     expect(screen.getByRole('button')).toHaveClass('md3-button--filled');
   });
+
+  it('renders the outlined variant with on-surface-variant text and not primary text', () => {
+    render(<Button variant="outlined">Outlined</Button>);
+    const btn = screen.getByRole('button');
+    expect(btn).toHaveClass('text-md-on-surface-variant');
+    expect(btn).not.toHaveClass('text-md-primary');
+  });
+});
+
+// ─── Size & Shape ─────────────────────────────────────────────────────────────
+
+describe('Button — Size & Shape', () => {
+  it('defaults to size "m" and shape "round"', () => {
+    render(<Button>Default</Button>);
+    const btn = screen.getByRole('button');
+    expect(btn).toHaveClass('md3-button--size-m');
+    expect(btn).toHaveClass('md3-button--shape-round');
+  });
+
+  it.each<ButtonSize>(['xs', 's', 'm', 'l', 'xl'])(
+    'applies the md3-button--size-%s class for size "%s"',
+    (size) => {
+      render(<Button size={size}>{size}</Button>);
+      expect(screen.getByRole('button')).toHaveClass(
+        `md3-button--size-${size}`,
+      );
+    },
+  );
+
+  it.each<ButtonShape>(['round', 'square'])(
+    'applies the md3-button--shape-%s class for shape "%s"',
+    (shape) => {
+      render(<Button shape={shape}>{shape}</Button>);
+      expect(screen.getByRole('button')).toHaveClass(
+        `md3-button--shape-${shape}`,
+      );
+    },
+  );
 });
 
 // ─── Props ────────────────────────────────────────────────────────────────────
@@ -218,4 +256,17 @@ describe('Button — Accessibility', () => {
     const results = await axe.run(container);
     expect(results.violations).toHaveLength(0);
   });
+
+  it.each<ButtonSize>(['xs', 's', 'm', 'l', 'xl'])(
+    'has no axe violations — square shape, size %s',
+    async (size) => {
+      const { container } = render(
+        <Button shape="square" size={size}>
+          {size}
+        </Button>,
+      );
+      const results = await axe.run(container);
+      expect(results.violations).toHaveLength(0);
+    },
+  );
 });

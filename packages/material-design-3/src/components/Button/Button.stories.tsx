@@ -38,6 +38,18 @@ const meta: Meta<typeof Button> = {
       options: ['filled', 'elevated', 'filled-tonal', 'outlined', 'text'],
       description: 'Variante visual según la especificación M3.',
     },
+    size: {
+      control: 'select',
+      options: ['xs', 's', 'm', 'l', 'xl'],
+      description:
+        'Tamaño M3 Expressive. Define el corner-radius en reposo (forma square) y al presionar.',
+    },
+    shape: {
+      control: 'select',
+      options: ['round', 'square'],
+      description:
+        'Forma M3 Expressive en reposo. "round" es siempre totalmente redondeado; "square" depende de size.',
+    },
     children: {
       control: 'text',
       description: 'Etiqueta del botón.',
@@ -76,6 +88,8 @@ type Story = StoryObj<typeof Button>;
 export const Primary: Story = {
   args: {
     variant: 'filled',
+    size: 'm',
+    shape: 'round',
     children: 'Button',
     disabled: false,
     type: 'button',
@@ -130,6 +144,39 @@ export const AllVariants: Story = {
       <Button variant="filled-tonal">Filled Tonal</Button>
       <Button variant="outlined">Outlined</Button>
       <Button variant="text">Text</Button>
+    </div>
+  ),
+};
+
+export const Shapes: Story = {
+  name: 'Shapes (round vs square)',
+  render: () => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button shape="round">Round</Button>
+      <Button shape="square">Square</Button>
+    </div>
+  ),
+};
+
+export const Sizes: Story = {
+  name: 'Sizes (square shape, corner-radius scale)',
+  render: () => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button size="xs" shape="square">
+        XS
+      </Button>
+      <Button size="s" shape="square">
+        S
+      </Button>
+      <Button size="m" shape="square">
+        M
+      </Button>
+      <Button size="l" shape="square">
+        L
+      </Button>
+      <Button size="xl" shape="square">
+        XL
+      </Button>
     </div>
   ),
 };
