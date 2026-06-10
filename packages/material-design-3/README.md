@@ -28,6 +28,8 @@ export function App() {
 
 ## Componentes
 
-| Componente | Descripción                            | Documentación                                                                                                 |
-| ---------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `Button`   | Botón M3 en sus 5 variantes de énfasis | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/Button.md) |
+| Componente     | Descripción                                  | Documentación                                                                                                 |
+| -------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `Button`       | Botón M3 en sus variantes de énfasis         | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/Button.md) |
+| `ButtonGroup`  | Grupo de botones M3                          | [Ver documentación →](#)                                                                                      |
+| `ToggleButton` | ToggleButton M3 con sus variantes de énfasis | [Ver documentación →](#)                                                                                      |
