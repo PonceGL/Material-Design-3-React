@@ -42,6 +42,7 @@
   --md-sys-shape-corner-large: 16px;
   --md-sys-shape-corner-extra-large: 28px;
   --md-sys-shape-corner-full: 9999px;
+  --md-sys-shape-corner-button-group-connected-xl: 20px;
 
   /* Elevation */
   --md-sys-elevation-level0: none;

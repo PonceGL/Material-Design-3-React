@@ -1,0 +1,98 @@
+/*
+  Reglas de tamaño y forma compartidas por todos los botones M3 Expressive
+  de la familia Buttons (Button, ToggleButton). Se importan desde el CSS de
+  cada componente para evitar duplicar estas reglas.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+*/
+
+.md3-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1;
+  gap: 0.5rem;
+  min-height: 3rem;
+  border: none;
+  transition-property: box-shadow, border-radius, padding-inline;
+  transition-duration: 100ms;
+  transition-timing-function: ease-in-out;
+}
+
+.md3-button--size-xs {
+  padding-inline: 0.75rem;
+  min-height: 2.5rem;
+}
+
+.md3-button--size-s {
+  padding-inline: 1.25rem;
+  min-height: 2.75rem;
+}
+
+.md3-button--size-m {
+  padding-inline: 1.5rem;
+}
+
+.md3-button--size-l {
+  padding-inline: 2.5rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  min-height: 3.25rem;
+}
+
+.md3-button--size-xl {
+  padding-inline: 3.5rem;
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+  min-height: 3.5rem;
+}
+
+/*
+  Corner-radius table (M3 Expressive). Concrete rem values are used instead
+  of var(--md-sys-shape-corner-*) because unregistered custom properties
+  cannot be interpolated in a transition (see CLAUDE.md).
+*/
+
+.md3-button--shape-round {
+  border-radius: 3rem; /* corner-full — all sizes */
+}
+
+.md3-button--shape-square {
+  border-radius: 0.75rem; /* corner-medium, 12px */
+}
+
+.md3-button--size-xs:active {
+  padding-inline: 1rem;
+}
+
+.md3-button--size-s:active {
+  padding-inline: 1.5rem;
+}
+
+.md3-button--size-m:active {
+  padding-inline: 2rem;
+}
+
+.md3-button--size-l:active {
+  padding-inline: 3rem;
+}
+
+.md3-button--size-xl:active {
+  padding-inline: 4rem;
+}
+
+.md3-button--shape-round:active {
+  border-radius: 1rem;
+}
+
+.md3-button--shape-square:active {
+  border-radius: 0.2rem;
+}
