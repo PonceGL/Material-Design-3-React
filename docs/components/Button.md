@@ -84,7 +84,7 @@ import { Button } from '@poncegl/material-design-3';
 <Button variant="text">Text</Button>
 ```
 
-### Con icono líder
+### Con icono al inicio
 
 ```tsx
 import { PlusIcon } from './icons';

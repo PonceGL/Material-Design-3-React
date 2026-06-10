@@ -26,7 +26,7 @@ export type CommonVariants =
  * with `ButtonGroup`/`ToggleButton` so the whole family stays in sync.
  *
  * - `xs` — Extra small
- * - `s`  — Small (default, matches the pre-Expressive size)
+ * - `s`  — Small
  * - `m`  — Medium
  * - `l`  — Large
  * - `xl` — Extra large
