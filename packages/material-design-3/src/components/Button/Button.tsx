@@ -1,3 +1,7 @@
+import type {
+  ButtonShape,
+  ButtonSize,
+} from '@/components/shared/variants.types';
 import { cn } from '@/lib/cn';
 
 import './Button.css';
@@ -38,9 +42,24 @@ const variantClasses: Record<ButtonVariant, string> = {
   ].join(' '),
 };
 
+const sizeClasses: Record<ButtonSize, string> = {
+  xs: 'md3-button--size-xs',
+  s: 'md3-button--size-s',
+  m: 'md3-button--size-m',
+  l: 'md3-button--size-l',
+  xl: 'md3-button--size-xl',
+};
+
+const shapeClasses: Record<ButtonShape, string> = {
+  round: 'md3-button--shape-round',
+  square: 'md3-button--shape-square',
+};
+
 export function Button({
   testId,
   variant = 'filled',
+  size = 's',
+  shape = 'round',
   icon,
   iconTrailing,
   children,
@@ -51,7 +70,13 @@ export function Button({
   return (
     <button
       data-testid={testId}
-      className={cn(base, variantClasses[variant], className)}
+      className={cn(
+        base,
+        variantClasses[variant],
+        sizeClasses[size],
+        shapeClasses[shape],
+        className,
+      )}
       type={type}
       {...rest}
     >

@@ -2,7 +2,13 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 import type { BaseComponentProps } from '@/components/shared/BaseComponent.types';
 
-import { CommonVariants } from '../shared/variants.types';
+import {
+  type ButtonShape,
+  type ButtonSize,
+  CommonVariants,
+} from '../shared/variants.types';
+
+export type { ButtonShape, ButtonSize };
 
 /**
  * The five visual variants of the M3 Button component.
@@ -22,6 +28,10 @@ export interface ButtonProps
   testId?: string;
   /** Visual style of the button. Defaults to `'filled'`. */
   variant?: ButtonVariant;
+  /** M3 Expressive size, drives the corner-radius scale. Defaults to `'s'`. */
+  size?: ButtonSize;
+  /** M3 Expressive shape at rest. Defaults to `'round'`. */
+  shape?: ButtonShape;
   /** Leading icon rendered before the label. Accepts any ReactNode (e.g. an SVG icon component). */
   icon?: ReactNode;
   /** Trailing icon rendered after the label. Accepts any ReactNode. */

@@ -19,35 +19,69 @@
   gap: 0.5rem;
   min-height: 48px;
   border: none;
-  border-radius: 9999px;
   transition-property: box-shadow, border-radius, padding-inline;
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
 }
 
-.md3-button:active {
-  border-radius: 0.75rem;
+/*
+  Corner-radius table (M3 Expressive). Concrete rem values are used instead
+  of var(--md-sys-shape-corner-*) because unregistered custom properties
+  cannot be interpolated in a transition (see CLAUDE.md).
+*/
+
+.md3-button--shape-round {
+  border-radius: 9999px; /* corner-full — all sizes */
+}
+
+.md3-button--shape-square.md3-button--size-xs,
+.md3-button--shape-square.md3-button--size-s {
+  border-radius: 0.75rem; /* corner-medium, 12px */
+}
+
+.md3-button--shape-square.md3-button--size-m {
+  border-radius: 1rem; /* corner-large, 16px */
+}
+
+.md3-button--shape-square.md3-button--size-l,
+.md3-button--shape-square.md3-button--size-xl {
+  border-radius: 1.75rem; /* corner-extra-large, 28px */
+}
+
+/* Pressed state: corner radius depends only on size, both shapes morph the same way */
+.md3-button--size-xs:active,
+.md3-button--size-s:active {
+  border-radius: 0.5rem; /* corner-small, 8px */
+}
+
+.md3-button--size-m:active {
+  border-radius: 0.75rem; /* corner-medium, 12px */
+}
+
+.md3-button--size-l:active,
+.md3-button--size-xl:active {
+  border-radius: 1rem; /* corner-large, 16px */
 }
 
 .md3-button--filled,
 .md3-button--elevated,
 .md3-button--filled-tonal {
-  padding-inline: 1.5rem;
+  padding-inline: 1rem;
 }
 
 .md3-button--filled:active,
 .md3-button--elevated:active,
 .md3-button--filled-tonal:active {
-  padding-inline: 2rem;
+  padding-inline: 1.5rem;
 }
 
 .md3-button--outlined {
-  padding-inline: 1.5rem;
+  padding-inline: 1rem;
   border: 1px solid var(--md-sys-color-primary);
 }
 
 .md3-button--outlined:active {
-  padding-inline: 2rem;
+  padding-inline: 1.5rem;
 }
 
 .md3-button--text {
