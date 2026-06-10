@@ -27,29 +27,33 @@
   transition-timing-function: ease-in-out;
 }
 
+.md3-button--outlined {
+  border: 1px solid var(--md-sys-color-outline);
+}
+
 .md3-button--size-xs {
   padding-inline: 0.75rem;
   min-height: 2.5rem;
 }
 
 .md3-button--size-s {
-  padding-inline: 1.25rem;
+  padding-inline: 2rem;
   min-height: 2.75rem;
 }
 
 .md3-button--size-m {
-  padding-inline: 1.5rem;
+  padding-inline: 2.5rem;
 }
 
 .md3-button--size-l {
-  padding-inline: 2.5rem;
+  padding-inline: 3.5rem;
   padding-bottom: 1rem;
   padding-top: 1rem;
   min-height: 3.25rem;
 }
 
 .md3-button--size-xl {
-  padding-inline: 3.5rem;
+  padding-inline: 4.5rem;
   padding-bottom: 1.5rem;
   padding-top: 1.5rem;
   min-height: 3.5rem;

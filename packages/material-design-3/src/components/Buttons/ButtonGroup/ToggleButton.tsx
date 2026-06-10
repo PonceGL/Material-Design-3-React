@@ -58,9 +58,9 @@ const variantClasses: Record<ToggleButtonVariant, ToggleButtonStateClasses> = {
   },
   outlined: {
     unselected: [
-      'md3-toggle-button--outlined',
+      'md3-button--outlined',
       'bg-transparent text-md-on-surface-variant',
-      'border border-md-outline',
+      'focus-visible:outline-md-primary',
     ].join(' '),
     selected: [
       'md3-toggle-button--outlined-selected',

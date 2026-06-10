@@ -65,6 +65,7 @@ export type ToggleButtonVariant = CommonVariants;
 
 export interface ToggleButtonProps
   extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
+  testId?: string;
   /** Visual style of the button. Defaults to `'filled'`. */
   variant?: ToggleButtonVariant;
   /**

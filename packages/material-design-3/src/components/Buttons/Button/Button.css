@@ -12,8 +12,3 @@
 .md3-button--filled-tonal:active {
   padding-inline: 2rem;
 }
-
-.md3-button--outlined {
-  /* padding-inline: 1.5rem; */
-  border: 1px solid var(--md-sys-color-outline);
-}
