@@ -67,6 +67,17 @@ export interface ToggleButtonProps
   extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
   /** Visual style of the button. Defaults to `'filled'`. */
   variant?: ToggleButtonVariant;
+  /**
+   * M3 Expressive size, shared with `Button`/`ButtonGroup`. Drives the
+   * button's `min-height` (touch target) and horizontal padding, both at
+   * rest and while pressed. Defaults to `'m'`.
+   */
+  size?: ButtonSize;
+  /**
+   * Shape at rest when unselected. Selecting the button morphs it to the
+   * opposite shape (`round` ↔ `square`). Defaults to `'round'`.
+   */
+  shape?: ButtonShape;
   /** Whether the button is currently selected. Reflected as `aria-pressed`. */
   selected: boolean;
   /** Called with the next selected state when the button is activated. */
