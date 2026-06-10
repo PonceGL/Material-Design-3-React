@@ -39,6 +39,36 @@ export function App() {
           </Button>
         </div>
 
+        <div className="w-full flex justify-center items-center gap-3">
+          <Button size="xs" onClick={exampleAction}>
+            Size: XS
+          </Button>
+          <Button size="s" onClick={exampleAction}>
+            Size: S
+          </Button>
+          <Button size="m" onClick={exampleAction}>
+            Size: M
+          </Button>
+          <Button size="l" onClick={exampleAction}>
+            Size: L
+          </Button>
+          <Button size="xl" onClick={exampleAction}>
+            Size: XL
+          </Button>
+        </div>
+
+        <div className="w-full flex justify-center items-center gap-3">
+          <Button shape="round" onClick={exampleAction}>
+            Round
+          </Button>
+          <Button shape="square" onClick={exampleAction}>
+            Square
+          </Button>
+          <Button shape="square" size="l" onClick={exampleAction}>
+            Square L
+          </Button>
+        </div>
+
         <div className="space-y-3">
           <p className="text-sm font-medium text-md-on-surface-variant">
             Elevation tokens

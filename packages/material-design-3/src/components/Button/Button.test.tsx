@@ -60,10 +60,10 @@ describe('Button — Rendering', () => {
 // ─── Size & Shape ─────────────────────────────────────────────────────────────
 
 describe('Button — Size & Shape', () => {
-  it('defaults to size "s" and shape "round"', () => {
+  it('defaults to size "m" and shape "round"', () => {
     render(<Button>Default</Button>);
     const btn = screen.getByRole('button');
-    expect(btn).toHaveClass('md3-button--size-s');
+    expect(btn).toHaveClass('md3-button--size-m');
     expect(btn).toHaveClass('md3-button--shape-round');
   });
 

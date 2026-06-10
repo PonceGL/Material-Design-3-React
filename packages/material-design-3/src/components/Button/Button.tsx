@@ -58,7 +58,7 @@ const shapeClasses: Record<ButtonShape, string> = {
 export function Button({
   testId,
   variant = 'filled',
-  size = 's',
+  size = 'm',
   shape = 'round',
   icon,
   iconTrailing,
