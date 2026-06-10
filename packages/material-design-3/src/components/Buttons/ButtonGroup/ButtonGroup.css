@@ -1,0 +1,86 @@
+/*
+  Estilos estructurales de ButtonGroup. ButtonGroup no tiene color propio
+  (los tokens de color los aporta cada item) — este archivo solo resuelve
+  layout (gap, flex-grow) y corner-radius.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+*/
+
+.md3-button-group {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* `standard` — gap entre items, escalado por tamaño */
+
+.md3-button-group--standard.md3-button-group--size-xs {
+  gap: 1.125rem; /* 18px */
+}
+
+.md3-button-group--standard.md3-button-group--size-s {
+  gap: 0.75rem; /* 12px */
+}
+
+.md3-button-group--standard.md3-button-group--size-m,
+.md3-button-group--standard.md3-button-group--size-l,
+.md3-button-group--standard.md3-button-group--size-xl {
+  gap: 0.5rem; /* 8px */
+}
+
+/* `standard` — squish-expand: el item seleccionado crece, sus vecinos ceden */
+
+.md3-button-group--standard > * {
+  flex-grow: 1;
+  transition: flex-grow 100ms ease-in-out;
+}
+
+.md3-button-group--standard > [aria-pressed='true'] {
+  flex-grow: 1.5;
+}
+
+/* `connected` — gap fijo de 2px y corner-radius por item, escalado por tamaño */
+
+.md3-button-group--connected {
+  gap: 0.125rem; /* 2px */
+}
+
+.md3-button-group--connected.md3-button-group--size-xs > * {
+  border-radius: 0.25rem; /* 4px */
+}
+
+.md3-button-group--connected.md3-button-group--size-s > *,
+.md3-button-group--connected.md3-button-group--size-m > * {
+  border-radius: 0.5rem; /* 8px */
+}
+
+.md3-button-group--connected.md3-button-group--size-l > * {
+  border-radius: 1rem; /* 16px */
+}
+
+.md3-button-group--connected.md3-button-group--size-xl > * {
+  border-radius: 1.25rem; /* 20px, --md-sys-shape-corner-button-group-connected-xl */
+}
+
+/*
+  `connected` + `shape="round"` — las esquinas externas del primer y último
+  item se redondean por completo (corner-full).
+
+  Caso límite conocido: si ese primer/último item es un `ToggleButton`
+  seleccionado, su shape-morph (`.md3-toggle-button[aria-pressed='true']...`
+  en ToggleButton.css) tiene la misma especificidad (0,3,0) que las reglas
+  de abajo. Cuál gana depende del orden de aparición en el CSS final, no se
+  resuelve en esta primera iteración.
+*/
+
+.md3-button-group--connected.md3-button-group--shape-round > *:first-child {
+  border-top-left-radius: 3rem;
+  border-bottom-left-radius: 3rem;
+}
+
+.md3-button-group--connected.md3-button-group--shape-round > *:last-child {
+  border-top-right-radius: 3rem;
+  border-bottom-right-radius: 3rem;
+}
