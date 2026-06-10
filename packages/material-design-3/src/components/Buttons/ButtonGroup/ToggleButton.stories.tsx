@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
 
+import type { ButtonSize } from '../../shared/variants.types';
 import type {
   ToggleButtonProps,
   ToggleButtonVariant,
@@ -98,7 +99,7 @@ function ControlledToggleButton({
 }
 
 export const Primary: Story = {
-  render: (args) => <ControlledToggleButton {...args} />,
+  render: (args) => <ToggleButton {...args} />,
   args: {
     variant: 'filled',
     size: 'm',
@@ -114,6 +115,8 @@ const VARIANTS: ToggleButtonVariant[] = [
   'filled-tonal',
   'outlined',
 ];
+
+const SIZE: ButtonSize[] = ['xs', 's', 'm', 'l', 'xl'];
 
 export const AllVariants: Story = {
   name: 'All Variants (Toggle color table)',
@@ -146,6 +149,25 @@ export const AllVariants: Story = {
             {variant}
           </ControlledToggleButton>
         </Fragment>
+      ))}
+    </div>
+  ),
+};
+
+export const AllSizes: Story = {
+  name: 'All Sizes (size axis)',
+  render: () => (
+    <div className="flex flex-wrap items-center gap-3">
+      {SIZE.map((size) => (
+        <ControlledToggleButton
+          key={size}
+          variant="elevated"
+          size={size}
+          selected={false}
+          onSelectedChange={() => {}}
+        >
+          {size}
+        </ControlledToggleButton>
       ))}
     </div>
   ),
