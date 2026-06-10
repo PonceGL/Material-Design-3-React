@@ -48,6 +48,13 @@ describe('Button — Rendering', () => {
     render(<Button variant="filled">Filled</Button>);
     expect(screen.getByRole('button')).toHaveClass('md3-button--filled');
   });
+
+  it('renders the outlined variant with on-surface-variant text and not primary text', () => {
+    render(<Button variant="outlined">Outlined</Button>);
+    const btn = screen.getByRole('button');
+    expect(btn).toHaveClass('text-md-on-surface-variant');
+    expect(btn).not.toHaveClass('text-md-primary');
+  });
 });
 
 // ─── Size & Shape ─────────────────────────────────────────────────────────────

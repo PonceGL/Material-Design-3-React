@@ -32,7 +32,7 @@ const variantClasses: Record<ButtonVariant, string> = {
   ].join(' '),
   outlined: [
     'md3-button--outlined',
-    'bg-transparent text-md-primary',
+    'bg-transparent text-md-on-surface-variant',
     'focus-visible:outline-md-primary',
   ].join(' '),
   text: [

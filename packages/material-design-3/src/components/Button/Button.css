@@ -77,7 +77,7 @@
 
 .md3-button--outlined {
   padding-inline: 1rem;
-  border: 1px solid var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-outline);
 }
 
 .md3-button--outlined:active {
