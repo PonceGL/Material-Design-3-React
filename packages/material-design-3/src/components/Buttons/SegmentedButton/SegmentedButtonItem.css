@@ -1,0 +1,61 @@
+/*
+  Estilos estructurales de SegmentedButtonItem.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+
+  Altura fija de 40dp (md.comp.outlined-segmented-button.container.height).
+  Por debajo del touch target recomendado de 48dp — mismo trade-off
+  documentado para los tamaños xs/s en shared/buttonShape.css.
+*/
+
+.md3-segmented-button-item {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: 1;
+  gap: 0.5rem; /* 8dp, gap ícono-texto */
+  min-height: 2.5rem; /* 40dp */
+  padding-inline: 0.75rem; /* 12dp, padding lateral mínimo */
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  cursor: pointer;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: 0.25rem; /* corner-extra-small, segmentos intermedios */
+  transition-property: background-color, color;
+  transition-duration: 100ms;
+  transition-timing-function: ease-in-out;
+}
+
+/*
+  Los bordes de items adyacentes se superponen 1px para evitar un borde
+  doble entre segmentos (mismo color/ancho en todos los estados, así que
+  el orden de pintado no importa).
+*/
+.md3-segmented-button-item:not(:first-child) {
+  margin-left: -1px;
+}
+
+/* Extremos: corner-full (mismo valor que .md3-button--shape-round) */
+.md3-segmented-button-item:first-child {
+  border-top-left-radius: 3rem;
+  border-bottom-left-radius: 3rem;
+}
+
+.md3-segmented-button-item:last-child {
+  border-top-right-radius: 3rem;
+  border-bottom-right-radius: 3rem;
+}
+
+/*
+  Eleva el item enfocado por encima de sus vecinos para que el
+  focus-visible:outline (con offset) no quede recortado por la
+  superposición de bordes de arriba.
+*/
+.md3-segmented-button-item:focus-visible {
+  z-index: 1;
+}
