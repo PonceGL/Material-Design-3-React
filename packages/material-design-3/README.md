@@ -35,3 +35,4 @@ export function App() {
 | `ToggleButton`     | ToggleButton M3 con sus variantes de énfasis  | [Ver documentación →](#)                                                                                                |
 | `IconButton`       | Botón M3 de icono en sus variantes de énfasis | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/IconButton.md)       |
 | `ToggleIconButton` | IconButton M3 con estado de alternancia       | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/ToggleIconButton.md) |
+| `SegmentedButton`  | Segmented button M3 "clásico" de igual ancho  | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/SegmentedButton.md)  |
