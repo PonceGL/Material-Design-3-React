@@ -1,10 +1,18 @@
 import '@/styles.css';
 
-export { Button, ButtonGroup, ToggleButton } from '@/components/Buttons';
+export {
+  Button,
+  ButtonGroup,
+  IconButton,
+  ToggleButton,
+  ToggleIconButton,
+} from '@/components/Buttons';
 export type {
   ButtonGroupProps,
   ButtonProps,
+  IconButtonProps,
   ToggleButtonProps,
+  ToggleIconButtonProps,
 } from '@/components/Buttons';
 
 export type { MD3ColorScheme, MD3SystemColorToken, MD3Theme } from '@/tokens';
