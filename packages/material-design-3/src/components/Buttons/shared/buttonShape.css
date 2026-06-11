@@ -83,15 +83,15 @@
 }
 
 .md3-button--size-m:active {
-  padding-inline: 2rem;
-}
-
-.md3-button--size-l:active {
   padding-inline: 3rem;
 }
 
-.md3-button--size-xl:active {
+.md3-button--size-l:active {
   padding-inline: 4rem;
+}
+
+.md3-button--size-xl:active {
+  padding-inline: 5rem;
 }
 
 .md3-button--shape-round:active {
@@ -121,35 +121,9 @@
   overflow: hidden;
   cursor: pointer;
   padding: 0;
-  border: none;
-  transition-property: box-shadow, border-radius;
-  transition-duration: 100ms;
+  transition-property: box-shadow, border-radius, padding-inline;
+  transition-duration: 150ms;
   transition-timing-function: ease-in-out;
-}
-
-/*
-  State layer (M3): a `currentColor` overlay whose opacity communicates
-  hover/focus/pressed. Painted via `::before` so it sits behind the icon
-  (the icon wrapper gets `position: relative` to stack above it).
-*/
-
-.md3-icon-button::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-color: currentColor;
-  opacity: 0;
-  transition: opacity 100ms ease-in-out;
-  pointer-events: none;
-}
-
-.md3-icon-button:hover::before {
-  opacity: 0.08;
-}
-
-.md3-icon-button:focus-visible::before,
-.md3-icon-button:active::before {
-  opacity: 0.12;
 }
 
 .md3-icon-button--size-xs {
@@ -175,4 +149,29 @@
 .md3-icon-button--size-xl {
   width: 3.5rem;
   height: 3.5rem;
+}
+
+.md3-icon-button--size-xs:active {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.md3-icon-button--size-s:active {
+  width: 3rem;
+  height: 3rem;
+}
+
+.md3-icon-button--size-m:active {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.md3-icon-button--size-l:active {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.md3-icon-button--size-xl:active {
+  width: 3.75rem;
+  height: 3.75rem;
 }

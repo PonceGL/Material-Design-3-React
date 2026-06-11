@@ -7,8 +7,8 @@ export function ToggleButtonSection() {
   const [isSelectedSquare, setIsSelectedSquare] = useState<boolean>(false);
 
   return (
-    <section className="w-full min-h-screen bg-md-surface px-6 py-10 text-md-on-surface">
-      <h2>Button</h2>
+    <section className="w-full min-h-40 bg-md-surface px-6 py-10 text-md-on-surface">
+      <h2>Toggle Button</h2>
       <div className="w-full flex justify-center items-center gap-3">
         <ToggleButton
           variant="filled"

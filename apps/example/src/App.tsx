@@ -1,5 +1,6 @@
 import { Button } from '@poncegl/material-design-3';
 
+import { IconButtonSection } from './IconButton';
 import { ToggleButtonSection } from './ToggleButton';
 import './example.css';
 import './styles.css';
@@ -92,6 +93,7 @@ export function App() {
       </section>
 
       <ToggleButtonSection />
+      <IconButtonSection />
     </main>
   );
 }
