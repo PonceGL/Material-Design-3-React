@@ -14,3 +14,10 @@ export type {
   ToggleButtonProps,
   ToggleButtonVariant,
 } from './ButtonGroup';
+
+export { IconButton, ToggleIconButton } from './IconButton';
+export type {
+  IconButtonProps,
+  IconButtonVariant,
+  ToggleIconButtonProps,
+} from './IconButton';

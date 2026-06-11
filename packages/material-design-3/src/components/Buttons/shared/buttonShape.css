@@ -1,7 +1,8 @@
 /*
   Reglas de tamaño y forma compartidas por todos los botones M3 Expressive
-  de la familia Buttons (Button, ToggleButton). Se importan desde el CSS de
-  cada componente para evitar duplicar estas reglas.
+  de la familia Buttons (Button, ToggleButton, IconButton, ToggleIconButton).
+  Se importan desde el CSS de cada componente para evitar duplicar estas
+  reglas.
 
   Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
   @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
@@ -82,15 +83,15 @@
 }
 
 .md3-button--size-m:active {
-  padding-inline: 2rem;
-}
-
-.md3-button--size-l:active {
   padding-inline: 3rem;
 }
 
-.md3-button--size-xl:active {
+.md3-button--size-l:active {
   padding-inline: 4rem;
+}
+
+.md3-button--size-xl:active {
+  padding-inline: 5rem;
 }
 
 .md3-button--shape-round:active {
@@ -99,4 +100,78 @@
 
 .md3-button--shape-square:active {
   border-radius: 0.2rem;
+}
+
+/*
+  IconButton / ToggleIconButton.
+
+  Square touch targets (width === height). The size scale reuses the same
+  dp values as `.md3-button--size-*`'s `min-height` (40/44/48/52/56px), kept
+  in sync so an IconButton lines up with a Button of the same `size` next to
+  it. `xs`/`s` (40px/44px) sit below the 48px recommended touch target —
+  consumers needing a larger hit area should pick `m` or larger.
+*/
+
+.md3-icon-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  transition-property: box-shadow, border-radius, padding-inline;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+.md3-icon-button--size-xs {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.md3-icon-button--size-s {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.md3-icon-button--size-m {
+  width: 3rem;
+  height: 3rem;
+}
+
+.md3-icon-button--size-l {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.md3-icon-button--size-xl {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.md3-icon-button--size-xs:active {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.md3-icon-button--size-s:active {
+  width: 3rem;
+  height: 3rem;
+}
+
+.md3-icon-button--size-m:active {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.md3-icon-button--size-l:active {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.md3-icon-button--size-xl:active {
+  width: 3.75rem;
+  height: 3.75rem;
 }

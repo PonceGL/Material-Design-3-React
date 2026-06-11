@@ -1,0 +1,28 @@
+@import '../shared/buttonShape.css';
+
+/*
+  Shape-morph al activar: round <-> square (mismos radios que
+  ToggleButton.css). Los selectores de atributo `[aria-pressed='true']`
+  combinados con la clase de shape elevan la especificidad por encima
+  de las reglas base de `buttonShape.css`.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+*/
+
+.md3-toggle-icon-button[aria-pressed='true'].md3-button--shape-round {
+  border-radius: 0.75rem; /* corner-medium */
+}
+
+.md3-toggle-icon-button[aria-pressed='true'].md3-button--shape-square {
+  border-radius: 3rem; /* corner-full */
+}
+
+.md3-toggle-icon-button[aria-pressed='true'].md3-button--shape-round:active {
+  border-radius: 0.2rem;
+}
+
+.md3-toggle-icon-button[aria-pressed='true'].md3-button--shape-square:active {
+  border-radius: 1rem;
+}

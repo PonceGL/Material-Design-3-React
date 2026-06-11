@@ -1,6 +1,12 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 import type { BaseComponentProps } from '@/components/shared/BaseComponent.types';
+import type {
+  ButtonShape,
+  ButtonSize,
+} from '@/components/shared/variants.types';
+
+export type { ButtonShape, ButtonSize };
 
 /**
  * The four visual variants of the M3 Icon Button component.
@@ -23,6 +29,17 @@ export interface IconButtonProps
   extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
   /** Visual style of the button. Defaults to `'standard'`. */
   variant?: IconButtonVariant;
+  /**
+   * M3 Expressive size, shared with `Button`/`ButtonGroup`/`ToggleButton`.
+   * Drives the button's width/height (a square touch target). Defaults to
+   * `'m'`.
+   */
+  size?: ButtonSize;
+  /**
+   * M3 Expressive shape at rest. Drives the button's corner-radius, both
+   * at rest and while pressed. Defaults to `'round'`.
+   */
+  shape?: ButtonShape;
   /** Icon rendered inside the button. Accepts any ReactNode (e.g. an SVG icon component). */
   icon: ReactNode;
 }
@@ -34,6 +51,17 @@ export interface ToggleIconButtonProps
   testId?: string;
   /** Visual style of the button. Defaults to `'standard'`. */
   variant?: IconButtonVariant;
+  /**
+   * M3 Expressive size, shared with `Button`/`ButtonGroup`/`ToggleButton`.
+   * Drives the button's width/height (a square touch target). Defaults to
+   * `'m'`.
+   */
+  size?: ButtonSize;
+  /**
+   * Shape at rest when unchecked. Checking the button morphs it to the
+   * opposite shape (`round` ↔ `square`). Defaults to `'round'`.
+   */
+  shape?: ButtonShape;
   /** Icon rendered while `checked` is `false`. Accepts any ReactNode. */
   icon: ReactNode;
   /**
