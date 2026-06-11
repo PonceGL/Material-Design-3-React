@@ -26,9 +26,9 @@ const variantClasses: Record<IconButtonVariant, string> = {
     'bg-md-secondary-container text-md-on-secondary-container',
   ].join(' '),
   outlined: [
-    'md3-icon-button--outlined',
     'md3-button--outlined',
     'bg-transparent text-md-on-surface-variant',
+    'focus-visible:outline-md-primary',
   ].join(' '),
 };
 
