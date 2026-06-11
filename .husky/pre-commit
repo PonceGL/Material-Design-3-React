@@ -1,1 +1,20 @@
-pnpm lint-staged && pnpm test:coverage
+echo "▶ [1/2] lint-staged (ESLint + Prettier sobre archivos en staging)..."
+if ! pnpm lint-staged; then
+  echo ""
+  echo "✖ pre-commit falló en lint-staged (ESLint/Prettier)."
+  echo "  Revisa arriba el archivo, línea y regla indicados (ej. 'archivo.ts:12:5  error  ...  @typescript-eslint/no-unused-vars')."
+  echo "  Corrige el problema, vuelve a 'git add' los archivos afectados y reintenta el commit."
+  exit 1
+fi
+
+echo ""
+echo "▶ [2/2] test:coverage (Vitest)..."
+if ! pnpm test:coverage; then
+  echo ""
+  echo "✖ pre-commit falló en los tests (Vitest)."
+  echo "  Revisa arriba qué test(s) fallaron y el mensaje de la aserción para corregir el código o la prueba."
+  exit 1
+fi
+
+echo ""
+echo "✔ pre-commit OK: lint, formato y tests pasaron correctamente."
