@@ -1,1 +1,12 @@
-npx --no -- commitlint --edit $1
+if ! npx --no -- commitlint --edit "$1"; then
+  echo ""
+  echo "✖ El mensaje de commit no cumple Conventional Commits."
+  echo "  Revisa arriba el detalle de cada regla incumplida (el nombre entre [corchetes], ej. [type-enum])."
+  echo ""
+  echo "  Formato esperado: <tipo>(<alcance opcional>): <descripción>"
+  echo "  Tipos válidos:    build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test"
+  echo "  Ejemplo:          feat(button): add support for outline variant"
+  echo ""
+  echo "  Guía completa: .github/commit-convention.md"
+  exit 1
+fi
