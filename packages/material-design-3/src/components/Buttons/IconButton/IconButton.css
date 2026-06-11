@@ -1,0 +1,9 @@
+@import '../shared/buttonShape.css';
+
+/*
+  IconButton has no structural rules of its own yet — `.md3-icon-button`,
+  its size scale and state layer all live in `shared/buttonShape.css` so
+  ToggleIconButton can reuse them too. This file is kept so the component
+  follows the standard five-file structure and has a place for future
+  IconButton-only overrides.
+*/
