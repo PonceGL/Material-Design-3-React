@@ -1,0 +1,16 @@
+/*
+  Estilos estructurales de SegmentedButton. El contenedor no tiene color
+  propio (los tokens de color los aporta cada SegmentedButtonItem) — este
+  archivo solo resuelve el layout: fila de ancho completo donde cada item
+  ocupa el mismo espacio.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+*/
+
+.md3-segmented-button {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+}
