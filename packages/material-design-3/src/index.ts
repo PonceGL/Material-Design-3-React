@@ -6,6 +6,7 @@ export {
   IconButton,
   SegmentedButton,
   SegmentedButtonItem,
+  SplitButton,
   ToggleButton,
   ToggleIconButton,
 } from '@/components/Buttons';
@@ -15,6 +16,9 @@ export type {
   IconButtonProps,
   SegmentedButtonItemProps,
   SegmentedButtonProps,
+  SplitButtonLeadingProps,
+  SplitButtonProps,
+  SplitButtonTrailingProps,
   ToggleButtonProps,
   ToggleIconButtonProps,
 } from '@/components/Buttons';
