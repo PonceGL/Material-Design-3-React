@@ -28,3 +28,11 @@ export type {
   SegmentedButtonProps,
   SegmentedButtonSelectionMode,
 } from './SegmentedButton';
+
+export { SplitButton } from './SplitButton';
+export type {
+  SplitButtonLeadingProps,
+  SplitButtonProps,
+  SplitButtonShapes,
+  SplitButtonTrailingProps,
+} from './SplitButton';
