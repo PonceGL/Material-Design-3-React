@@ -52,10 +52,6 @@ const meta: Meta<typeof SplitButton> = {
       control: false,
       description: '`SplitButton.Leading` y `SplitButton.Trailing`.',
     },
-    testId: {
-      control: 'text',
-      description: 'Propagado como data-testid en el elemento raíz.',
-    },
   },
 };
 
@@ -127,6 +123,20 @@ export const DisabledTrailing: Story = {
   render: (args) => (
     <SplitButton {...args}>
       <SplitButton.Leading>Confirmar</SplitButton.Leading>
+      <SplitButton.Trailing
+        disabled
+        icon={<ChevronDownIcon />}
+        aria-label="Más opciones"
+      />
+    </SplitButton>
+  ),
+};
+
+export const DisabledAll: Story = {
+  name: 'Disabled All',
+  render: (args) => (
+    <SplitButton {...args}>
+      <SplitButton.Leading disabled>Confirmar</SplitButton.Leading>
       <SplitButton.Trailing
         disabled
         icon={<ChevronDownIcon />}

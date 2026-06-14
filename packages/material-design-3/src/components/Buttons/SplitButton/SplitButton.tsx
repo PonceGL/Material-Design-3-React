@@ -37,7 +37,6 @@ const variantClasses: Record<ButtonVariant, string> = {
 
 const leadingBase = [
   'md3-button',
-  'md3-button--size-m',
   'md3-split-button__leading',
   'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
   'disabled:pointer-events-none disabled:opacity-[0.38]',
