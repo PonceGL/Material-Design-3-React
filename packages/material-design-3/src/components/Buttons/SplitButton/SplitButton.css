@@ -23,17 +23,11 @@
 */
 
 .md3-split-button__leading {
+  padding-inline: 2.5rem;
   border-radius: 3rem 0.25rem 0.25rem 3rem;
 }
 
 .md3-split-button__leading:active {
-  /*
-    .md3-button--size-m:active (buttonShape.css) crece padding-inline a 3rem,
-    lo que sumado al morph de border-radius produce un "rebote" de tamaño
-    que Compose no tiene. Se fija de nuevo al valor en reposo (2.5rem) para
-    que, igual que Trailing, solo cambie la forma de la esquina interna.
-  */
-  padding-inline: 2.5rem;
   border-radius: 3rem 1rem 1rem 3rem;
 }
 
