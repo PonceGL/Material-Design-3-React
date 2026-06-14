@@ -12,3 +12,4 @@ pnpm-debug.log*
 **/**/*.tgz
 **/**/storybook-static
 notes.md
+.DS_Store
