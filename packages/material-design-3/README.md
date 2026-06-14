@@ -28,11 +28,12 @@ export function App() {
 
 ## Componentes
 
-| Componente         | Descripción                                   | Documentación                                                                                                           |
-| ------------------ | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `Button`           | Botón M3 en sus variantes de énfasis          | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/Button.md)           |
-| `ButtonGroup`      | Grupo de botones M3                           | [Ver documentación →](#)                                                                                                |
-| `ToggleButton`     | ToggleButton M3 con sus variantes de énfasis  | [Ver documentación →](#)                                                                                                |
-| `IconButton`       | Botón M3 de icono en sus variantes de énfasis | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/IconButton.md)       |
-| `ToggleIconButton` | IconButton M3 con estado de alternancia       | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/ToggleIconButton.md) |
-| `SegmentedButton`  | Segmented button M3 "clásico" de igual ancho  | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/SegmentedButton.md)  |
+| Componente         | Descripción                                                     | Documentación                                                                                                           |
+| ------------------ | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `Button`           | Botón M3 en sus variantes de énfasis                            | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/Button.md)           |
+| `ButtonGroup`      | Grupo de botones M3                                             | [Ver documentación →](#)                                                                                                |
+| `ToggleButton`     | ToggleButton M3 con sus variantes de énfasis                    | [Ver documentación →](#)                                                                                                |
+| `IconButton`       | Botón M3 de icono en sus variantes de énfasis                   | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/IconButton.md)       |
+| `ToggleIconButton` | IconButton M3 con estado de alternancia                         | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/ToggleIconButton.md) |
+| `SegmentedButton`  | Segmented button M3 "clásico" de igual ancho                    | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/SegmentedButton.md)  |
+| `SplitButton`      | Botón principal + trigger secundario fusionados (M3 Expressive) | [Ver documentación →](https://github.com/PonceGL/Material-Design-3-React/blob/main/docs/components/SplitButton.md)      |
