@@ -25,7 +25,6 @@ export type ButtonVariant = CommonVariants | 'text';
 
 export interface ButtonProps
   extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
-  testId?: string;
   /** Visual style of the button. Defaults to `'filled'`. */
   variant?: ButtonVariant;
   /**

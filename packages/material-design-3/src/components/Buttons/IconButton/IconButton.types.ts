@@ -48,7 +48,6 @@ export interface ToggleIconButtonProps
   extends
     BaseComponentProps,
     Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> {
-  testId?: string;
   /** Visual style of the button. Defaults to `'standard'`. */
   variant?: IconButtonVariant;
   /**

@@ -52,7 +52,7 @@ function ThemeDemo({ label }: { label: string }) {
       </p>
       <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
         <Button variant="filled">Filled</Button>
-        <Button variant="tonal">Tonal</Button>
+        <Button variant="filled-tonal">Tonal</Button>
         <Button variant="outlined">Outlined</Button>
         <Button variant="text">Text</Button>
       </div>

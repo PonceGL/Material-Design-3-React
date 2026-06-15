@@ -33,7 +33,6 @@ export interface SplitButtonLeadingProps
 
 export interface SplitButtonTrailingProps
   extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
-  testId?: string;
   /**
    * Visual style. Must match `SplitButton.Leading`'s `variant` so both
    * parts read as a single button. Defaults to `'filled'`.
