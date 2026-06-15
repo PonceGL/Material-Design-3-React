@@ -1,0 +1,20 @@
+/*
+  Estilos estructurales de List.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+*/
+
+.md3-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.md3-list--standard {
+  gap: 0;
+}
+
+.md3-list--segmented {
+  gap: 0.75rem; /* 12dp, between-space */
+}
