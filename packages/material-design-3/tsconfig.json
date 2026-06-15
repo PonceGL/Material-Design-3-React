@@ -27,7 +27,8 @@
     "vite.config.ts",
     "vitest.setup.ts",
     "**/*.test.tsx",
-    "**/*.test.ts"
-  ],
-  "exclude": ["**/*.stories.tsx", "**/*.stories.ts"]
+    "**/*.test.ts",
+    "**/*.stories.tsx",
+    "**/*.stories.ts"
+  ]
 }

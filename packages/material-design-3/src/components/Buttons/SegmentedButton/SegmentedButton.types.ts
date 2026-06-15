@@ -27,7 +27,6 @@ export interface SegmentedButtonProps
 
 export interface SegmentedButtonItemProps
   extends BaseComponentProps, ButtonHTMLAttributes<HTMLButtonElement> {
-  testId?: string;
   /** Whether this item is currently selected. */
   selected: boolean;
   /** Called when the item is activated. */
