@@ -23,13 +23,20 @@
   min-height: 5.5rem; /* 88dp */
 }
 
-.md3-list-item__action {
+/*
+  Área primaria: leading + texto.
+
+  Toma todo el espacio disponible dejando espacio para el trailing.
+  El trailing siempre queda fuera de este elemento para que un <button>
+  en el trailing nunca quede anidado dentro del <button> del onClick.
+*/
+.md3-list-item__body {
   display: flex;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  gap: 1rem; /* 16dp */
-  padding-inline: 1rem; /* 16dp, leading-space/trailing-space */
+  flex: 1 1 0%;
+  min-width: 0;
+  gap: 1rem; /* 16dp entre icono leading y texto */
+  padding-inline: 1rem; /* 16dp leading-space / 16dp trailing-space */
   border: none;
   background-color: transparent;
   border-radius: inherit;
@@ -40,15 +47,26 @@
   transition-timing-function: ease-in-out;
 }
 
-button.md3-list-item__action {
+button.md3-list-item__body {
   cursor: pointer;
 }
 
-.md3-list-item__leading,
+.md3-list-item__leading {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/*
+  Trailing: sibling directo de md3-list-item__body (no un hijo).
+  Se centra verticalmente porque md3-list-item tiene align-items default (stretch)
+  y este elemento tiene align-items: center para su propio contenido.
+*/
 .md3-list-item__trailing {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  padding-inline-end: 1rem; /* 16dp trailing-space */
 }
 
 .md3-list-item__text {
