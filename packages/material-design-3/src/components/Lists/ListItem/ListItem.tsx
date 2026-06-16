@@ -3,28 +3,24 @@ import { cn } from '@/lib/cn';
 import './ListItem.css';
 import type { ListItemProps } from './ListItem.types';
 
-/**
- * A single row inside a `List`.
- *
- * Height is derived automatically from its content: one-line (56dp) by
- * default, two-line (72dp) when `supportingText` is set, three-line (88dp)
- * when `overline` is set.
- *
- * When `onClick` is provided, the item renders an inner full-size `<button>`
- * (single-action item) with hover/focus/pressed state layers and a
- * focus-visible ring. Without `onClick`, the content is static.
- *
- * @example
- * ```tsx
- * <ListItem
- *   leading={<InboxIcon />}
- *   label="Inbox"
- *   supportingText="124 unread messages"
- *   trailing="2h"
- *   onClick={() => navigate('/inbox')}
- * />
- * ```
- */
+const selectionStateClasses: Record<
+  'default' | 'selected',
+  { label: string; variant: string; stateLayer: string }
+> = {
+  default: {
+    label: 'text-md-on-surface',
+    variant: 'text-md-on-surface-variant',
+    stateLayer:
+      'hover:bg-md-on-surface/[0.08] focus-visible:bg-md-on-surface/[0.1] active:bg-md-on-surface/[0.1]',
+  },
+  selected: {
+    label: 'text-md-on-secondary-container',
+    variant: 'text-md-on-secondary-container',
+    stateLayer:
+      'hover:bg-md-on-secondary-container/[0.08] focus-visible:bg-md-on-secondary-container/[0.1] active:bg-md-on-secondary-container/[0.1]',
+  },
+};
+
 export function ListItem({
   testId,
   leading,
@@ -44,49 +40,29 @@ export function ListItem({
       ? 'md3-list-item--two-line'
       : 'md3-list-item--one-line';
 
-  const labelColor = selected
-    ? 'text-md-on-secondary-container'
-    : 'text-md-on-surface';
-  const variantColor = selected
-    ? 'text-md-on-secondary-container'
-    : 'text-md-on-surface-variant';
-  const stateLayerClasses = selected
-    ? [
-        'hover:bg-md-on-secondary-container/[0.08]',
-        'focus-visible:bg-md-on-secondary-container/[0.1]',
-        'active:bg-md-on-secondary-container/[0.1]',
-      ]
-    : [
-        'hover:bg-md-on-surface/[0.08]',
-        'focus-visible:bg-md-on-surface/[0.1]',
-        'active:bg-md-on-surface/[0.1]',
-      ];
+  const state = selectionStateClasses[selected ? 'selected' : 'default'];
 
-  const content = (
+  // Leading + texto únicamente — el trailing queda fuera del área primaria.
+  const primaryContent = (
     <>
       {leading && (
-        <span className={cn('md3-list-item__leading', variantColor)}>
+        <span className={cn('md3-list-item__leading', state.variant)}>
           {leading}
         </span>
       )}
       <span className="md3-list-item__text">
         {overline && (
-          <span className={cn('md3-list-item__overline', variantColor)}>
+          <span className={cn('md3-list-item__overline', state.variant)}>
             {overline}
           </span>
         )}
-        <span className={cn('md3-list-item__label', labelColor)}>{label}</span>
+        <span className={cn('md3-list-item__label', state.label)}>{label}</span>
         {supportingText && (
-          <span className={cn('md3-list-item__supporting-text', variantColor)}>
+          <span className={cn('md3-list-item__supporting-text', state.variant)}>
             {supportingText}
           </span>
         )}
       </span>
-      {trailing && (
-        <span className={cn('md3-list-item__trailing', variantColor)}>
-          {trailing}
-        </span>
-      )}
     </>
   );
 
@@ -110,16 +86,21 @@ export function ListItem({
           onClick={onClick}
           disabled={disabled}
           className={cn(
-            'md3-list-item__action',
-            'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-md-primary',
+            'md3-list-item__body',
+            'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-md-primary',
             'disabled:pointer-events-none',
-            stateLayerClasses,
+            state.stateLayer,
           )}
         >
-          {content}
+          {primaryContent}
         </button>
       ) : (
-        <div className="md3-list-item__action">{content}</div>
+        <div className="md3-list-item__body">{primaryContent}</div>
+      )}
+      {trailing && (
+        <span className={cn('md3-list-item__trailing', state.variant)}>
+          {trailing}
+        </span>
       )}
     </div>
   );
