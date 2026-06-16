@@ -21,3 +21,18 @@ export type {
   IconButtonVariant,
   ToggleIconButtonProps,
 } from './IconButton';
+
+export { SegmentedButton, SegmentedButtonItem } from './SegmentedButton';
+export type {
+  SegmentedButtonItemProps,
+  SegmentedButtonProps,
+  SegmentedButtonSelectionMode,
+} from './SegmentedButton';
+
+export { SplitButton } from './SplitButton';
+export type {
+  SplitButtonLeadingProps,
+  SplitButtonProps,
+  SplitButtonShapes,
+  SplitButtonTrailingProps,
+} from './SplitButton';

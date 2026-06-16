@@ -1,0 +1,47 @@
+@import '../shared/buttonShape.css';
+
+/*
+  Estilos estructurales de SplitButton.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+*/
+
+.md3-split-button {
+  display: flex;
+  align-items: stretch;
+  gap: 0.125rem; /* 2dp — M3 spec: "the space should always be 2dp" */
+}
+
+/*
+  Forma asimétrica (M3 Expressive): esquinas externas corner-full (3rem,
+  igual que .md3-button--shape-round) y esquinas internas corner-extra-small
+  (0.25rem, 4dp). Al presionar, solo la esquina interna crece a 1rem — mismo
+  valor de "pressed" que .md3-button--shape-round:active — manteniendo la
+  esquina externa en corner-full.
+*/
+
+.md3-split-button__leading {
+  padding-inline: 2.5rem;
+  border-radius: 3rem 0.25rem 0.25rem 3rem;
+}
+
+.md3-split-button__leading:active {
+  border-radius: 3rem 1rem 1rem 3rem;
+}
+
+.md3-split-button__trailing {
+  /*
+    Tamaño fijo 48x48dp (no usa .md3-icon-button--size-* para evitar el
+    crecimiento en :active de esas clases, que rompería la alineación de
+    altura con .md3-split-button__leading).
+  */
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.25rem 3rem 3rem 0.25rem;
+}
+
+.md3-split-button__trailing:active {
+  border-radius: 1rem 3rem 3rem 1rem;
+}
