@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/react';
 
@@ -250,4 +250,149 @@ function SegmentedSelectionExample() {
 export const SegmentedSelection: Story = {
   name: 'Segmented Selection',
   render: () => <SegmentedSelectionExample />,
+};
+
+// Placeholder — replace with <Divider /> once the component is implemented (RCL-164/165)
+function ListDivider() {
+  return (
+    <div
+      role="separator"
+      aria-hidden="true"
+      className="h-px bg-md-outline-variant"
+    />
+  );
+}
+
+// Inset variant — starts after the leading slot (padding + icon + gap = 3.5rem)
+function ListDividerInset() {
+  return (
+    <div
+      role="separator"
+      aria-hidden="true"
+      className="h-px bg-md-outline-variant ml-14"
+    />
+  );
+}
+
+export const WithDividers: Story = {
+  name: 'With Dividers (full-width)',
+  render: () => (
+    <List className="max-w-sm" aria-label="List with full-width dividers">
+      <ListItem
+        leading={<InboxIcon />}
+        label="Inbox"
+        supportingText="124 unread messages"
+        onClick={() => {}}
+      />
+      <ListItem leading={<StarIcon />} label="Starred" onClick={() => {}} />
+      <ListDivider />
+      <ListItem
+        leading={<SendIcon />}
+        label="Sent"
+        supportingText="Last sent 2 days ago"
+        onClick={() => {}}
+      />
+      <ListItem
+        leading={<DraftsIcon />}
+        label="Drafts"
+        supportingText="3 pending drafts"
+        onClick={() => {}}
+      />
+    </List>
+  ),
+};
+
+export const WithDividersInset: Story = {
+  name: 'With Dividers (inset)',
+  render: () => (
+    <List className="max-w-sm" aria-label="List with inset dividers">
+      <ListItem
+        leading={<InboxIcon />}
+        label="Inbox"
+        supportingText="124 unread messages"
+        onClick={() => {}}
+      />
+      <ListDividerInset />
+      <ListItem leading={<StarIcon />} label="Starred" onClick={() => {}} />
+      <ListDividerInset />
+      <ListItem
+        leading={<SendIcon />}
+        label="Sent"
+        supportingText="Last sent 2 days ago"
+        onClick={() => {}}
+      />
+      <ListDividerInset />
+      <ListItem
+        leading={<DraftsIcon />}
+        label="Drafts"
+        supportingText="3 pending drafts"
+        onClick={() => {}}
+      />
+    </List>
+  ),
+};
+
+// ─── Dynamic list — data from an API-like array ───────────────────────────────
+
+const teamMembers = [
+  { id: 1, name: 'Jane Doe', role: 'Product Designer', initials: 'JD' },
+  { id: 2, name: 'Marco Rivera', role: 'Frontend Engineer', initials: 'MR' },
+  { id: 3, name: 'Sophie Turner', role: 'UX Researcher', initials: 'ST' },
+  { id: 4, name: 'Alex Chen', role: 'Backend Engineer', initials: 'AC' },
+  { id: 5, name: 'Priya Sharma', role: 'Product Manager', initials: 'PS' },
+];
+
+function MemberAvatar({ initials }: { initials: string }) {
+  return (
+    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-md-primary-container text-sm font-medium text-md-on-primary-container">
+      {initials}
+    </span>
+  );
+}
+
+const MoreVertIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+  </svg>
+);
+
+function MemberActionButton({ label }: { label: string }) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-md-on-surface/[0.08] active:bg-md-on-surface/[0.1] transition-colors"
+    >
+      <MoreVertIcon />
+    </button>
+  );
+}
+
+export const DynamicContactList: Story = {
+  name: 'Dynamic — from data (avatar + action)',
+  render: () => (
+    <List className="max-w-sm" aria-label="Team members">
+      {teamMembers.map((member, index) => (
+        <Fragment key={member.id}>
+          <ListItem
+            leading={<MemberAvatar initials={member.initials} />}
+            label={member.name}
+            supportingText={member.role}
+            trailing={
+              <MemberActionButton label={`Options for ${member.name}`} />
+            }
+            onClick={() => {}}
+          />
+          {index < teamMembers.length - 1 && <ListDividerInset />}
+        </Fragment>
+      ))}
+    </List>
+  ),
 };
