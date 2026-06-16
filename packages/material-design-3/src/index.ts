@@ -23,6 +23,9 @@ export type {
   ToggleIconButtonProps,
 } from '@/components/Buttons';
 
+export { List, ListItem } from '@/components/Lists';
+export type { ListItemProps, ListProps, ListVariant } from '@/components/Lists';
+
 export type { MD3ColorScheme, MD3SystemColorToken, MD3Theme } from '@/tokens';
 
 export { createMD3Theme } from '@/theme/create-md3-theme';
