@@ -13,18 +13,36 @@
   vía `var(--md-sys-color-*)` en CSS plano en lugar de una utilidad Tailwind.
 */
 
+.md3-text-field-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .md3-text-field {
   position: relative;
   display: flex;
   align-items: center;
+  gap: 1rem; /* 16dp entre icono y texto */
   box-sizing: border-box;
+  width: 100%;
   min-height: 3.5rem; /* 56dp */
-  padding-inline: 1rem; /* 16dp — sin iconos (RCL-192 ajusta con iconos) */
+  padding-inline: 1rem; /* 16dp — sin iconos */
   margin: 0;
   min-width: 0;
+  --md3-text-field-label-start: 1rem;
   transition-property: border-color, border-width;
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
+}
+
+.md3-text-field--has-leading-icon {
+  padding-inline-start: 0.75rem; /* 12dp con icono */
+  --md3-text-field-label-start: 3.25rem; /* padding + icono (24dp) + gap (16dp) */
+}
+
+.md3-text-field--has-trailing-icon {
+  padding-inline-end: 0.75rem; /* 12dp con icono */
 }
 
 .md3-text-field--filled {
@@ -119,7 +137,7 @@
 */
 .md3-text-field__label {
   position: absolute;
-  left: 1rem;
+  left: var(--md3-text-field-label-start);
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
@@ -169,7 +187,7 @@
 .md3-text-field__notch {
   position: absolute;
   top: 0;
-  left: 0.75rem;
+  left: calc(var(--md3-text-field-label-start) - 0.25rem);
   margin: 0;
   padding: 0;
   max-width: 0.01px;
@@ -188,4 +206,52 @@
 .md3-text-field__input:focus ~ .md3-text-field__notch,
 .md3-text-field__input:not(:placeholder-shown) ~ .md3-text-field__notch {
   max-width: 100%;
+}
+
+/* Iconos */
+.md3-text-field__icon {
+  width: 1.5rem; /* 24dp */
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.md3-text-field__icon-button {
+  width: 3rem; /* 48dp — touch target mínimo */
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 9999px;
+  transition: background-color 150ms ease-in-out;
+}
+
+/* Texto de soporte + contador */
+.md3-text-field__supporting-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem; /* 16dp */
+  padding-top: 0.25rem; /* 4dp */
+  padding-inline: 1rem; /* 16dp, igual que el container */
+}
+
+.md3-text-field__supporting-text {
+  margin: 0;
+  font-size: 0.75rem; /* Body Small */
+  line-height: 1rem;
+  letter-spacing: 0.025em;
+}
+
+.md3-text-field__counter {
+  flex-shrink: 0;
+  font-size: 0.75rem; /* Body Small */
+  line-height: 1rem;
+  letter-spacing: 0.025em;
+  color: var(--md-sys-color-on-surface-variant);
 }
