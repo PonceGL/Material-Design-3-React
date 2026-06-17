@@ -255,3 +255,27 @@
   letter-spacing: 0.025em;
   color: var(--md-sys-color-on-surface-variant);
 }
+
+/*
+  Multiline: el campo crece en altura según `rows`, así que iconos/label se
+  alinean arriba en lugar de centrarse en toda la altura del <textarea>.
+  Sin auto-grow — altura fija (vía `rows`) + scroll, según las guidelines M3
+  para web (a diferencia del "growing multiline field" de Compose).
+*/
+.md3-text-field--multiline {
+  align-items: flex-start;
+}
+
+.md3-text-field--multiline .md3-text-field__input {
+  resize: vertical;
+}
+
+.md3-text-field--multiline .md3-text-field__icon,
+.md3-text-field--multiline .md3-text-field__icon-button {
+  align-self: flex-start;
+  margin-top: 1rem; /* alinea con la primera línea de texto */
+}
+
+.md3-text-field--multiline .md3-text-field__label {
+  top: 1.75rem;
+}

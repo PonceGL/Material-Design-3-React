@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import type { ChangeEvent, InputHTMLAttributes } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 
 import { cn } from '@/lib/cn';
 
@@ -32,12 +32,17 @@ const trailingIconButtonStateLayer =
 /**
  * Material Design 3 text field.
  *
- * Renders a single-line `<input>` in one of the two M3 visual variants
- * (`filled`, `outlined`) with a 100% CSS floating label — no internal
- * React state is used to track focus or whether the field is populated.
- * `status` drives the validation color of the indicator/outline, label,
- * trailing icon and supporting text (`error` is the only M3-defined role;
- * `success`/`warning` are an extension of this library).
+ * Renders a single-line `<input>` — or, with `multiline`, a `<textarea>` —
+ * in one of the two M3 visual variants (`filled`, `outlined`) with a 100%
+ * CSS floating label — no internal React state is used to track focus or
+ * whether the field is populated. `status` drives the validation color of
+ * the indicator/outline, label, trailing icon and supporting text (`error`
+ * is the only M3-defined role; `success`/`warning` are an extension of
+ * this library).
+ *
+ * Per M3 web guidelines, `multiline` renders a fixed-height, vertically
+ * resizable `<textarea>` rather than an auto-growing field (that's a
+ * Compose-only pattern).
  *
  * @example
  * ```tsx
@@ -55,13 +60,15 @@ const trailingIconButtonStateLayer =
  *   showCharacterCount
  * />
  * ```
+ *
+ * @example Multiline
+ * ```tsx
+ * <TextField label="Notes" multiline rows={5} />
+ * ```
  */
 export function TextField(props: TextFieldProps) {
   const generatedId = useId();
 
-  /* eslint-disable @typescript-eslint/no-unused-vars -- `multiline` is
-     rendered in a later subtask (RCL-193). Already destructured here so
-     it doesn't leak onto the native <input>. */
   const {
     testId,
     variant = 'filled',
@@ -71,62 +78,74 @@ export function TextField(props: TextFieldProps) {
     id,
     placeholder,
     disabled,
-    multiline,
     leadingIcon,
     trailingIcon,
     onTrailingIconClick,
     trailingIconAriaLabel,
     supportingText,
     showCharacterCount,
-    ...rest
+    maxLength,
   } = props;
-  /* eslint-enable @typescript-eslint/no-unused-vars */
 
   const inputId = id ?? generatedId;
   const supportingTextId = `${inputId}-supporting-text`;
 
-  // TODO(RCL-193): branch into <textarea> when `multiline` is true. Every
-  // TextField renders an <input> for now, regardless of `multiline`.
-  const { value, defaultValue, onChange, maxLength, ...inputAttrs } =
-    rest as InputHTMLAttributes<HTMLInputElement>;
-
-  const isControlled = value !== undefined;
+  const isControlled = props.value !== undefined;
   const [uncontrolledLength, setUncontrolledLength] = useState(
-    () => String(defaultValue ?? '').length,
+    () => String(props.defaultValue ?? '').length,
   );
-  const length = isControlled ? String(value).length : uncontrolledLength;
+  const length = isControlled ? String(props.value).length : uncontrolledLength;
 
-  const handleChange = showCharacterCount
-    ? (event: ChangeEvent<HTMLInputElement>) => {
-        if (!isControlled) {
-          setUncontrolledLength(event.target.value.length);
+  let formControl: ReactNode;
+
+  if (props.multiline) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from the spread below, not a valid <textarea> attribute
+    const { multiline, ...textareaRest } = props;
+    const handleChange = showCharacterCount
+      ? (event: ChangeEvent<HTMLTextAreaElement>) => {
+          if (!isControlled) {
+            setUncontrolledLength(event.target.value.length);
+          }
+          props.onChange?.(event);
         }
-        onChange?.(event);
-      }
-    : onChange;
-
-  const rootClasses = cn(
-    base,
-    variantClasses[variant],
-    leadingIcon && 'md3-text-field--has-leading-icon',
-    trailingIcon && 'md3-text-field--has-trailing-icon',
-  );
-
-  const input = (
-    <input
-      id={inputId}
-      placeholder={placeholder ?? ' '}
-      disabled={disabled}
-      className="md3-text-field__input text-md-on-surface"
-      {...inputAttrs}
-      value={value}
-      defaultValue={defaultValue}
-      maxLength={maxLength}
-      onChange={handleChange}
-      aria-invalid={status === 'error' ? true : undefined}
-      aria-describedby={supportingText ? supportingTextId : undefined}
-    />
-  );
+      : props.onChange;
+    formControl = (
+      <textarea
+        id={inputId}
+        placeholder={placeholder ?? ' '}
+        disabled={disabled}
+        className="md3-text-field__input text-md-on-surface"
+        {...textareaRest}
+        rows={props.rows ?? 3}
+        onChange={handleChange}
+        aria-invalid={status === 'error' ? true : undefined}
+        aria-describedby={supportingText ? supportingTextId : undefined}
+      />
+    );
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from the spread below, not a valid <input> attribute
+    const { multiline, ...inputRest } = props;
+    const handleChange = showCharacterCount
+      ? (event: ChangeEvent<HTMLInputElement>) => {
+          if (!isControlled) {
+            setUncontrolledLength(event.target.value.length);
+          }
+          props.onChange?.(event);
+        }
+      : props.onChange;
+    formControl = (
+      <input
+        id={inputId}
+        placeholder={placeholder ?? ' '}
+        disabled={disabled}
+        className="md3-text-field__input text-md-on-surface"
+        {...inputRest}
+        onChange={handleChange}
+        aria-invalid={status === 'error' ? true : undefined}
+        aria-describedby={supportingText ? supportingTextId : undefined}
+      />
+    );
+  }
 
   const labelEl = (
     <label
@@ -176,11 +195,19 @@ export function TextField(props: TextFieldProps) {
       </span>
     ));
 
+  const rootClasses = cn(
+    base,
+    variantClasses[variant],
+    leadingIcon && 'md3-text-field--has-leading-icon',
+    trailingIcon && 'md3-text-field--has-trailing-icon',
+    props.multiline && 'md3-text-field--multiline',
+  );
+
   const field =
     variant === 'outlined' ? (
       <fieldset data-status={status} className={rootClasses}>
         {leadingIconEl}
-        {input}
+        {formControl}
         {trailingIconEl}
         <legend className="md3-text-field__notch" aria-hidden="true">
           <span>{label}</span>
@@ -190,7 +217,7 @@ export function TextField(props: TextFieldProps) {
     ) : (
       <div data-status={status} className={rootClasses}>
         {leadingIconEl}
-        {input}
+        {formControl}
         {trailingIconEl}
         {labelEl}
       </div>
