@@ -44,6 +44,12 @@ const meta: Meta<typeof TextField> = {
       control: 'text',
       description: 'Etiqueta del campo. Siempre visible (resting o floating).',
     },
+    type: {
+      control: 'select',
+      options: ['text', 'email', 'password', 'tel', 'url'],
+      description:
+        'Tipo nativo del <input>, restringido a un subconjunto seguro — solo afecta el teclado virtual/validación básica, nunca cambia el widget nativo (sin date/radio/number/etc.) ni duplica funcionalidad propia (sin search, que trae su propio botón de limpiar).',
+    },
     status: {
       control: 'select',
       options: ['none', 'error', 'success', 'warning'],
@@ -126,6 +132,22 @@ export const Outlined: Story = {
   args: {
     label: 'Email',
     variant: 'outlined',
+  },
+};
+
+export const EmailType: Story = {
+  name: 'Email Type',
+  args: {
+    label: 'Email',
+    type: 'email',
+  },
+};
+
+export const PhoneType: Story = {
+  name: 'Phone Type',
+  args: {
+    label: 'Phone',
+    type: 'tel',
   },
 };
 

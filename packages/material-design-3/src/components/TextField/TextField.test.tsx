@@ -499,6 +499,21 @@ describe('TextField — Props passthrough', () => {
     expect(screen.getByLabelText('Email')).toBeRequired();
   });
 
+  it.each(['text', 'email', 'password', 'tel', 'url'] as const)(
+    'forwards type="%s" to the native input',
+    (type) => {
+      render(<TextField label="Field" type={type} />);
+      expect(screen.getByLabelText('Field')).toHaveAttribute('type', type);
+    },
+  );
+
+  it('defaults to type="text" when type is not provided', () => {
+    render(<TextField label="Email" />);
+    // No explicit `type` attribute is rendered, but the native default
+    // value (the `type` IDL property, not getAttribute) is "text".
+    expect(screen.getByLabelText('Email')).toHaveProperty('type', 'text');
+  });
+
   it('disables the input and dims the container when disabled', () => {
     render(<TextField label="Email" disabled testId="email-field" />);
     expect(screen.getByLabelText('Email')).toBeDisabled();

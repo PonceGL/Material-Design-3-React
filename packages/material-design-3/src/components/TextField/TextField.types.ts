@@ -18,6 +18,27 @@ export type TextFieldVariant = 'filled' | 'outlined';
  */
 export type TextFieldStatus = 'none' | 'error' | 'success' | 'warning';
 
+/**
+ * The single-line `<input>` types this library supports — a deliberate
+ * subset of the native HTML `type` attribute, restricted to web's main
+ * benefit over typing it manually: hinting the right virtual keyboard on
+ * touch devices (e.g. `email`/`tel` swap in an `@`/numeric keypad).
+ *
+ * Excluded on purpose:
+ * - `date`/`time`/`month`/`week`/`datetime-local`, `radio`, `checkbox`,
+ *   `range`, `color`, `file` — each renders its own native widget instead
+ *   of a text field, which the M3 filled/outlined visuals don't account
+ *   for.
+ * - `number` — adds native spinner arrows, also a visual mismatch; use
+ *   `tel` (no spinners, still hints a numeric keypad) for phone-number-like
+ *   input.
+ * - `search` — adds the browser's own native clear ("x") button, which
+ *   would duplicate/conflict with `trailingIcon` + `onTrailingIconClick`
+ *   (already built into this component for exactly that use case).
+ * - `submit`/`reset`/`button`/`image`/`hidden` — not text entry at all.
+ */
+export type TextFieldInputType = 'text' | 'email' | 'password' | 'tel' | 'url';
+
 interface TextFieldBaseProps extends BaseComponentProps {
   /** Visual style of the field. Defaults to `'filled'`. */
   variant?: TextFieldVariant;
@@ -69,7 +90,9 @@ export type TextFieldProps =
   | (TextFieldBaseProps & {
       /** `true` renders a `<textarea>` instead of an `<input>`. Defaults to `false`. */
       multiline?: false;
-    } & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> &
+      /** Native `<input>` type, restricted to `TextFieldInputType`. Defaults to `'text'`. */
+      type?: TextFieldInputType;
+    } & Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> &
       Partial<Record<keyof TextareaOnlyAttributes, never>>)
   | (TextFieldBaseProps & {
       multiline: true;

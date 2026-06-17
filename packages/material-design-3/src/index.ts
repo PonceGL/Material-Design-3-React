@@ -28,6 +28,7 @@ export type { ListItemProps, ListProps, ListVariant } from '@/components/Lists';
 
 export { TextField } from '@/components/TextField';
 export type {
+  TextFieldInputType,
   TextFieldProps,
   TextFieldStatus,
   TextFieldVariant,
