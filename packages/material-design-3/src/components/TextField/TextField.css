@@ -1,0 +1,191 @@
+/*
+  Estilos estructurales de TextField.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del consumidor.
+
+  Los colores de borde/label por estado viven aquí (no como utilidades
+  Tailwind en el .tsx) porque dependen de combinaciones variant x status x
+  :hover/:focus-within que son más legibles como selectores CSS que como
+  variantes Tailwind encadenadas — mismo criterio ya aplicado en
+  `.md3-button--outlined` (Button.css), que también fija su color de borde
+  vía `var(--md-sys-color-*)` en CSS plano en lugar de una utilidad Tailwind.
+*/
+
+.md3-text-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 3.5rem; /* 56dp */
+  padding-inline: 1rem; /* 16dp — sin iconos (RCL-192 ajusta con iconos) */
+  margin: 0;
+  min-width: 0;
+  transition-property: border-color, border-width;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+}
+
+.md3-text-field--filled {
+  border-radius: 0.25rem 0.25rem 0 0; /* extra-small arriba, 0 abajo */
+  border: none;
+  border-bottom: 1px solid var(--md-sys-color-on-surface-variant);
+}
+
+.md3-text-field--outlined {
+  border-radius: 0.25rem; /* extra-small, las 4 esquinas */
+  border: 1px solid var(--md-sys-color-outline);
+}
+
+.md3-text-field--filled:focus-within {
+  border-bottom-width: 2px;
+}
+
+.md3-text-field--outlined:focus-within {
+  border-width: 3px;
+}
+
+/* Color del indicador (filled) / outline (outlined) — status="none" (default) */
+.md3-text-field--filled[data-status='none'] {
+  border-bottom-color: var(--md-sys-color-on-surface-variant);
+}
+.md3-text-field--outlined[data-status='none'] {
+  border-color: var(--md-sys-color-outline);
+}
+.md3-text-field--filled[data-status='none']:hover {
+  border-bottom-color: var(--md-sys-color-on-surface);
+}
+.md3-text-field--outlined[data-status='none']:hover {
+  border-color: var(--md-sys-color-on-surface);
+}
+.md3-text-field--filled[data-status='none']:focus-within {
+  border-bottom-color: var(--md-sys-color-primary);
+}
+.md3-text-field--outlined[data-status='none']:focus-within {
+  border-color: var(--md-sys-color-primary);
+}
+
+/* status="error" */
+.md3-text-field--filled[data-status='error'] {
+  border-bottom-color: var(--md-sys-color-error);
+}
+.md3-text-field--outlined[data-status='error'] {
+  border-color: var(--md-sys-color-error);
+}
+.md3-text-field--outlined[data-status='error']:hover {
+  border-color: var(--md-sys-color-on-error-container);
+}
+
+/* status="success" */
+.md3-text-field--filled[data-status='success'] {
+  border-bottom-color: var(--md-sys-color-success);
+}
+.md3-text-field--outlined[data-status='success'] {
+  border-color: var(--md-sys-color-success);
+}
+
+/* status="warning" */
+.md3-text-field--filled[data-status='warning'] {
+  border-bottom-color: var(--md-sys-color-warning);
+}
+.md3-text-field--outlined[data-status='warning'] {
+  border-color: var(--md-sys-color-warning);
+}
+
+/* Input */
+.md3-text-field__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem; /* Body Large, 16sp */
+  line-height: 1.5rem; /* 24lh */
+  letter-spacing: 0.03125em; /* tracking 0.5 */
+  padding-top: 1.25rem;
+  padding-bottom: 0.5rem;
+}
+
+.md3-text-field--outlined .md3-text-field__input {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/*
+  Label flotante — 100% CSS, sin estado de React.
+  El <label> va DESPUÉS del input en el DOM para que estos selectores
+  hermanos (`~`) funcionen con inputs controlados y no controlados.
+*/
+.md3-text-field__label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 1rem; /* Body Large */
+  line-height: 1.5rem;
+  letter-spacing: 0.03125em;
+  transition-property: transform, font-size, color;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+.md3-text-field__input:focus ~ .md3-text-field__label,
+.md3-text-field__input:not(:placeholder-shown) ~ .md3-text-field__label {
+  top: 0;
+  font-size: 0.75rem; /* Body Small, 12sp */
+  line-height: 1rem;
+  letter-spacing: 0.025em; /* tracking 0.4 */
+}
+
+.md3-text-field--filled .md3-text-field__input:focus ~ .md3-text-field__label,
+.md3-text-field--filled
+  .md3-text-field__input:not(:placeholder-shown)
+  ~ .md3-text-field__label {
+  transform: translateY(0.375rem); /* 6dp desde el borde superior */
+}
+
+.md3-text-field--outlined .md3-text-field__input:focus ~ .md3-text-field__label,
+.md3-text-field--outlined
+  .md3-text-field__input:not(:placeholder-shown)
+  ~ .md3-text-field__label {
+  transform: translateY(-50%); /* centrado sobre la línea del borde */
+}
+
+/* Color del label flotante — solo cambia a primary en focus cuando status="none"; los demás status fijan su propio color vía Tailwind en TextField.tsx y no deben revertir a primary. */
+.md3-text-field[data-status='none']
+  .md3-text-field__input:focus
+  ~ .md3-text-field__label {
+  color: var(--md-sys-color-primary);
+}
+
+/*
+  Notch del outlined: un <legend> decorativo (aria-hidden, texto
+  visibility:hidden) cuyo único propósito es hacerle saber al navegador
+  dónde recortar el borde del <fieldset>. El <label> visible y accesible
+  es un elemento independiente, posicionado encima.
+*/
+.md3-text-field__notch {
+  position: absolute;
+  top: 0;
+  left: 0.75rem;
+  margin: 0;
+  padding: 0;
+  max-width: 0.01px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  transition: max-width 200ms ease-in-out;
+}
+
+.md3-text-field__notch span {
+  display: inline-block;
+  padding-inline: 0.25rem; /* 4dp — "left/right padding populated label text" del spec outlined */
+  visibility: hidden;
+}
+
+.md3-text-field__input:focus ~ .md3-text-field__notch,
+.md3-text-field__input:not(:placeholder-shown) ~ .md3-text-field__notch {
+  max-width: 100%;
+}
