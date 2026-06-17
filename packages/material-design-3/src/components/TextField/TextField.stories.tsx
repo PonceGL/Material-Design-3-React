@@ -101,107 +101,86 @@ export default meta;
 
 type Story = StoryObj<typeof TextField>;
 
+// Cada story de abajo renderiza exactamente el código que el panel "Code" de
+// Storybook muestra: las que solo usan props simples (string/number/boolean)
+// se definen vía `args` (Storybook genera el snippet automáticamente); las
+// que necesitan un ReactNode (iconos) o estado de React usan `render` con el
+// JSX puesto directamente ahí — nunca delegado a un componente con nombre
+// propio, porque entonces el panel de código solo mostraría esa referencia
+// y no el uso real de TextField.
+
 export const Default: Story = {
   args: {
     label: 'Email',
   },
 };
 
-export const Variants: Story = {
-  render: () => (
-    <div className="flex flex-wrap items-start gap-6">
-      <TextField label="Filled" variant="filled" />
-      <TextField label="Outlined" variant="outlined" />
-    </div>
-  ),
+export const Filled: Story = {
+  args: {
+    label: 'Email',
+    variant: 'filled',
+  },
 };
 
-export const States: Story = {
-  name: 'States (enabled vs disabled — try hover/focus live)',
-  render: () => (
-    <div className="flex flex-wrap items-start gap-6">
-      <TextField label="Enabled" variant="filled" defaultValue="Populated" />
-      <TextField
-        label="Disabled"
-        variant="filled"
-        disabled
-        defaultValue="Populated"
-      />
-      <TextField label="Enabled" variant="outlined" defaultValue="Populated" />
-      <TextField
-        label="Disabled"
-        variant="outlined"
-        disabled
-        defaultValue="Populated"
-      />
-    </div>
-  ),
+export const Outlined: Story = {
+  args: {
+    label: 'Email',
+    variant: 'outlined',
+  },
 };
 
-export const WithIcons: Story = {
-  name: 'With Icons',
-  render: () => (
-    <div className="flex flex-wrap items-start gap-6">
-      <TextField label="Search" variant="filled" leadingIcon={<SearchIcon />} />
-      <TextField
-        label="Search"
-        variant="outlined"
-        leadingIcon={<SearchIcon />}
-      />
-    </div>
-  ),
+export const WithLeadingIcon: Story = {
+  name: 'With Leading Icon',
+  render: () => <TextField label="Search" leadingIcon={<SearchIcon />} />,
 };
-
-function WithClearButtonExample() {
-  const [value, setValue] = useState('Material Design 3');
-
-  return (
-    <TextField
-      label="Search"
-      leadingIcon={<SearchIcon />}
-      trailingIcon={value ? <ClearIcon /> : undefined}
-      onTrailingIconClick={value ? () => setValue('') : undefined}
-      trailingIconAriaLabel="Clear search"
-      value={value}
-      onChange={(event) => setValue(event.target.value)}
-    />
-  );
-}
 
 export const WithClearButton: Story = {
   name: 'With Clear Button',
-  render: () => <WithClearButtonExample />,
+  render: function Render() {
+    const [value, setValue] = useState('Material Design 3');
+
+    return (
+      <TextField
+        label="Search"
+        leadingIcon={<SearchIcon />}
+        trailingIcon={<ClearIcon />}
+        onTrailingIconClick={() => setValue('')}
+        trailingIconAriaLabel="Clear search"
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+      />
+    );
+  },
 };
 
-export const ValidationStates: Story = {
-  name: 'Validation States',
-  render: () => (
-    <div className="flex flex-wrap items-start gap-6">
-      <TextField
-        label="Email"
-        status="error"
-        supportingText="Enter a valid email"
-        defaultValue="not-an-email"
-      />
-      <TextField
-        label="Username"
-        status="success"
-        supportingText="Username is available"
-        defaultValue="ponce.gl"
-      />
-      <TextField
-        label="Password"
-        status="warning"
-        supportingText="Password is weak"
-        defaultValue="123456"
-      />
-      <TextField
-        label="Email"
-        status="none"
-        supportingText="We'll never share your email"
-      />
-    </div>
-  ),
+export const ErrorStatus: Story = {
+  name: 'Error',
+  args: {
+    label: 'Email',
+    status: 'error',
+    supportingText: 'Enter a valid email',
+    defaultValue: 'not-an-email',
+  },
+};
+
+export const SuccessStatus: Story = {
+  name: 'Success',
+  args: {
+    label: 'Username',
+    status: 'success',
+    supportingText: 'Username is available',
+    defaultValue: 'ponce.gl',
+  },
+};
+
+export const WarningStatus: Story = {
+  name: 'Warning',
+  args: {
+    label: 'Password',
+    status: 'warning',
+    supportingText: 'Password is weak',
+    defaultValue: '123456',
+  },
 };
 
 export const CharacterCounter: Story = {
@@ -215,44 +194,31 @@ export const CharacterCounter: Story = {
 };
 
 export const Multiline: Story = {
+  args: {
+    label: 'Notes',
+    multiline: true,
+    rows: 4,
+  },
+};
+
+export const MultilineWithIconAndError: Story = {
+  name: 'Multiline With Icon and Error',
   render: () => (
-    <div className="flex flex-wrap items-start gap-6">
-      <TextField label="Notes" multiline variant="filled" />
-      <TextField label="Notes" multiline variant="outlined" />
-      <TextField
-        label="Description"
-        multiline
-        rows={5}
-        leadingIcon={<SearchIcon />}
-        status="error"
-        supportingText="Description is required"
-      />
-      <TextField
-        label="Bio"
-        multiline
-        maxLength={200}
-        showCharacterCount
-        defaultValue="Building Material Design 3 components for React."
-      />
-    </div>
+    <TextField
+      label="Description"
+      multiline
+      rows={4}
+      leadingIcon={<SearchIcon />}
+      status="error"
+      supportingText="Description is required"
+    />
   ),
 };
 
 export const Disabled: Story = {
-  render: () => (
-    <div className="flex flex-wrap items-start gap-6">
-      <TextField
-        label="Email"
-        variant="filled"
-        disabled
-        defaultValue="ponce@example.com"
-      />
-      <TextField
-        label="Email"
-        variant="outlined"
-        disabled
-        defaultValue="ponce@example.com"
-      />
-    </div>
-  ),
+  args: {
+    label: 'Email',
+    disabled: true,
+    defaultValue: 'ponce@example.com',
+  },
 };
