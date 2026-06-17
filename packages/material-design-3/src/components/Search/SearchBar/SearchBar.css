@@ -1,0 +1,101 @@
+/*
+  Estilos estructurales de SearchBar.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del
+  consumidor. Mismo criterio que TextField.css/ListItem.css.
+
+  State-layer: el fondo en reposo (surface-container-high) es opaco, así
+  que un cambio directo de background-color en :hover apagaría ese color
+  en vez de mezclarse con él. Por eso el state-layer vive en una capa
+  independiente (::before, absoluta, debajo del contenido) cuya opacidad
+  sube en hover/focus — el efecto visual es la mezcla que pide M3, sin
+  tocar el color base. Mismo problema (overlay sobre fondo opaco) que se
+  documentó como sin precedente real al implementar TextField.
+*/
+
+.md3-search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* 16dp entre icono y texto */
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 45rem; /* 720dp */
+  height: 3.5rem; /* 56dp */
+  padding-inline: 1.5rem; /* 24dp en reposo */
+  border-radius: var(--md-sys-shape-corner-full);
+  overflow: hidden;
+  transition-property: padding-inline;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+}
+
+.md3-search-bar:focus-within {
+  padding-inline: 0.75rem; /* 12dp en foco — M3 Expressive "grow on focus" */
+}
+
+.md3-search-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: var(--md-sys-color-on-surface-variant);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease-in-out;
+}
+
+.md3-search-bar:hover::before {
+  opacity: 0.08;
+}
+
+.md3-search-bar:focus-within::before {
+  opacity: 0.1;
+}
+
+/* Pintan por encima del ::before del state-layer */
+.md3-search-bar__icon,
+.md3-search-bar__input,
+.md3-search-bar__actions {
+  position: relative;
+}
+
+.md3-search-bar__icon {
+  flex-shrink: 0;
+  width: 1.5rem; /* 24dp */
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.md3-search-bar__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem; /* Body Large, 16sp */
+  line-height: 1.5rem; /* 24lh */
+  letter-spacing: 0.03125em; /* tracking 0.5 */
+}
+
+/*
+  Oculta los controles nativos de <input type="search"> (lupa/clear de
+  WebKit): duplicarían leadingIcon/trailingActions, que ya cubren ese rol.
+*/
+.md3-search-bar__input::-webkit-search-decoration,
+.md3-search-bar__input::-webkit-search-cancel-button,
+.md3-search-bar__input::-webkit-search-results-button,
+.md3-search-bar__input::-webkit-search-results-decoration {
+  display: none;
+}
+
+.md3-search-bar__actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* 4dp entre hasta 2 trailing actions */
+}

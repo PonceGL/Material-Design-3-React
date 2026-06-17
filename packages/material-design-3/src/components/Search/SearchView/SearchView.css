@@ -1,0 +1,63 @@
+/*
+  Estilos estructurales de SearchView.
+
+  Siempre montado en el DOM — la visibilidad se anima vía [data-state],
+  nunca con un unmount condicional, para que la transición sea suave y el
+  panel no "salte" al abrir/cerrar.
+
+  Las combinaciones [data-layout][data-state] van como selectores
+  compuestos (no reglas separadas) para no depender del orden de cascada:
+  full-screen y docked tienen valores de max-height incompatibles entre sí
+  y ambos comparten la misma especificidad si se declaran sueltos.
+*/
+
+.md3-search-view {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  transition-property: max-height, opacity, margin-top;
+  transition-duration: 250ms, 200ms, 250ms;
+  transition-timing-function: ease-in-out;
+}
+
+.md3-search-view[data-state='closed'] {
+  max-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.md3-search-view[data-layout='full-screen'][data-state='open'] {
+  max-height: 100dvh;
+  opacity: 1;
+  visibility: visible;
+}
+
+.md3-search-view[data-layout='docked'] {
+  max-width: 45rem; /* 720dp */
+  min-height: 15rem; /* 240dp */
+  border-radius: var(--md-sys-shape-corner-extra-large);
+}
+
+.md3-search-view[data-layout='docked'][data-state='open'] {
+  max-height: 66.6667vh; /* 2/3 de la pantalla */
+  opacity: 1;
+  visibility: visible;
+  margin-top: 0.125rem; /* 2dp gap respecto al search bar (contained + docked) */
+}
+
+.md3-search-view__header {
+  flex-shrink: 0;
+}
+
+.md3-search-view__divider {
+  flex-shrink: 0;
+  height: 1px;
+}
+
+.md3-search-view__results {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
