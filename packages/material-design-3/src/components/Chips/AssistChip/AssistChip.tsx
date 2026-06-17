@@ -15,7 +15,7 @@ const base = [
 ].join(' ');
 
 const variantClasses: Record<AssistChipVariant, string> = {
-  primary: 'bg.md-primary text-md-on-primary',
+  primary: 'bg-md-primary text-md-on-primary',
   filled: 'bg-md-surface-variant text-md-on-surface-variant',
   elevated: 'bg-md-surface shadow-md-elevation-1',
   tonal: 'bg-md-secondary-container text-md-on-secondary-container',
