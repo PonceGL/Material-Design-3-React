@@ -1,5 +1,10 @@
 import { useId, useState } from 'react';
-import type { ChangeEvent, ReactNode } from 'react';
+import type {
+  ChangeEvent,
+  InputHTMLAttributes,
+  ReactNode,
+  TextareaHTMLAttributes,
+} from 'react';
 
 import { cn } from '@/lib/cn';
 
@@ -78,6 +83,7 @@ export function TextField(props: TextFieldProps) {
     id,
     placeholder,
     disabled,
+    multiline,
     leadingIcon,
     trailingIcon,
     onTrailingIconClick,
@@ -85,30 +91,38 @@ export function TextField(props: TextFieldProps) {
     supportingText,
     showCharacterCount,
     maxLength,
+    value,
+    defaultValue,
+    onChange,
+    ...rest
   } = props;
 
   const inputId = id ?? generatedId;
   const supportingTextId = `${inputId}-supporting-text`;
 
-  const isControlled = props.value !== undefined;
+  const isControlled = value !== undefined;
   const [uncontrolledLength, setUncontrolledLength] = useState(
-    () => String(props.defaultValue ?? '').length,
+    () => String(defaultValue ?? '').length,
   );
-  const length = isControlled ? String(props.value).length : uncontrolledLength;
+  const length = isControlled ? String(value).length : uncontrolledLength;
 
+  // `rest` is a union of the input-only and textarea-only attributes left
+  // over after excluding every TextFieldBaseProps field above. Which native
+  // element actually renders is decided by the same `multiline` flag, so
+  // this cast is safe — TypeScript just can't narrow a discriminated union
+  // through an already-destructured copy (see RCL-193 commit message).
   let formControl: ReactNode;
 
-  if (props.multiline) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from the spread below, not a valid <textarea> attribute
-    const { multiline, ...textareaRest } = props;
+  if (multiline) {
+    const textareaRest = rest as TextareaHTMLAttributes<HTMLTextAreaElement>;
     const handleChange = showCharacterCount
       ? (event: ChangeEvent<HTMLTextAreaElement>) => {
           if (!isControlled) {
             setUncontrolledLength(event.target.value.length);
           }
-          props.onChange?.(event);
+          onChange?.(event);
         }
-      : props.onChange;
+      : onChange;
     formControl = (
       <textarea
         id={inputId}
@@ -116,23 +130,24 @@ export function TextField(props: TextFieldProps) {
         disabled={disabled}
         className="md3-text-field__input text-md-on-surface"
         {...textareaRest}
-        rows={props.rows ?? 3}
+        rows={textareaRest.rows ?? 3}
+        value={value}
+        defaultValue={defaultValue}
         onChange={handleChange}
         aria-invalid={status === 'error' ? true : undefined}
         aria-describedby={supportingText ? supportingTextId : undefined}
       />
     );
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- excluded from the spread below, not a valid <input> attribute
-    const { multiline, ...inputRest } = props;
+    const inputRest = rest as InputHTMLAttributes<HTMLInputElement>;
     const handleChange = showCharacterCount
       ? (event: ChangeEvent<HTMLInputElement>) => {
           if (!isControlled) {
             setUncontrolledLength(event.target.value.length);
           }
-          props.onChange?.(event);
+          onChange?.(event);
         }
-      : props.onChange;
+      : onChange;
     formControl = (
       <input
         id={inputId}
@@ -140,6 +155,8 @@ export function TextField(props: TextFieldProps) {
         disabled={disabled}
         className="md3-text-field__input text-md-on-surface"
         {...inputRest}
+        value={value}
+        defaultValue={defaultValue}
         onChange={handleChange}
         aria-invalid={status === 'error' ? true : undefined}
         aria-describedby={supportingText ? supportingTextId : undefined}
@@ -200,7 +217,7 @@ export function TextField(props: TextFieldProps) {
     variantClasses[variant],
     leadingIcon && 'md3-text-field--has-leading-icon',
     trailingIcon && 'md3-text-field--has-trailing-icon',
-    props.multiline && 'md3-text-field--multiline',
+    multiline && 'md3-text-field--multiline',
   );
 
   const field =
