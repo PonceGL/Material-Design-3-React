@@ -26,6 +26,14 @@ export type {
 export { List, ListItem } from '@/components/Lists';
 export type { ListItemProps, ListProps, ListVariant } from '@/components/Lists';
 
+export { SearchBar, SearchView } from '@/components/Search';
+export type {
+  SearchBarProps,
+  SearchViewLayout,
+  SearchViewProps,
+  SearchViewStyle,
+} from '@/components/Search';
+
 export { TextField } from '@/components/TextField';
 export type {
   TextFieldInputType,
