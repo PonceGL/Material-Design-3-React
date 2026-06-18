@@ -20,7 +20,9 @@
   align-items: center;
   height: 100%;
   padding-top: 2.75rem; /* 44dp top-space, las 3 configuraciones */
-  transition: width 200ms ease-in-out;
+  transition:
+    width 200ms ease-in-out,
+    border-radius 200ms ease-in-out;
 }
 
 .md3-navigation-rail[data-variant='collapsed'] {

@@ -8,7 +8,10 @@ import type {
   NavigationRailVariant,
 } from './NavigationRail.types';
 
-const base = 'md3-navigation-rail';
+const base = [
+  'md3-navigation-rail',
+  'transition-[background-color,box-shadow] duration-200 ease-in-out',
+].join(' ');
 
 const containerVariantClasses = {
   standard: 'bg-md-surface shadow-md-elevation-0',

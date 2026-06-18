@@ -36,9 +36,23 @@
   font-weight: 500;
   font-size: 0.75rem; /* label-medium, 12sp, collapsed */
   line-height: 1rem; /* 16lh */
-  transition-property: color;
-  transition-duration: 100ms;
-  transition-timing-function: ease-in-out;
+  /*
+    `flex-direction`/`justify-content` son propiedades discretas (sin
+    interpolación continua), pero SÍ se pueden transicionar — el cambio de
+    valor ocurre en un punto intermedio de la duración (no instantáneo al
+    inicio). Se les da la MISMA duración que `width` en NavigationRail.css
+    (200ms) para que el cambio de layout coincida con el punto medio del
+    resize del riel, en vez de saltar de golpe antes de que el riel
+    siquiera empiece a moverse — eso es lo que hacía sentir la animación
+    de "collapse" instantánea/incompleta frente a la de "expand".
+  */
+  transition:
+    color 100ms ease-in-out,
+    flex-direction 200ms ease-in-out,
+    justify-content 200ms ease-in-out,
+    gap 200ms ease-in-out,
+    font-size 200ms ease-in-out,
+    line-height 200ms ease-in-out;
 }
 
 .md3-navigation-rail-item__icon {
@@ -78,10 +92,22 @@
   pointer-events: none;
 }
 
+/*
+  top/left/width/height/transform sí son continuamente interpolables (a
+  diferencia de flex-direction) — animarlos con la misma duración que el
+  resize del riel (200ms, ver NavigationRail.css) hace que la píldora
+  "morphee" de la forma pequeña centrada en el ícono a la fila completa,
+  en vez de saltar de golpe a inset:0 (ver regla `[data-variant='expanded']`
+  más abajo). `opacity` (selección) se anima aparte, a 100ms, igual que
+  el resto de los estados de color de la librería.
+*/
+
 .md3-navigation-rail-item::before {
   background-color: var(--md-sys-color-secondary-container);
   opacity: 0;
-  transition: opacity 100ms ease-in-out;
+  transition-property: opacity, top, left, width, height, transform;
+  transition-duration: 100ms, 200ms, 200ms, 200ms, 200ms, 200ms;
+  transition-timing-function: ease-in-out;
 }
 
 .md3-navigation-rail-item[aria-current='page']::before {
@@ -91,7 +117,9 @@
 .md3-navigation-rail-item::after {
   background-color: var(--md-sys-color-on-secondary-container);
   opacity: 0;
-  transition: opacity 100ms ease-in-out;
+  transition-property: opacity, top, left, width, height, transform;
+  transition-duration: 100ms, 200ms, 200ms, 200ms, 200ms, 200ms;
+  transition-timing-function: ease-in-out;
 }
 
 .md3-navigation-rail-item:hover::after {
