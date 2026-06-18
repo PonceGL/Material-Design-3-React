@@ -1,0 +1,139 @@
+/*
+  Estilos estructurales Y de color de NavigationRailItem.
+
+  Excepción deliberada al criterio general "color en Tailwind/tsx" del
+  resto de la librería: tanto el layout (vertical/horizontal) como el color
+  del label seleccionado dependen del `data-variant` del `NavigationRail`
+  ancestro, que este componente nunca recibe como prop (layout sin Context,
+  ver NavigationRail.tsx) — solo un selector CSS descendiente puede
+  resolverlo. El indicador activo y el state-layer de hover/focus/pressed
+  también viven aquí porque comparten exactamente el mismo tamaño/posición
+  que cambia con el layout.
+
+  Intencionalmente fuera de @layer: misma razón que el resto de la
+  librería (ver buttonShape.css).
+
+  Sin selectores posicionales (:nth-child/:first-child/:last-child) — a
+  diferencia de SegmentedButtonItem, el layout no depende de la posición,
+  así que es compatible con listas virtualizadas externas.
+*/
+
+.md3-navigation-rail-item {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem; /* 4dp icono<->label, collapsed */
+  width: 100%;
+  height: 4rem; /* 64dp */
+  padding-inline: 1rem; /* 16dp leading/trailing */
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--md-sys-color-on-surface-variant); /* inactivo, icono+label */
+  font-weight: 500;
+  font-size: 0.75rem; /* label-medium, 12sp, collapsed */
+  line-height: 1rem; /* 16lh */
+  transition-property: color;
+  transition-duration: 100ms;
+  transition-timing-function: ease-in-out;
+}
+
+.md3-navigation-rail-item__icon {
+  position: relative; /* ancla para un futuro Badge, mismo patrón que IconButton */
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem; /* 24dp, tamaño real del ícono en ambos layouts */
+  height: 1.5rem;
+}
+
+.md3-navigation-rail-item__icon,
+.md3-navigation-rail-item__label {
+  position: relative; /* pintan por encima del indicador/state-layer de abajo */
+}
+
+/*
+  Indicador activo (::before) + state-layer de hover/focus/pressed
+  (::after): dos capas independientes con el mismo tamaño/posición, para
+  que el state-layer pueda mezclarse correctamente tanto sobre fondo
+  transparente (item no seleccionado) como sobre el indicador opaco (item
+  seleccionado) — mismo problema de "fondo opaco" resuelto en SearchBar.css,
+  aquí con dos pseudo-elementos en vez de uno solo porque hay dos colores
+  independientes que pueden estar activos a la vez.
+*/
+.md3-navigation-rail-item::before,
+.md3-navigation-rail-item::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3.5rem; /* 56dp, ancho de la píldora en collapsed */
+  height: 2rem; /* 32dp, alto de la píldora en collapsed */
+  border-radius: var(--md-sys-shape-corner-full);
+  pointer-events: none;
+}
+
+.md3-navigation-rail-item::before {
+  background-color: var(--md-sys-color-secondary-container);
+  opacity: 0;
+  transition: opacity 100ms ease-in-out;
+}
+
+.md3-navigation-rail-item[aria-current='page']::before {
+  opacity: 1;
+}
+
+.md3-navigation-rail-item::after {
+  background-color: var(--md-sys-color-on-secondary-container);
+  opacity: 0;
+  transition: opacity 100ms ease-in-out;
+}
+
+.md3-navigation-rail-item:hover::after {
+  opacity: 0.08;
+}
+
+.md3-navigation-rail-item:focus-visible::after,
+.md3-navigation-rail-item:active::after {
+  opacity: 0.1;
+}
+
+.md3-navigation-rail-item[aria-current='page'] .md3-navigation-rail-item__icon {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* M3 Expressive vs M2: el label activo usa un token distinto al del ícono */
+.md3-navigation-rail-item[aria-current='page']
+  .md3-navigation-rail-item__label {
+  color: var(--md-sys-color-secondary);
+}
+
+/* expanded (horizontal) — layout vía CSS puro desde el data-variant del NavigationRail padre, sin Context */
+[data-variant='expanded'] .md3-navigation-rail-item {
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 0.5rem; /* 8dp */
+  font-size: 0.875rem; /* label-large, 14sp */
+  line-height: 1.25rem; /* 20lh */
+}
+
+/* expanded — el indicador/state-layer cubre la fila completa, no solo el ícono */
+[data-variant='expanded'] .md3-navigation-rail-item::before,
+[data-variant='expanded'] .md3-navigation-rail-item::after {
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  height: 100%;
+}
+
+[data-variant='expanded']
+  .md3-navigation-rail-item[aria-current='page']
+  .md3-navigation-rail-item__label {
+  color: var(--md-sys-color-on-secondary-container);
+}
