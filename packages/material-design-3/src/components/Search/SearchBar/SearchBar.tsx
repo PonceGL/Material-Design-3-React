@@ -16,8 +16,9 @@ import type { SearchBarProps } from './SearchBar.types';
  * or results below it — `SearchBar` itself has no notion of an open/closed
  * panel.
  *
- * @example Provide an accessible name — the placeholder alone is not
- * enough for assistive technology.
+ * @example Prefer an explicit `aria-label` over relying on `placeholder`
+ * alone — `placeholder` is only a last-resort fallback in the accessible
+ * name computation, and disappears once the field has a value.
  * ```tsx
  * <SearchBar leadingIcon={<SearchIcon />} placeholder="Search" aria-label="Search" />
  * ```
