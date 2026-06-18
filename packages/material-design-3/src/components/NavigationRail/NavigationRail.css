@@ -62,6 +62,17 @@
   content-visibility: auto; /* progressive enhancement para listas largas */
 }
 
+/*
+  Los items NUNCA deben encogerse por debajo de su alto intrínseco: sin
+  esto, una lista que no entra completa en el alto disponible (ver Long
+  List) se "aplasta" en vez de desbordar hacia el scroll de
+  `overflow-y: auto` de arriba — flex-shrink es 1 por default, incluso
+  con overflow:auto en el contenedor.
+*/
+.md3-navigation-rail__items > * {
+  flex-shrink: 0;
+}
+
 /* expanded — cada destino ocupa todo el ancho del riel (fila completa) */
 .md3-navigation-rail[data-variant='expanded'] .md3-navigation-rail__items > * {
   width: 100%;
