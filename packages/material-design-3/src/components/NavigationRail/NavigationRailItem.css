@@ -1,14 +1,21 @@
 /*
-  Estilos estructurales Y de color de NavigationRailItem.
+  Estilos estructurales de NavigationRailItem.
 
-  Excepción deliberada al criterio general "color en Tailwind/tsx" del
-  resto de la librería: tanto el layout (vertical/horizontal) como el color
-  del label seleccionado dependen del `data-variant` del `NavigationRail`
-  ancestro, que este componente nunca recibe como prop (layout sin Context,
-  ver NavigationRail.tsx) — solo un selector CSS descendiente puede
-  resolverlo. El indicador activo y el state-layer de hover/focus/pressed
-  también viven aquí porque comparten exactamente el mismo tamaño/posición
-  que cambia con el layout.
+  El color (indicador, ícono, label) se decide en NavigationRailItem.tsx
+  directamente a partir de la prop `selected`, vía clases condicionales —
+  indicador y state-layer son <span> reales (no pseudo-elementos), igual
+  que el resto de la librería (Button/IconButton/ToggleButton tampoco usan
+  pseudo-elementos para sus estados). Solo el LAYOUT (vertical/horizontal)
+  y el tamaño/posición del indicador/state-layer viven aquí, porque
+  dependen del `data-variant` del `NavigationRail` ancestro, que este
+  componente nunca recibe como prop (layout sin Context, ver
+  NavigationRail.tsx) — eso sí solo se puede resolver con un selector CSS
+  descendiente.
+
+  Única excepción de color real en este archivo: el label SELECCIONADO
+  cambia de token según el layout (M3 Expressive: `secondary` en
+  collapsed, `on-secondary-container` en expanded) — el único caso en que
+  el color depende del ancestro, no solo de la prop.
 
   Intencionalmente fuera de @layer: misma razón que el resto de la
   librería (ver buttonShape.css).
@@ -32,7 +39,6 @@
   border: none;
   cursor: pointer;
   background-color: transparent;
-  color: var(--md-sys-color-on-surface-variant); /* inactivo, icono+label */
   font-weight: 500;
   font-size: 0.75rem; /* label-medium, 12sp, collapsed */
   line-height: 1rem; /* 16lh */
@@ -43,11 +49,9 @@
     inicio). Se les da la MISMA duración que `width` en NavigationRail.css
     (200ms) para que el cambio de layout coincida con el punto medio del
     resize del riel, en vez de saltar de golpe antes de que el riel
-    siquiera empiece a moverse — eso es lo que hacía sentir la animación
-    de "collapse" instantánea/incompleta frente a la de "expand".
+    siquiera empiece a moverse.
   */
   transition:
-    color 100ms ease-in-out,
     flex-direction 200ms ease-in-out,
     justify-content 200ms ease-in-out,
     gap 200ms ease-in-out,
@@ -55,8 +59,13 @@
     line-height 200ms ease-in-out;
 }
 
+.md3-navigation-rail-item__icon,
+.md3-navigation-rail-item__label {
+  position: relative; /* pintan por encima del indicador/state-layer de abajo */
+  transition: color 100ms ease-in-out;
+}
+
 .md3-navigation-rail-item__icon {
-  position: relative; /* ancla para un futuro Badge, mismo patrón que IconButton */
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -65,23 +74,17 @@
   height: 1.5rem;
 }
 
-.md3-navigation-rail-item__icon,
-.md3-navigation-rail-item__label {
-  position: relative; /* pintan por encima del indicador/state-layer de abajo */
-}
-
 /*
-  Indicador activo (::before) + state-layer de hover/focus/pressed
-  (::after): dos capas independientes con el mismo tamaño/posición, para
-  que el state-layer pueda mezclarse correctamente tanto sobre fondo
-  transparente (item no seleccionado) como sobre el indicador opaco (item
-  seleccionado) — mismo problema de "fondo opaco" resuelto en SearchBar.css,
-  aquí con dos pseudo-elementos en vez de uno solo porque hay dos colores
-  independientes que pueden estar activos a la vez.
+  Indicador activo + state-layer de hover/focus/pressed: dos <span> reales
+  con el mismo tamaño/posición (no pseudo-elementos). El indicador toma su
+  color de una clase condicional en el .tsx (depende de `selected`, prop
+  real); el state-layer tiene un color fijo y solo su OPACIDAD cambia con
+  los pseudo-CLASES :hover/:focus-visible/:active del botón (eso sí es
+  CSS puro legítimo — son estados de interacción del propio elemento, no
+  un sustituto de la prop `selected`).
 */
-.md3-navigation-rail-item::before,
-.md3-navigation-rail-item::after {
-  content: '';
+.md3-navigation-rail-item__indicator,
+.md3-navigation-rail-item__state-layer {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -90,55 +93,47 @@
   height: 2rem; /* 32dp, alto de la píldora en collapsed */
   border-radius: var(--md-sys-shape-corner-full);
   pointer-events: none;
+  /*
+    top/left/width/height/transform sí son continuamente interpolables —
+    animarlos con la misma duración que el resize del riel (200ms, ver
+    NavigationRail.css) hace que la píldora "morphee" de la forma pequeña
+    centrada en el ícono a la fila completa, en vez de saltar de golpe a
+    inset:0 (ver regla `[data-variant='expanded']` más abajo).
+  */
+  transition:
+    top 200ms ease-in-out,
+    left 200ms ease-in-out,
+    width 200ms ease-in-out,
+    height 200ms ease-in-out,
+    transform 200ms ease-in-out;
 }
 
-/*
-  top/left/width/height/transform sí son continuamente interpolables (a
-  diferencia de flex-direction) — animarlos con la misma duración que el
-  resize del riel (200ms, ver NavigationRail.css) hace que la píldora
-  "morphee" de la forma pequeña centrada en el ícono a la fila completa,
-  en vez de saltar de golpe a inset:0 (ver regla `[data-variant='expanded']`
-  más abajo). `opacity` (selección) se anima aparte, a 100ms, igual que
-  el resto de los estados de color de la librería.
-*/
-
-.md3-navigation-rail-item::before {
-  background-color: var(--md-sys-color-secondary-container);
-  opacity: 0;
-  transition-property: opacity, top, left, width, height, transform;
-  transition-duration: 100ms, 200ms, 200ms, 200ms, 200ms, 200ms;
+.md3-navigation-rail-item__indicator {
+  transition-property: top, left, width, height, transform, background-color;
+  transition-duration: 200ms, 200ms, 200ms, 200ms, 200ms, 100ms;
   transition-timing-function: ease-in-out;
 }
 
-.md3-navigation-rail-item[aria-current='page']::before {
-  opacity: 1;
-}
-
-.md3-navigation-rail-item::after {
-  background-color: var(--md-sys-color-on-secondary-container);
+.md3-navigation-rail-item__state-layer {
   opacity: 0;
-  transition-property: opacity, top, left, width, height, transform;
-  transition-duration: 100ms, 200ms, 200ms, 200ms, 200ms, 200ms;
+  transition-property: top, left, width, height, transform, opacity;
+  transition-duration: 200ms, 200ms, 200ms, 200ms, 200ms, 100ms;
   transition-timing-function: ease-in-out;
 }
 
-.md3-navigation-rail-item:hover::after {
+.md3-navigation-rail-item:hover .md3-navigation-rail-item__state-layer {
   opacity: 0.08;
 }
 
-.md3-navigation-rail-item:focus-visible::after,
-.md3-navigation-rail-item:active::after {
+.md3-navigation-rail-item:focus-visible .md3-navigation-rail-item__state-layer,
+.md3-navigation-rail-item:active .md3-navigation-rail-item__state-layer {
   opacity: 0.1;
 }
 
-.md3-navigation-rail-item[aria-current='page'] .md3-navigation-rail-item__icon {
-  color: var(--md-sys-color-on-secondary-container);
-}
-
-/* M3 Expressive vs M2: el label activo usa un token distinto al del ícono */
+/* M3 Expressive vs M2: el label seleccionado usa un token distinto al del ícono, según el layout */
 .md3-navigation-rail-item[aria-current='page']
   .md3-navigation-rail-item__label {
-  color: var(--md-sys-color-secondary);
+  color: var(--md-sys-color-secondary); /* collapsed, default */
 }
 
 /* expanded (horizontal) — layout vía CSS puro desde el data-variant del NavigationRail padre, sin Context */
@@ -151,8 +146,8 @@
 }
 
 /* expanded — el indicador/state-layer cubre la fila completa, no solo el ícono */
-[data-variant='expanded'] .md3-navigation-rail-item::before,
-[data-variant='expanded'] .md3-navigation-rail-item::after {
+[data-variant='expanded'] .md3-navigation-rail-item__indicator,
+[data-variant='expanded'] .md3-navigation-rail-item__state-layer {
   top: 0;
   left: 0;
   transform: none;

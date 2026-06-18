@@ -18,11 +18,13 @@ const base = [
  * Renders a native `<button>` with `aria-current="page"` when `selected` —
  * a navigation destination, not a toggle, so `aria-pressed` does not apply.
  *
- * Layout (icon-above-label vs. icon-beside-label), the active-indicator
- * shape and all selected/hover/focus colors are resolved entirely in CSS
- * from the parent `NavigationRail`'s `data-variant` (see
- * `NavigationRailItem.css`) — this component never needs to know its own
- * layout.
+ * Color (indicator, icon, label) is driven directly by the `selected` prop
+ * via plain conditional classes, like every other component in this
+ * library — no pseudo-elements involved. Only the LAYOUT (icon-above-label
+ * vs. icon-beside-label) and the active indicator/state-layer's size and
+ * position come from CSS, since those depend on the parent `NavigationRail`'s
+ * `data-variant`, which this component never receives as a prop (see
+ * `NavigationRailItem.css`).
  *
  * Wrapped in `React.memo`: in a rail with many destinations, changing the
  * selection only re-renders the item that loses it and the one that gains
@@ -59,10 +61,35 @@ export const NavigationRailItem = memo(function NavigationRailItem({
       className={cn(base, className)}
       {...rest}
     >
-      <span className="md3-navigation-rail-item__icon">
+      <span
+        aria-hidden="true"
+        className={cn(
+          'md3-navigation-rail-item__indicator',
+          selected && 'bg-md-secondary-container',
+        )}
+      />
+      <span
+        aria-hidden="true"
+        className="md3-navigation-rail-item__state-layer bg-md-on-secondary-container"
+      />
+      <span
+        className={cn(
+          'md3-navigation-rail-item__icon',
+          selected
+            ? 'text-md-on-secondary-container'
+            : 'text-md-on-surface-variant',
+        )}
+      >
         {selected ? (activeIcon ?? icon) : icon}
       </span>
-      <span className="md3-navigation-rail-item__label">{label}</span>
+      <span
+        className={cn(
+          'md3-navigation-rail-item__label',
+          !selected && 'text-md-on-surface-variant',
+        )}
+      >
+        {label}
+      </span>
     </button>
   );
 });
