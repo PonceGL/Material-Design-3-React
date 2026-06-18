@@ -47,7 +47,17 @@
   align-items: center;
   gap: 0.75rem; /* 12dp entre menu y fab */
   width: 100%;
+  padding-inline: 1rem; /* mismo inset que el leading/trailing de los items */
   margin-bottom: 1.5rem; /* 24dp antes del primer destino */
+}
+
+/*
+  expanded — el menu/fab se alinean con el borde inicial, igual que el
+  icono de los items (que arrancan en el mismo padding-inline). En
+  collapsed se mantienen centrados sobre la columna angosta.
+*/
+.md3-navigation-rail[data-variant='expanded'] .md3-navigation-rail__header {
+  align-items: flex-start;
 }
 
 .md3-navigation-rail__items {
