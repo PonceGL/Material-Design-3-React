@@ -18,15 +18,18 @@ const containedLayoutBackground: Record<SearchViewLayout, string> = {
 /**
  * Material Design 3 search view.
  *
- * The "focused search" panel that appears below a `SearchBar` with
- * suggestions or results. Always mounted in the DOM — visibility is driven
- * by the `open` prop (reflected as `data-state` and animated in CSS) plus
- * `inert` for accessibility while closed. Empty by default; pass result
- * items as `children` (e.g. `List`/`ListItem` from this library).
+ * Wraps a persistent `SearchBar` (always visible, passed via the
+ * `searchBar` prop) and a "focused search" panel with suggestions or
+ * results that appears below it. The panel is always mounted in the DOM —
+ * its visibility is driven by the `open` prop (reflected as `data-state`
+ * and animated in CSS) plus `inert` for accessibility while closed. Empty
+ * by default; pass result items as `children` (e.g. `List`/`ListItem` from
+ * this library).
  *
- * Pressing Escape while the view is open calls `onClose`, but no close
- * button is rendered automatically — wire one through `SearchBar`'s
- * `leadingIcon` (a back/close `IconButton`) if you need a visible trigger.
+ * Pressing Escape anywhere inside (including the search bar's input) while
+ * the view is open calls `onClose`, but no close button is rendered
+ * automatically — wire one through `SearchBar`'s `leadingIcon` (a
+ * back/close `IconButton`) if you need a visible trigger.
  *
  * @example
  * ```tsx
@@ -63,26 +66,29 @@ export function SearchView({
   return (
     <div
       data-testid={testId}
-      data-state={open ? 'open' : 'closed'}
-      data-layout={layout}
-      data-style={style}
-      inert={!open}
       onKeyDown={handleKeyDown}
-      className={cn(
-        'md3-search-view',
-        style === 'contained' && containedLayoutBackground[layout],
-        className,
-      )}
+      className={cn('md3-search-view', className)}
       {...rest}
     >
       <div className="md3-search-view__header">{searchBar}</div>
-      {style === 'divided' && (
-        <div
-          aria-hidden="true"
-          className="md3-search-view__divider bg-md-outline-variant"
-        />
-      )}
-      <div className="md3-search-view__results">{children}</div>
+      <div
+        data-state={open ? 'open' : 'closed'}
+        data-layout={layout}
+        data-style={style}
+        inert={!open}
+        className={cn(
+          'md3-search-view__panel',
+          style === 'contained' && containedLayoutBackground[layout],
+        )}
+      >
+        {style === 'divided' && (
+          <div
+            aria-hidden="true"
+            className="md3-search-view__divider bg-md-outline-variant"
+          />
+        )}
+        <div className="md3-search-view__results">{children}</div>
+      </div>
     </div>
   );
 }

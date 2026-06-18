@@ -30,32 +30,49 @@ describe('SearchView — Rendering', () => {
 // ─── Open/closed state ────────────────────────────────────────────────────────
 
 describe('SearchView — Open/closed state', () => {
-  it('reflects open as data-state="open"', () => {
+  it('keeps the search bar visible regardless of open (only the panel collapses)', () => {
+    render(
+      <SearchView open={false} searchBar={<SearchBar aria-label="Search" />} />,
+    );
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
+  });
+
+  it('reflects open as data-state="open" on the results panel', () => {
     const { container } = render(
       <SearchView open searchBar={<SearchBar aria-label="Search" />} />,
     );
-    expect(container.firstChild).toHaveAttribute('data-state', 'open');
+    expect(container.querySelector('.md3-search-view__panel')).toHaveAttribute(
+      'data-state',
+      'open',
+    );
   });
 
-  it('reflects closed as data-state="closed"', () => {
+  it('reflects closed as data-state="closed" on the results panel', () => {
     const { container } = render(
       <SearchView open={false} searchBar={<SearchBar aria-label="Search" />} />,
     );
-    expect(container.firstChild).toHaveAttribute('data-state', 'closed');
+    expect(container.querySelector('.md3-search-view__panel')).toHaveAttribute(
+      'data-state',
+      'closed',
+    );
   });
 
   it('is inert when closed', () => {
     const { container } = render(
       <SearchView open={false} searchBar={<SearchBar aria-label="Search" />} />,
     );
-    expect(container.firstChild).toHaveAttribute('inert');
+    expect(container.querySelector('.md3-search-view__panel')).toHaveAttribute(
+      'inert',
+    );
   });
 
   it('is not inert when open', () => {
     const { container } = render(
       <SearchView open searchBar={<SearchBar aria-label="Search" />} />,
     );
-    expect(container.firstChild).not.toHaveAttribute('inert');
+    expect(
+      container.querySelector('.md3-search-view__panel'),
+    ).not.toHaveAttribute('inert');
   });
 });
 
@@ -66,8 +83,9 @@ describe('SearchView — Layout and style', () => {
     const { container } = render(
       <SearchView open searchBar={<SearchBar aria-label="Search" />} />,
     );
-    expect(container.firstChild).toHaveAttribute('data-layout', 'full-screen');
-    expect(container.firstChild).toHaveAttribute('data-style', 'contained');
+    const panel = container.querySelector('.md3-search-view__panel');
+    expect(panel).toHaveAttribute('data-layout', 'full-screen');
+    expect(panel).toHaveAttribute('data-style', 'contained');
   });
 
   it('reflects a custom layout', () => {
@@ -78,7 +96,10 @@ describe('SearchView — Layout and style', () => {
         searchBar={<SearchBar aria-label="Search" />}
       />,
     );
-    expect(container.firstChild).toHaveAttribute('data-layout', 'docked');
+    expect(container.querySelector('.md3-search-view__panel')).toHaveAttribute(
+      'data-layout',
+      'docked',
+    );
   });
 
   it('reflects a custom style', () => {
@@ -89,14 +110,19 @@ describe('SearchView — Layout and style', () => {
         searchBar={<SearchBar aria-label="Search" />}
       />,
     );
-    expect(container.firstChild).toHaveAttribute('data-style', 'divided');
+    expect(container.querySelector('.md3-search-view__panel')).toHaveAttribute(
+      'data-style',
+      'divided',
+    );
   });
 
   it('applies the full-screen background class for the contained style', () => {
     const { container } = render(
       <SearchView open searchBar={<SearchBar aria-label="Search" />} />,
     );
-    expect(container.firstChild).toHaveClass('bg-md-surface-container-low');
+    expect(container.querySelector('.md3-search-view__panel')).toHaveClass(
+      'bg-md-surface-container-low',
+    );
   });
 
   it('applies the docked background class for the contained style', () => {
@@ -107,7 +133,9 @@ describe('SearchView — Layout and style', () => {
         searchBar={<SearchBar aria-label="Search" />}
       />,
     );
-    expect(container.firstChild).toHaveClass('bg-md-surface-container-high');
+    expect(container.querySelector('.md3-search-view__panel')).toHaveClass(
+      'bg-md-surface-container-high',
+    );
   });
 
   it('does not apply a filled background class for the divided style', () => {
@@ -118,10 +146,9 @@ describe('SearchView — Layout and style', () => {
         searchBar={<SearchBar aria-label="Search" />}
       />,
     );
-    expect(container.firstChild).not.toHaveClass('bg-md-surface-container-low');
-    expect(container.firstChild).not.toHaveClass(
-      'bg-md-surface-container-high',
-    );
+    const panel = container.querySelector('.md3-search-view__panel');
+    expect(panel).not.toHaveClass('bg-md-surface-container-low');
+    expect(panel).not.toHaveClass('bg-md-surface-container-high');
   });
 });
 
