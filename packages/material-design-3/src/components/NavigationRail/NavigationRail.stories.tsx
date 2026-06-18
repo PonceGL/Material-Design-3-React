@@ -238,8 +238,15 @@ export const Expanded: Story = {
 export const ExpandedModal: Story = {
   name: 'Expanded (modal)',
   render: function Render() {
-    const [open, setOpen] = useState(true);
+    // El riel permanece siempre montado, alternando entre collapsed
+    // (riel delgado permanente) y expanded+modal (overlay temporal) —
+    // así la transición de ancho/fondo/elevación de NavigationRail.css
+    // puede animarse. Desmontar y volver a montar todo el componente
+    // (como hacía antes este ejemplo) salta directo al estado final,
+    // sin ninguna animación posible.
+    const rail = useNavigationRail('collapsed');
     const [page, setPage] = useState('home');
+    const isOpen = rail.variant === 'expanded';
 
     return (
       <div className="relative h-[28rem] w-full max-w-2xl overflow-hidden bg-md-surface-variant">
@@ -247,43 +254,33 @@ export const ExpandedModal: Story = {
           <p className="text-sm font-medium text-md-on-surface-variant">
             Contenido de la página, detrás del overlay modal
           </p>
-          {!open && (
-            <IconButton
-              variant="standard"
-              icon={<MenuIcon />}
-              aria-label="Open navigation"
-              onClick={() => setOpen(true)}
-            />
-          )}
         </div>
-        {open && (
-          <div className="absolute inset-y-0 left-0">
-            <NavigationRail
-              aria-label="Main"
-              variant="expanded"
-              modal
-              menu={
-                <IconButton
-                  variant="standard"
-                  icon={<MenuIcon />}
-                  aria-label="Close navigation"
-                  onClick={() => setOpen(false)}
-                />
-              }
-            >
-              {destinations.map((destination) => (
-                <NavigationRailItem
-                  key={destination.id}
-                  icon={destination.icon}
-                  activeIcon={destination.activeIcon}
-                  label={destination.label}
-                  selected={page === destination.id}
-                  onClick={() => setPage(destination.id)}
-                />
-              ))}
-            </NavigationRail>
-          </div>
-        )}
+        <div className="absolute inset-y-0 left-0">
+          <NavigationRail
+            aria-label="Main"
+            variant={rail.variant}
+            modal
+            menu={
+              <IconButton
+                variant="standard"
+                icon={<MenuIcon />}
+                aria-label={isOpen ? 'Close navigation' : 'Open navigation'}
+                onClick={rail.toggle}
+              />
+            }
+          >
+            {destinations.map((destination) => (
+              <NavigationRailItem
+                key={destination.id}
+                icon={destination.icon}
+                activeIcon={destination.activeIcon}
+                label={destination.label}
+                selected={page === destination.id}
+                onClick={() => setPage(destination.id)}
+              />
+            ))}
+          </NavigationRail>
+        </div>
       </div>
     );
   },
