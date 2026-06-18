@@ -1,0 +1,68 @@
+/*
+  Estilos estructurales de NavigationRail.
+
+  Intencionalmente fuera de @layer: los estilos sin layer ganan sobre
+  @layer utilities (Tailwind v4), y la especificidad de clase (0,1,0) gana
+  sobre el selector universal * (0,0,0) de cualquier CSS reset del
+  consumidor. Mismo criterio que el resto de la librería.
+
+  Color y elevación (clases bg-md-* y shadow-md-elevation-*) viven en
+  NavigationRail.tsx vía Tailwind, no aquí — el componente conoce
+  `modal`/`variant` en JS sin depender de ningún ancestro, así que no hay
+  razón para resolverlo en CSS (a diferencia de NavigationRailItem, ver
+  NavigationRailItem.css).
+*/
+
+.md3-navigation-rail {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding-top: 2.75rem; /* 44dp top-space, las 3 configuraciones */
+  transition: width 200ms ease-in-out;
+}
+
+.md3-navigation-rail[data-variant='collapsed'] {
+  width: 6rem; /* 96dp */
+}
+
+/*
+  220-360dp en el spec; 220dp es el ancho por defecto. Para un ancho
+  distinto dentro de ese rango, el consumidor puede pasar `style={{ width }}`
+  — el atributo style inline tiene mayor especificidad que esta regla.
+*/
+.md3-navigation-rail[data-variant='expanded'] {
+  width: 13.75rem; /* 220dp */
+}
+
+.md3-navigation-rail[data-variant='expanded'][data-modal='true'] {
+  border-radius: 1rem; /* corner-large, 16dp */
+}
+
+.md3-navigation-rail__header {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem; /* 12dp entre menu y fab */
+  width: 100%;
+  margin-bottom: 1.5rem; /* 24dp antes del primer destino */
+}
+
+.md3-navigation-rail__items {
+  flex: 1 1 auto;
+  min-height: 0; /* permite que overflow-y funcione dentro de un flex column */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  overflow-y: auto;
+  content-visibility: auto; /* progressive enhancement para listas largas */
+}
+
+/* expanded — cada destino ocupa todo el ancho del riel (fila completa) */
+.md3-navigation-rail[data-variant='expanded'] .md3-navigation-rail__items > * {
+  width: 100%;
+}

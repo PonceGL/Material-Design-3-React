@@ -26,6 +26,19 @@ export type {
 export { List, ListItem } from '@/components/Lists';
 export type { ListItemProps, ListProps, ListVariant } from '@/components/Lists';
 
+export {
+  NavigationRail,
+  NavigationRailItem,
+  useNavigationRail,
+} from '@/components/NavigationRail';
+export type {
+  NavigationRailHandle,
+  NavigationRailItemProps,
+  NavigationRailProps,
+  NavigationRailVariant,
+  UseNavigationRailReturn,
+} from '@/components/NavigationRail';
+
 export { SearchBar, SearchView } from '@/components/Search';
 export type {
   SearchBarProps,
