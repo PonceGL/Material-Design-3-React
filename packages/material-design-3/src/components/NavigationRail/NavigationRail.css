@@ -20,7 +20,9 @@
   align-items: center;
   height: 100%;
   padding-top: 2.75rem; /* 44dp top-space, las 3 configuraciones */
-  transition: width 200ms ease-in-out;
+  transition:
+    width 200ms ease-in-out,
+    border-radius 200ms ease-in-out;
 }
 
 .md3-navigation-rail[data-variant='collapsed'] {
@@ -47,7 +49,17 @@
   align-items: center;
   gap: 0.75rem; /* 12dp entre menu y fab */
   width: 100%;
+  padding-inline: 1rem; /* mismo inset que el leading/trailing de los items */
   margin-bottom: 1.5rem; /* 24dp antes del primer destino */
+}
+
+/*
+  expanded — el menu/fab se alinean con el borde inicial, igual que el
+  icono de los items (que arrancan en el mismo padding-inline). En
+  collapsed se mantienen centrados sobre la columna angosta.
+*/
+.md3-navigation-rail[data-variant='expanded'] .md3-navigation-rail__header {
+  align-items: flex-start;
 }
 
 .md3-navigation-rail__items {
@@ -60,6 +72,17 @@
   width: 100%;
   overflow-y: auto;
   content-visibility: auto; /* progressive enhancement para listas largas */
+}
+
+/*
+  Los items NUNCA deben encogerse por debajo de su alto intrínseco: sin
+  esto, una lista que no entra completa en el alto disponible (ver Long
+  List) se "aplasta" en vez de desbordar hacia el scroll de
+  `overflow-y: auto` de arriba — flex-shrink es 1 por default, incluso
+  con overflow:auto en el contenedor.
+*/
+.md3-navigation-rail__items > * {
+  flex-shrink: 0;
 }
 
 /* expanded — cada destino ocupa todo el ancho del riel (fila completa) */
